@@ -13,6 +13,26 @@
             Email: <input name="Email" value="" size="80"><br> 
             <br><center><input type="submit"></center> 
         </form> 
-            
+          
+        <form method=post action="/cgibin/example.cgi">  
+            <center> Select an option:<select> 
+            <option>option 1</option> 
+            <option selected>option 2</option> 
+            <option>option 3</option>  
+        </form> 
+
+        <form method=post action="/cgibin/example.cgi">  
+            Select an option:<br>  
+            <input type="radio" name="option"> Option 1 
+            <input type="radio" name="option" checked> Option 2 
+            <input type="radio" name="option"> Option 3 
+        </form>
+
+        <form action="/action_page.php">
+            <label for="img">Select image:</label>
+            <input type="file" id="img" name="img" accept="image/*">
+            <input type="submit">
+        </form>
+
     </body>
 </html>
