@@ -1,3 +1,72 @@
-body{
-    background-color: orange;
+*{
+    margin: 0px;
+    padding: 0px;
+    text-decoration: none;
+    list-style: none;
+    color: white;
+    box-sizing: border-box;
+}
+
+#main-header{
+    min-height: 80px;
+    background-color: burlywood;
+}
+
+#logo
+{
+    float: left;
+}
+
+#navbar ul{
+    float: right;
+    position: relative;
+}
+
+#navbar ul li{
+    background-color: coral;
+    margin: 3px;
+    width: 170px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 20px;
+    font-family: sans-serif;
+    float: left;
+}
+
+#navbar ul li:hover{
+    background-color: tomato;
+    box-shadow:  0 0 5px #33ffff,
+    0 0 10px #66ffff;
+}
+
+#navbar ul ul{
+    position: absolute;
+    top: 90px;
+    transition: top 20s;
+    display: none;
+}
+
+#navbar ul li:hover>ul{
+    display: block;
+    top: 70px;
+}
+
+a:hover{
+    color: black;
+}
+
+@media(max-width: 600px){
+    #logo
+    {
+        float: none;
+    }
+    #navbar
+    {
+        float: none;
+    }
+    #navbar ul li{
+        display: flex;
+        width: 100%;
+        float: none;
+    }    
 }
