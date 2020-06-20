@@ -14,6 +14,7 @@ body{
 nav{
     background-color: black;
     min-height: 80px;
+    user-select: none;
 }
 
 nav .logo a{
@@ -42,7 +43,7 @@ nav ul li{
 nav ul ul{
     position: absolute;
     top: 90px;
-    opacity: o;
+    opacity: 0;
     visibility: hidden;
     border-top: 3px solid cyan;
     transition: top .3s;
@@ -92,4 +93,85 @@ nav ul ul ul li{
     position: relative;
     top : -40px;
     left: 200px;
+}
+
+.show,.icon, input{
+    display: none;
+}
+
+@media(max-width: 780px){
+    .logo{
+        width: 90%;
+    }
+
+    .bar{
+        margin-right: 20px;
+        float: right;
+        line-height: 60px;
+        font-size: 30px;
+        color: white;
+        cursor: pointer;
+        clear: right;
+    }
+
+    .bar:hover{
+        color: cyan;
+    }
+
+    .show,.icon{
+        display: block;
+    }
+
+    .show + a ,ul{
+        display: none;
+    }
+
+    [id ^= btn]:checked + ul{
+        display: block;
+    }
+
+    nav ul{
+        float: none;
+        margin: 0px;
+        position: relative;
+    }
+
+    nav ul li,nav ul ul li{
+        border-top: 3px solid rgba(255,255,0, 0.3);
+        display: block;
+        width: 100%;
+        margin: 0px;
+    }
+
+    nav ul li a:hover{
+        color: cyan;
+        box-shadow: none;
+    }
+
+    nav ul li a{
+        line-height: 3em;
+    }
+
+    nav ul ul{
+        top: 50px;
+        left: 30px;
+        float: none;
+        position: static;
+        border: none;
+        display: none;
+        visibility: visible;
+        opacity: 1;
+    }
+
+    nav ul ul ul li{
+        position: static;
+    }
+
+    nav ul ul li a{
+        padding-left: 60px;
+    }
+
+    nav ul ul ul li a{
+        padding-left: 120px;
+    }
 }
