@@ -1,18 +1,58 @@
 <html>
     <head>
-        <title>Login</title>
+        <title>Registration</title>
+        <link rel="stylesheet" href="styles/reigstration.css">
     </head>
     <body>
-        <ul>
-            <li>
-                <script class="hello1"></script>
-            </li>
-            <li>
-                <script class="hello2"></script>
-            </li>
-            <li>
-                <script class="hello3"></script>
-            </li>
-        </ul>
+        <div class="regform">
+            <h1>Registration Form</h1>
+        </div>
+        <div class="main">
+            <form action="">
+                <div id="name">
+                    <h2 class="name">Name</h2>
+                    <input type="text" class="firstname" name="firstname"><br>
+                    <label for="" class="firstlabel">First Name</label>
+                    <input type="text" class="lastname" name="lastname">
+                    <label for="" class="lastlabel">Last Name</label>            
+                </div>
+        
+                <h2 class="name">Company</h2>
+                <input type="text" class="company" name="company">
+        
+                <h2 class="name">Email</h2>
+                <input type="text" class="email" name="email">
+        
+                <h2 class="name">Phone</h2>
+                <input type="text" class="code" name="area-code">
+                <label for="" class="area-code">Area Code</label>
+                <input type="text" class="phone" name="phone-number">
+                <label for="" class="phone-number">Phone Number</label>
+        
+                <h2 class="name">Subject</h2>
+                <select name="subject" id="" class="option">
+                    <option value="" disabled="disabled" selected="selected">
+                        --Choose Option--
+                    </option>
+                    <option value="">S1</option>
+                    <option value="">S2</option>
+                    <option value="">S3</option>
+                </select><br>
+    
+                <label for="" class="radio">
+                    <input type="radio" class="radio-one" checked="checked">
+                    <span class="checkmark"></span>
+                    YES
+                </label>
+    
+                <label for="" class="radio">
+                    <input type="radio" class="radio-two">
+                    <span class="checkmark"></span>
+                    NO
+                </label>
+    
+                <button type="submit">Register</button>
+            </form>
+        </div>
     </body>
 </html>
