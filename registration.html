@@ -3,10 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/registration.css">
+    <link rel="stylesheet" href="styles/reigstration.css">
     <title>Document</title>
 </head>
 <body>
-    
+    <div class="wrapper">
+        <div class="title">Registration Form</div>
+        <div class="form">
+            <div class="inputfield">
+                <label for="">Photo</label>
+                <input type="file" id="img" name="img" accept="image/*" class="input">
+            </div>
+            <div class="inputfield">
+                <label for="">Name</label>
+                <input type="text" class="input">
+            </div>
+            <div class="inputfield">
+                <label for="">Father's Name</label>
+                <input type="text" class="input">
+            </div>
+            <div class="inputfield">
+                <label for="">Mother's Name</label>
+                <input type="text" class="input">
+            </div>
+            <div class="inputfield">
+                <label for="">Gender</label>
+                <select name="subject" id="" class="input">
+                    <option value="" disabled="disabled" selected="selected">
+                        --Choose Option--
+                    </option>
+                    <option value="">Male</option>
+                    <option value="">Female</option>
+                </select>
+            </div>
+            <div class="inputfield">
+                <label for="">Date of Birth</label>
+                <input type="date" class="input">
+            </div>
+            <div class="inputfield">
+                <label for="">NID no</label>
+                <input type="text" class="input">
+            </div>
+            <div class="inputfield">
+                <label for="">Mobile No</label>
+                <input type="text" class="input">
+            </div>
+            <div class="inputfield">
+                <label for="">Password</label>
+                <input type="password" placeholder="Password" class="input">
+            </div>
+            <div class="inputfield">
+                <label for="">Confirm Password</label>
+                <input type="password" placeholder="Confirm Password" class="input">
+            </div>
+            <div class="submit-btn">
+                <input type="submit">
+            </div>
+        </div>
+    </div>
 </body>
 </html>
