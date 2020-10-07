@@ -46,6 +46,31 @@ class USERS:
             self.nid_no,self.mobile_no,self.password]
         execute_sql(sql,list,True,False)
 
+    def is_a_new_user(self):
+        sql1 = 'select count(*) from users where USER_MOBILE_NO=:mobile_no'
+        sql2 = 'select count(*) from users where USER_NID=:nid'
+        list1 = [self.mobile_no]
+        list2 = [self.nid_no]
+        if execute_sql(sql1,list1,False,True)[0][0] == 0 and execute_sql(sql2,list2,False,True)[0][0] == 0:
+            return True
+        else:
+            return False
+
     def id(self):
         return self.id
+
+
+class Login:
+    def __init__(self,mobile_no,Password):
+        self.mobile_no=mobile_no
+        self.password=Password
+
+    def is_valid_user(self):
+        sql= 'select USER_PASSWORD from users where USER_MOBILE_NO=:mobile'
+        list= [self.mobile_no]
+
+        if execute_sql(sql,list,False,True)[0][0] == self.password:
+            return True
+        else:
+            return False
 

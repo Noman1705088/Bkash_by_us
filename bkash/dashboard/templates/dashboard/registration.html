@@ -59,6 +59,9 @@
                 <label for="conf_password">Confirm Password</label>
                 <input type="password" placeholder="Confirm Password" class="input" name="conf_password" required>
             </div>
+            {% if message %}
+                <p>This mobile or NID is already used,Try another</p>
+            {% endif %}
             <div class="submit-btn">
                 <input type="submit">
             </div>
