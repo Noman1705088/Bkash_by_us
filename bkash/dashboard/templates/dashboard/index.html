@@ -1,38 +1,97 @@
-<html>
-    <head>
-        <link rel="stylesheet" href= "styles/menu.css" />
-        <title>Home Page</title>
-    </head>
-    <body>
-        <marquee behavior="" direction="">
-            hello world
-        </marquee>
-        <a href="login.html">LOGIN</a>
-        <form action="#" method="POST"> 
-            Name: <input name="Name" value="" size="80"><br> 
-            Email: <input name="Email" value="" size="80"><br> 
-            <br><center><input type="submit"></center> 
-        </form> 
-          
-        <form method=post action="/cgibin/example.cgi">  
-            <center> Select an option:<select> 
-            <option>option 1</option> 
-            <option selected>option 2</option> 
-            <option>option 3</option>  
-        </form> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/menu.css">
+    <link rel="stylesheet" href="styles/container.css">
+    <title>HomePage</title>
+</head>
+<body>
+    <header id="main-header">
+        <nav>
+            <div class="logo">
+                <a href="#">Bkash</a>
+            </div>
+            
+            <label for="btn" class="icon">
+                <span class="bar">|||</span>
+            </label>
+            <input type="checkbox" id="btn">
+            <ul>
+                <li><a href="">Home</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li>
+                    <label for="btn1" class="show">
+                        <a href="">Register</a>
+                        <span class="bar">+</span>
+                    </label>
+                    <a href="">Register</a>
+                    <input type="checkbox" id="btn1">
+                    <ul>
+                        <li><a href="registration.html">As User</a></li>
+                        <li><a href="">As Agent</a></li>
+                        <li>
+                            <label for="btn2" class="show">
+                                <a href="">As Marchent</a>
+                                <span class="bar">+</span>
+                            </label>
+                            <a href="">As Marchent</a>
+                            <input type="checkbox" id="btn2">
+                            <ul>
+                                <li><a href="">As Bussi</a></li>
+                                <li><a href="">As MobOp</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="">Contact Us</a></li>
+            </ul>
+        </nav>
+    </header>
 
-        <form method=post action="/cgibin/example.cgi">  
-            Select an option:<br>  
-            <input type="radio" name="option"> Option 1 
-            <input type="radio" name="option" checked> Option 2 
-            <input type="radio" name="option"> Option 3 
-        </form>
+    <div class="showcase">
+        <h1>Responsive Site</h1>
+        <p>This is a responsive website for mobilewallet app.</p>
+    </div>
 
-        <form action="/action_page.php">
-            <label for="img">Select image:</label>
-            <input type="file" id="img" name="img" accept="image/*">
-            <input type="submit">
-        </form>
-
-    </body>
+    <div class="service"><h3>Popular Services</h3></div>
+    <div class="box-container">
+        <div class="box">send money</div>
+        <div class="box">Mobile recharge</div>
+        <div class="box">Cash out</div>
+        <div class="box">Make payment</div>
+        <div class="box">Add Money</div>
+        <div class="box">Pay Bill</div>
+        <div class="box">Tickets</div>
+        <div class="box">My Bkash</div>
+        <div class="box">Services</div>
+        <div class="box">Donation</div>
+    </div>
+    
+    <div class="service"><h3>Contact Us</h3></div>
+    <div class="box-container1">
+        <div class="box1">
+            <h2>Give Us A Call</h2>
+            <ul>
+                <li>+8801521103929</li>
+                <li>+8801xxxxxxxxx</li>
+            </ul>
+        </div>
+        <div class="box1">
+            <h2>Come & Drop By</h2>
+            <ul>
+                <li>Room no:219 , Ahsanullah-Hall,</li>
+                <li>BUET,Dhaka</li>
+            </ul>
+        </div>
+        <div class="box1">
+            <h2>Send Us A Message</h2>
+            <ul>
+                <li>connect@gmail.com</li>
+                <li>yourname@gmail.com</li>
+            </ul>
+        </div>
+    </div>
+</body>
 </html>
