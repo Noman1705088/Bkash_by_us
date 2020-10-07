@@ -1,0 +1,60 @@
+.showcase{
+    width: 95%;
+    min-height: 500px;
+    margin: auto;
+    margin-top: 5px;
+    background-color: #f4f4f4;
+}
+
+.showcase h1{
+    line-height: 100px;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.showcase p{
+    line-height: 30px;
+    text-align: center;
+}
+
+.box-container{
+    width: 80%;
+    min-height: 200px;
+    margin: auto;
+    margin-top: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.box{
+    background-color: lightgray;
+    border-radius: 15px;
+    height: 300px;
+    width: 250px;
+    margin: 20px;
+}
+
+.service{
+    height: 100px;
+}
+
+.service h3{
+    line-height: 50px;
+    font-size: 30px;
+    color: linen;
+    text-align: center;
+    font-family: Verdana, sans-serif;
+}
+
+.box-container1{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    min-height: 300px;
+}
+
+.box1{
+    margin: 20px;
+}

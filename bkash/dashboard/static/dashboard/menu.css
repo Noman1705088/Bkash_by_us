@@ -1,0 +1,177 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    text-decoration: none;
+    list-style: none;
+    /*color: black;*/
+    box-sizing: border-box;
+}
+
+body{
+    background-color: darkgrey;
+}
+
+nav{
+    background-color: black;
+    min-height: 80px;
+    user-select: none;
+}
+
+nav .logo a{
+    color: white;
+    float: left;
+    padding-left: 20px;
+    font-size: 30px;
+    line-height: 1.6em;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+nav ul{
+    float: right;
+    margin-top: 20px;
+    margin-right: 130px;
+    position: relative;
+}
+
+nav ul li{
+    background-color: black;
+    display: inline-block;
+    float: left;
+    margin-right: 20px;
+}
+
+nav ul ul{
+    position: absolute;
+    top: 90px;
+    opacity: 0;
+    visibility: hidden;
+    border-top: 3px solid cyan;
+    transition: top .3s;
+}
+
+nav ul li:hover> ul{
+    visibility: visible;
+    opacity: 1;
+    top: 23px;
+}
+
+nav ul li a{
+    line-height: 1.6em;
+    font-size: 20px;
+    color: cornsilk;
+    padding: 15px;
+}
+
+nav ul li a:hover{
+    color: cyan;
+    border-radius: 5px;
+    box-shadow:  0 0 5px #33ffff,
+    0 0 10px #66ffff;
+}
+
+nav ul ul li{
+    display: list-item;
+    position: relative;
+    margin: 0;
+    width: 200px;
+    border-bottom: 1px solid rgba(0,0,0, 0.3);
+}
+
+nav ul ul li a:hover{
+    box-shadow: none;
+}
+
+nav ul ul ul{
+    border-top: none;
+}
+
+nav ul ul li a{
+    line-height: 50px;
+}
+
+nav ul ul ul li{
+    position: relative;
+    top : -40px;
+    left: 200px;
+}
+
+.show,.icon, input{
+    display: none;
+}
+
+@media(max-width: 780px){
+    .logo{
+        width: 90%;
+    }
+
+    .bar{
+        margin-right: 20px;
+        float: right;
+        line-height: 60px;
+        font-size: 30px;
+        color: white;
+        cursor: pointer;
+        clear: right;
+    }
+
+    .bar:hover{
+        color: cyan;
+    }
+
+    .show,.icon{
+        display: block;
+    }
+
+    .show + a ,ul{
+        display: none;
+    }
+
+    [id ^= btn]:checked + ul{
+        display: block;
+    }
+
+    nav ul{
+        float: none;
+        margin: 0px;
+        position: relative;
+    }
+
+    nav ul li,nav ul ul li{
+        border-top: 3px solid rgba(255,255,0, 0.3);
+        display: block;
+        width: 100%;
+        margin: 0px;
+    }
+
+    nav ul li a:hover{
+        color: cyan;
+        box-shadow: none;
+    }
+
+    nav ul li a{
+        line-height: 3em;
+    }
+
+    nav ul ul{
+        top: 50px;
+        left: 30px;
+        float: none;
+        position: static;
+        border: none;
+        display: none;
+        visibility: visible;
+        opacity: 1;
+    }
+
+    nav ul ul ul li{
+        position: static;
+    }
+
+    nav ul ul li a{
+        padding-left: 60px;
+    }
+
+    nav ul ul ul li a{
+        padding-left: 120px;
+    }
+}
