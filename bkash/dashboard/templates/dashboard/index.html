@@ -1,10 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/menu.css">
-    <link rel="stylesheet" href="styles/container.css">
+    <link rel="stylesheet" href="{%static 'dashboard/menu.css' %}">
+    <link rel="stylesheet" href="{%static 'dashboard/container.css' %}">
     <title>HomePage</title>
 </head>
 <body>
@@ -20,7 +21,7 @@
             <input type="checkbox" id="btn">
             <ul>
                 <li><a href="">Home</a></li>
-                <li><a href="login.html">Login</a></li>
+                <li><a {% if not logged_id %}href="login.html"{% endif %}>Login</a></li>
                 <li>
                     <label for="btn1" class="show">
                         <a href="">Register</a>

@@ -69,8 +69,15 @@ class Login:
         sql= 'select USER_PASSWORD from users where USER_MOBILE_NO=:mobile'
         list= [self.mobile_no]
 
-        if execute_sql(sql,list,False,True)[0][0] == self.password:
+        if not execute_sql(sql,list,False,True):
+            return False
+        elif execute_sql(sql,list,False,True)[0][0] == self.password:
             return True
         else:
             return False
 
+    def user_id(self,logged_in):
+        sql= 'select USER_ID from users where USER_MOBILE_NO=:mobile'
+        list= [self.mobile_no]
+
+        return execute_sql(sql,list,False,True)[0][0]

@@ -1,4 +1,4 @@
-from django.shortcuts import render,HttpResponse
+from django.shortcuts import render,HttpResponse,redirect
 from django.views import View
 from django.core.files.storage import FileSystemStorage
 import os
@@ -37,5 +37,9 @@ class LoginView(View):
         logged_in=False
         if user.is_valid_user():
             logged_in=True
+            #return render(request,"dashboard/index.html",{'logged_in':logged_in})
+            return redirect('index')
+
+        user_id=user.user_id(logged_in)
 
         return render(request,"dashboard/login.html",{'message':logged_in})
