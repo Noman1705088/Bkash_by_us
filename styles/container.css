@@ -6,6 +6,11 @@
     background-color: #f4f4f4;
 }
 
+#main-header{
+    position: fixed;
+    width: 100%;
+}
+
 .showcase h1{
     line-height: 100px;
     text-align: center;

@@ -10,7 +10,11 @@ class RegistrationView(View):
         return render(request,"dashboard/registration.html")
     def post(self,request):
         if request.FILES.get("img"):
-            user_id = int(execute_sql('select max(user_id) from users',[],False,True)[0][0]) + 1
+            if not execute_sql('select max(user_id) from users',[],False,True)[0][0]:
+                user_id=1
+            else:
+                user_id = int(execute_sql('select max(user_id) from users',[],False,True)[0][0]) + 1
+                
             imagename= 'user_'+str(user_id)+'.jpg'
 
             user=USERS(imagename,request.POST.get("username"),request.POST.get("father_name"),request.POST.get("mother_name"),\

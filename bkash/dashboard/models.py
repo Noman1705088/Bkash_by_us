@@ -1,6 +1,15 @@
 from django.db import models
 import cx_Oracle as db
 from datetime import date
+import hashlib
+import os
+
+def hash_the_password(password):
+    salt = b''
+    key = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
+    return str(key)
+
+
 # Create your models here.
 
 def execute_sql(sql,list,commit,is_select_st):
@@ -36,8 +45,11 @@ class USERS:
         self.dob = dob
         self.nid_no = nid_no
         self.mobile_no = mobile_no
-        self.password = Password
-        self.id = int(execute_sql('select max(user_id) from users',[],False,True)[0][0]) + 1
+        self.password = hash_the_password(Password)
+        if not execute_sql('select max(user_id) from users',[],False,True)[0][0]:
+            self.id=1
+        else:
+            self.id = int(execute_sql('select max(user_id) from users',[],False,True)[0][0]) + 1
 
     def insert(self):
         sql = 'INSERT INTO USERS VALUES(:id,:username,:img,:fater,:mother,:gender,:dob,\
@@ -71,7 +83,7 @@ class Login:
 
         if not execute_sql(sql,list,False,True):
             return False
-        elif execute_sql(sql,list,False,True)[0][0] == self.password:
+        elif execute_sql(sql,list,False,True)[0][0] == hash_the_password(self.password):
             return True
         else:
             return False
