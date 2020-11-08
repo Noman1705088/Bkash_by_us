@@ -72,6 +72,27 @@ class USERS:
         return self.id
 
 
+class Agent:
+    def __init__(self,AGENT_ID,AGENT_BANK_AC,AGENT_BALANCE):
+        self.agent_id = AGENT_ID
+        self.agent_bank_ac = AGENT_BANK_AC
+        self.agent_balance = AGENT_BALANCE
+
+    def insert(self):
+        sql = 'INSERT INTO AGENT VALUES(:id,:agent_bank_ac,:agent_balance)'
+        list = [self.agent_id,self.agent_bank_ac,self.agent_balance]
+        execute_sql(sql,list,True,False)
+
+class Customer:
+    def __init__(self,cust_id,cust_balance):
+        self.customer_id = cust_id
+        self.customer_balance = cust_balance
+
+    def insert(self):
+        sql = 'INSERT INTO CUSTOMER VALUES(:id,:customer_balance)'
+        list = [self.customer_id,self.customer_balance]
+        execute_sql(sql,list,True,False)
+
 class Login:
     def __init__(self,mobile_no,Password):
         self.mobile_no=mobile_no

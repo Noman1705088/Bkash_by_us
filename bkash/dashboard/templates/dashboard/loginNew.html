@@ -20,7 +20,7 @@
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
       />
-      <link rel="stylesheet" href="style.css" />
+      <link rel="stylesheet" href="{% static 'dashboard/style.css' %}"/>
       <title>Bkash</title>
     </head>
 
@@ -29,7 +29,7 @@
         <div class="col-lg-5 m-auto">
           <div class="card mt-5 bg-dark">
             <div class="card-title text-center mt-3">
-              <img src="usericon.png" alt="" width="150px" height="150px" />
+              <img src="https://png.pngtree.com/png-vector/20190919/ourlarge/pngtree-user-login-or-authenticate-icon-on-gray-background-flat-icon-ve-png-image_1742031.jpg" alt="" width="150px" height="150px" />
             </div>
             <div class="card-title text-center mt-2">
               <h1 class="mb-3 font-weight-light text-white text-uppercase">
@@ -75,7 +75,6 @@
             <strong>Login Successful</strong>
           </div> -->
           {% else %}
-          <p>Try Again</p>
           <!--<div class="alert alert-danger mt-4">
             <strong>Sorry!Login Failed</strong>
           </div> -->

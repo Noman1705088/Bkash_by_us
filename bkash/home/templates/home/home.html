@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomePage</title>
+</head>
+<body>
+    <ul>
+        <li>Register
+            <ul>
+                <li><a href="">Admin</a></li>
+                <li><a href="{% url 'dashboard:registrationCustomer' %}">Customer</a></li>
+                <li><a href="{% url 'dashboard:registrationAgent' %}">Agent</a></li>
+                <li><a href="">Marchent</a></li>
+                <li><a href="">Operator</a></li>
+                <li><a href="">Serv Pr</a></li>
+            </ul>
+        </li>
+        <li>Login
+            <ul>
+                <li><a href="">Admin</a></li>
+                <li><a href="{% url 'dashboard:login' %}">Customer</a></li>
+                <li><a href="">Agent</a></li>
+            </ul></li>
+        <li>
+            <a href="">About</a>
+        </li>
+    </ul>
+</body>
+</html>

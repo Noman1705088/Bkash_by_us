@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User_HomePage</title>
+</head>
+<body>
+{% if mobile_no %}
+    <img src="" alt="">
+    <ul>
+        Mobile No: {{mobile_no}}
+        <li><a href="">Profile</a></li>
+        <li><a href='{% url 'home:logout' %}'>Logout</a></li>
+        <li><a href="">Update</a></li>
+    </ul>
+
+    <div>Send money</div>
+    <div>Cash in</div>
+    <div>Cash out</div>
+    <div>Payment</div>
+    <div>My Balance</div>
+    <div>Service</div>
+    <div>Donate</div>
+    <div>Ticket</div>
+{% endif %}
+</body>
+</html>
