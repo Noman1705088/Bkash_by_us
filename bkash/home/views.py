@@ -35,10 +35,18 @@ class LogoutView(View):
     def get(self,request):
         if request.session.get('CUSTOMER'):
             del(request.session['CUSTOMER'])
-            return redirect('home:home')
+            resp=redirect('home:home')
+            resp.delete_cookie('NAME')
+            resp.delete_cookie('MOBILE')
+            resp.delete_cookie('PHOTO')
+            return resp
         if request.session.get('AGENT'):
             del(request.session['AGENT'])
-            return redirect('home:home')
+            resp=redirect('home:home')
+            resp.delete_cookie('NAME')
+            resp.delete_cookie('MOBILE')
+            resp.delete_cookie('PHOTO')
+            return resp
         return redirect('home:home')
 
 class UpdateUserView(View):
