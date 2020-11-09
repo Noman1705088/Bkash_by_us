@@ -6,13 +6,13 @@
     <title>User_HomePage</title>
 </head>
 <body>
-{% if mobile_no %}
-    <img src="" alt="">
+{% if MOBILE %}
+    <img src={{PHOTO}} alt="">
     <ul>
-        Mobile No: {{mobile_no}}
-        <li><a href="">Profile</a></li>
+        Mobile No: {{MOBILE}}
+        <li><a href="">Profile: {{NAME}}</a></li>
         <li><a href='{% url 'home:logout' %}'>Logout</a></li>
-        <li><a href="">Update</a></li>
+        <li><a href="{% url 'home:updateUser' %}">Update</a></li>
     </ul>
 
     <div>Send money</div>

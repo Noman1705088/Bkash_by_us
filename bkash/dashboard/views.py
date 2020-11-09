@@ -2,7 +2,7 @@ from django.shortcuts import render,HttpResponse,redirect
 from django.views import View
 from django.core.files.storage import FileSystemStorage
 import os
-from .models import USERS,Login,execute_sql,Agent,Customer
+from .models import USERS,LoginAgent,LoginCustomer,execute_sql,Agent,Customer
 # Create your views here.
 
 class RegistrationAgentView(View):
@@ -32,6 +32,7 @@ class RegistrationAgentView(View):
                 image= request.FILES.get("img")
                 fs = FileSystemStorage()
                 filename = fs.save(imagename, image)
+                redirect('home:home')
             else:
                 mobile_no_already_used=True
         return render(request,"dashboard/registrationAgentNew.html",{'message':mobile_no_already_used})
@@ -62,24 +63,37 @@ class RegistrationCustomerView(View):
                 image= request.FILES.get("img")
                 fs = FileSystemStorage()
                 filename = fs.save(imagename, image)
+                redirect('home:home')
             else:
                 mobile_no_already_used=True
         return render(request,"dashboard/registrationCustomerNew.html",{'message':mobile_no_already_used})
 
 
 
-class LoginView(View):
+class LoginCustomerView(View):
     def get(self,request):
-        return render(request,"dashboard/loginNew.html")
+        return render(request,"dashboard/loginCustomerNew.html")
     def post(self,request):
-        user = Login(request.POST.get('mobile_no'),request.POST.get('password'))
+        user = LoginCustomer(request.POST.get('mobile_no'),request.POST.get('password'))
         logged_in=False
         if user.is_valid_user():
+            if request.session.get('AGENT'):
+                del(request.session['AGENT'])
             logged_in=True
-            #return render(request,"dashboard/index.html",{'logged_in':logged_in})
-            request.session['mobile_no'] = request.POST.get('mobile_no')
-            return redirect('home:user_home')
+            request.session['CUSTOMER'] = user.user_id()
+            return redirect('home:home')
+        return render(request,"dashboard/loginCustomerNew.html",{'message':logged_in})
 
-        user_id=user.user_id(logged_in)
-
-        return render(request,"dashboard/loginNew.html",{'message':logged_in})
+class LoginAgentView(View):
+    def get(self,request):
+        return render(request,"dashboard/loginAgentNew.html")
+    def post(self,request):
+        user = LoginAgent(request.POST.get('mobile_no'),request.POST.get('password'))
+        logged_in=False
+        if user.is_valid_user():
+            if request.session.get('CUSTOMER'):
+                del(request.session['CUSTOMER'])
+            logged_in=True
+            request.session['AGENT'] = user.user_id()
+            return redirect('home:home')
+        return render(request,"dashboard/loginAgentNew.html",{'message':logged_in})

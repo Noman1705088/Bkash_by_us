@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User_HomePage</title>
+</head>
+<body>
+{% if NAME %}
+    <img src={{PHOTO}} alt="">
+    <form  action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+        <label for="img">Photo</label>
+        <input type="file" id="img"accept="image/*" class="input" name="img" required >
+
+        <label for="username">{{NAME}}</label>
+        <input type="text" class="input" name="username" required>
+
+        <label for="father_name">{{FATHER}}</label>
+        <input type="text" class="input" name="father_name">
+
+        <label for="mother_name">{{MOTHER}}</label>
+        <input type="text" class="input" name="mother_name">
+
+        <label for="password">Password</label>
+        <input type="password" placeholder="Password" class="input" name="password" required>
+    </form>
+{% endif %}
+</body>
+</html>

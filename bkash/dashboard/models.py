@@ -95,11 +95,22 @@ class Customer:
 
 class Login:
     def __init__(self,mobile_no,Password):
+        self.id=id
         self.mobile_no=mobile_no
         self.password=Password
 
+    def user_id(self):
+        sql= 'select USER_ID from users where USER_MOBILE_NO=:mobile'
+        list= [self.mobile_no]
+
+        return execute_sql(sql,list,False,True)[0][0]
+
+class LoginCustomer(Login):
+    def __init__(self,mobile_no,Password):
+        super().__init__(mobile_no,Password)
+
     def is_valid_user(self):
-        sql= 'select USER_PASSWORD from users where USER_MOBILE_NO=:mobile'
+        sql= 'SELECT USER_PASSWORD FROM USERS U JOIN CUSTOMER C ON U.USER_ID=C.CUSTOMER_ID WHERE USER_MOBILE_NO=:mobile'
         list= [self.mobile_no]
 
         if not execute_sql(sql,list,False,True):
@@ -109,8 +120,18 @@ class Login:
         else:
             return False
 
-    def user_id(self,logged_in):
-        sql= 'select USER_ID from users where USER_MOBILE_NO=:mobile'
+class LoginAgent(Login):
+    def __init__(self,mobile_no,Password):
+        super().__init__(mobile_no,Password)
+        
+    def is_valid_user(self):
+        sql= 'SELECT USER_PASSWORD FROM USERS U JOIN AGENT A ON U.USER_ID=A.AGENT_ID WHERE USER_MOBILE_NO=:mobile'
         list= [self.mobile_no]
 
-        return execute_sql(sql,list,False,True)[0][0]
+        if not execute_sql(sql,list,False,True):
+            return False
+        elif execute_sql(sql,list,False,True)[0][0] == hash_the_password(self.password):
+            return True
+        else:
+            return False
+
