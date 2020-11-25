@@ -60,4 +60,11 @@ class UpdateUserView(View):
             context = user.showForUpdate()
             return render(request,'home/updateUser.html',context)
     def post(self,request):
-        sql='sql'
+        if request.session.get('CUSTOMER') or request.session.get('AGENT'):
+            id= request.session.get('AGENT')
+            if request.session.get('CUSTOMER'):
+               id= request.session.get('CUSTOMER')
+
+            user= UpdateUser(id)
+            user.update(request.POST.get('img'),request.POST.get('username'),request.POST.get('father_name'),request.POST.get('mother_name'),request.POST.get('password'))
+            return redirect('home:logout')

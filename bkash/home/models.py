@@ -32,7 +32,7 @@ class UpdateUser:
         self.password = ans[9]
 
     def showForUpdate(self):
-        return {'PHOTO':'..\media\\'+self.img,'NAME':self.username,'MOTHER':self.mother_name,'FATHER':self.mother_name}
+        return {'PHOTO':'..\media\\'+self.img,'NAME':self.username,'MOTHER':self.mother_name,'FATHER':self.father_name}
 
     def update(self,img,username,father_name,mother_name,Password):
         if img:
@@ -44,13 +44,13 @@ class UpdateUser:
         if mother_name:
             self.mother_name=mother_name
         if Password:
-            self.password= hash_the_password(password)
+            self.password= hash_the_password(Password)
 
         sql = 'UPDATE USERS\
         SET USER_NAME=:username,USER_FATHER_NAME=:father_name,USER_MOTHER_NAME=:mother_name,USER_PASSWORD=:password\
         WHERE USER_ID=:id'
 
-        list = [self.username,self.img,self.father_name,self.mother_name,self.password]
+        list = [self.username,self.father_name,self.mother_name,self.password,self.id]
         execute_sql(sql,list,True,False)
 
 
