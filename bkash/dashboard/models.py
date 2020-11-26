@@ -79,8 +79,8 @@ class Agent:
         self.agent_balance = AGENT_BALANCE
 
     def insert(self):
-        sql = 'INSERT INTO AGENT VALUES(:id,:agent_bank_ac,:agent_balance)'
-        list = [self.agent_id,self.agent_bank_ac,self.agent_balance]
+        sql = 'INSERT INTO AGENT VALUES(:id,:agent_bank_ac,:agent_balance,:approved_by)'
+        list = [self.agent_id,self.agent_bank_ac,self.agent_balance,None]
         execute_sql(sql,list,True,False)
 
 class Customer:
@@ -89,8 +89,8 @@ class Customer:
         self.customer_balance = cust_balance
 
     def insert(self):
-        sql = 'INSERT INTO CUSTOMER VALUES(:id,:customer_balance)'
-        list = [self.customer_id,self.customer_balance]
+        sql = 'INSERT INTO CUSTOMER VALUES(:id,:customer_balance,:approved_by)'
+        list = [self.customer_id,self.customer_balance,None]
         execute_sql(sql,list,True,False)
 
 class Login:

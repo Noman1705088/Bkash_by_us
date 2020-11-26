@@ -8,26 +8,30 @@ class HomeView(View):
         if request.session.get('CUSTOMER'):
             if not (request.COOKIES.get('NAME') and request.COOKIES.get('PHOTO') and request.COOKIES.get('MOBILE')):
                 user = UserProfile(request.session.get('CUSTOMER'))
-                context = user.getProfile()               
+                context = user.getProfile()
+                context['TYPE'] = 'customer'               
                 resp = render(request,'home/user_home.html',context)
                 resp.set_cookie('NAME',context['NAME'])
                 resp.set_cookie('MOBILE',context['MOBILE'])
                 resp.set_cookie('PHOTO',context['PHOTO'])
                 return resp           
 
-            context = {'NAME':request.COOKIES.get('NAME'),'PHOTO':request.COOKIES.get('PHOTO'),'MOBILE':request.COOKIES.get('MOBILE')}
+            context = {'NAME':request.COOKIES.get('NAME'),'PHOTO':request.COOKIES.get('PHOTO'),\
+                'MOBILE':request.COOKIES.get('MOBILE'),'TYPE':'customer'}
             return render(request,'home/user_home.html',context)
         elif request.session.get('AGENT'):
             if not (request.COOKIES.get('NAME') and request.COOKIES.get('PHOTO') and request.COOKIES.get('MOBILE')):
                 user = UserProfile(request.session.get('AGENT'))
-                context = user.getProfile()               
+                context = user.getProfile()    
+                context['TYPE'] = 'agent'            
                 resp = render(request,'home/user_home.html',context)
                 resp.set_cookie('NAME',context['NAME'])
                 resp.set_cookie('MOBILE',context['MOBILE'])
                 resp.set_cookie('PHOTO',context['PHOTO'])
                 return resp           
 
-            context = {'NAME':request.COOKIES.get('NAME'),'PHOTO':request.COOKIES.get('PHOTO'),'MOBILE':request.COOKIES.get('MOBILE')}
+            context = {'NAME':request.COOKIES.get('NAME'),'PHOTO':request.COOKIES.get('PHOTO'),\
+                'MOBILE':request.COOKIES.get('MOBILE'),'TYPE':'agent'}
             return render(request,'home/user_home.html',context)
         elif request.session.get('ADMIN'):
             '''if not (request.COOKIES.get('NAME')):
