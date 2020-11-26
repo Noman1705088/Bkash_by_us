@@ -73,7 +73,7 @@ class UpdateUserView(View):
     def get(self,request):
         if request.session.get('CUSTOMER') or request.session.get('AGENT'):
             id= request.session.get('AGENT')
-            if request.session.get('CUSTOMER'):
+            if request.session.get('CUSTOMER'): 
                id= request.session.get('CUSTOMER')
 
             user= UpdateUser(id)

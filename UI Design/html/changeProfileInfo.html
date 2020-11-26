@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Change Profile</title>
+    <script
+      src="https://kit.fontawesome.com/e367819fd5.js"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="../css/changeProfileStyle.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="row my-2">
+        <div class="col-lg-8 col-md-12 col-sm-12 order-lg-2">
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a
+                href=""
+                data-target="#profile"
+                data-toggle="tab"
+                class="nav-link active"
+                >Profile</a
+              >
+            </li>
+            <li class="nav-item">
+              <a href="" data-target="#edit" data-toggle="tab" class="nav-link"
+                >Edit Info</a
+              >
+            </li>
+          </ul>
+          <div class="card">
+            <div class="card-body px-4">
+              <div class="tab-content py-4">
+                <div class="tab-pane active" id="profile">
+                  <h5 class="mb-3">User Profile</h5>
+                  <div class="row pb-2">
+                    <div class="col-sm-6">
+                      <p class="font-weight-bold">Email:</p>
+                      <h6 class="text-muted">asifahmedutsa@gmail.com</h6>
+                    </div>
+                    <div class="col-sm-6">
+                      <p class="font-weight-bold">Mobile Number:</p>
+                      <h6 class="text-muted">01700545293</h6>
+                    </div>
+                  </div>
+
+                  <div class="row pb-2">
+                    <div class="col-sm-6">
+                      <p class="font-weight-bold">Father's Name:</p>
+                      <h6 class="text-muted">Dr. Md Rajab Ali</h6>
+                    </div>
+                    <div class="col-sm-6">
+                      <p class="font-weight-bold">Mother's Name:</p>
+                      <h6 class="text-muted">Ayesha Ahmed</h6>
+                    </div>
+                  </div>
+
+                  <div class="row pb-2">
+                    <div class="col-sm-6">
+                      <p class="font-weight-bold">NID:</p>
+                      <h6 class="text-muted">1210568454</h6>
+                    </div>
+                    <div class="col-sm-6">
+                      <p class="font-weight-bold">Date Of Birth:</p>
+                      <h6 class="text-muted">31-Jan-2000</h6>
+                    </div>
+                  </div>
+
+                  <div class="row pb-2">
+                    <div class="col-sm-8">
+                      <button class="btn btn-primary btn-sm mb-2">
+                        <a
+                          href="home.html"
+                          class="text-white text-decoration-none"
+                          >Back To Home</a
+                        >
+                      </button>
+                    </div>
+                    <div class="col-sm-4"></div>
+                  </div>
+                </div>
+
+                <div class="tab-pane" id="edit">
+                  <form
+                    action=""
+                    class="form-group text-center"
+                    method="POST"
+                    enctype="multipart/form-data"
+                  >
+                    <div>
+                      <label for="username">User Name:</label>
+                      <input
+                        type="text"
+                        name="username"
+                        class="form-control"
+                        placeholder="Enter Your User Name"
+                        value=""
+                        required
+                      />
+                    </div>
+                    <br />
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <label for="father_name">Father's Name:</label>
+                        <input
+                          type="text"
+                          name="father_name"
+                          class="form-control"
+                          placeholder="Enter Your Father's Name"
+                          value=""
+                          required
+                        />
+                      </div>
+                      <div class="col-lg-6">
+                        <label for="mother_name">Mother's Name:</label>
+                        <input
+                          type="text"
+                          name="mother_name"
+                          class="form-control"
+                          placeholder="Enter Your Mother's Name"
+                          value=""
+                          required
+                        />
+                      </div>
+                    </div>
+                    <br />
+                    <div>
+                      <label for="email">E-mail:</label>
+                      <input
+                        type="email"
+                        name="email"
+                        class="form-control"
+                        placeholder="Enter Your E-mail"
+                        value=""
+                        required
+                      />
+                    </div>
+                    <br />
+                    <div>
+                      <label for="gender">Gender:</label>
+                      <select
+                        name="gender"
+                        required
+                        id=""
+                        class="form-control"
+                        required
+                      >
+                        <option
+                          value="null"
+                          disabled="disabled"
+                          selected="selected"
+                        >
+                          --Choose Option--
+                        </option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                      </select>
+                    </div>
+                    <br />
+                    <div>
+                      <label for="dob">Date of Birth:</label>
+                      <input
+                        type="date"
+                        class="form-control"
+                        name="dob"
+                        required
+                      />
+                    </div>
+                    <br />
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <label for="nid_no">NID No:</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="nid_no"
+                          placeholder="Enter Your NID No"
+                          value=""
+                          required
+                        />
+                      </div>
+                      <div class="col-lg-6">
+                        <label for="mobile_no">Mobile No:</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="mobile_no"
+                          placeholder="Enter Your Mobile No"
+                          value=""
+                          required
+                        />
+                      </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <label for="password">Password:</label>
+                        <input
+                          type="password"
+                          class="form-control"
+                          name="password"
+                          placeholder="Enter Your Password"
+                          required
+                        />
+                      </div>
+                      <div class="col-lg-6">
+                        <label for="conf_password">Confirm Password:</label>
+                        <input
+                          type="password"
+                          class="form-control"
+                          name="conf_password"
+                          placeholder="Confirm Your Password"
+                          value=""
+                          required
+                        />
+                      </div>
+                    </div>
+                    <br />
+                    <div class="row pb-2">
+                      <div class="col-sm-6">
+                        <button
+                          class="btn btn-success btn-sm mb-2"
+                          type="submit"
+                        >
+                          <a
+                            href="home.html"
+                            class="text-white text-decoration-none"
+                            >Save Changes</a
+                          >
+                        </button>
+                      </div>
+                      <div class="col-sm-6">
+                        <button
+                          class="btn btn-primary btn-sm mb-2"
+                          type="submit"
+                        >
+                          <a href="#" class="text-white text-decoration-none"
+                            >Cancel</a
+                          >
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-lg-4 col-md-12 col-sm-12 order-lg-1 text-center picture-container"
+        >
+          <div class="picture">
+            <img
+              src="../img/Utsha.jpg"
+              class="picture-src mx-auto img-fluid d-block w-50"
+              id="wizardPicturePreview"
+              title=""
+            />
+          </div>
+          <h6 class="mt-2">Upload a different photo</h6>
+          <label class="custom-file">
+            <input
+              type="file"
+              id="wizard-picture"
+              class="custom-file-input"
+              name="img"
+            />
+            <span class="custom-file-control">Choose file</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        // Prepare the preview for profile picture
+        $("#wizard-picture").change(function () {
+          readURL(this);
+        });
+      });
+      function readURL(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+
+          reader.onload = function (e) {
+            $("#wizardPicturePreview")
+              .attr("src", e.target.result)
+              .fadeIn("slow");
+          };
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+    </script>
+  </body>
+</html>
