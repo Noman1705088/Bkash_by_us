@@ -135,3 +135,48 @@ class LoginAgent(Login):
         else:
             return False
 
+class Admin:
+    def __init__(self,id,name,password):
+        if not execute_sql('select max(admin_id) from admin',[],False,True)[0][0]:
+            self.id=1
+        else:
+            self.id = int(execute_sql('select max(admin_id) from admin',[],False,True)[0][0]) + 1
+        self.name=name
+        self.password=password
+
+    def insert(self):
+        sql = 'INSERT INTO ADMIN VALUES(:id,:name,:pass)'
+        list = [self.id,self.name,self.password]
+        execute_sql(sql,list,True,False)
+
+    def uniqueName(self):
+        sql = 'SELECT ADMIN_NAME FROM ADMIN WHERE ADMIN_NAME=:name'
+        list = [self.name]
+        if execute_sql(sql,list,False,True)[0][0]:
+            return False
+        else:
+            return True
+    
+
+class LoginAdmin:
+    def __init__(self,name,Password):
+        self.name=name
+        self.password=Password
+        
+    def is_valid_user(self):
+        sql= 'SELECT ADMIN_PASSWORD FROM ADMIN WHERE APPROVED_BY IS NOT NULL AND ADMIN_NAME=:name'
+        list= [self.name]
+
+        if not execute_sql(sql,list,False,True):
+            return False
+        elif execute_sql(sql,list,False,True)[0][0] == hash_the_password(self.password):
+            return True
+        else:
+            return False
+
+    def user_id(self):
+        sql= 'select ADMIN_ID from ADMIN where ADMIN_NAME=:name'
+        list= [self.name]
+
+        return execute_sql(sql,list,False,True)[0][0]
+

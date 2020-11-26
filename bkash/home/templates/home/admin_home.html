@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User_HomePage</title>
+</head>
+<body>
+    <h1>Agent Page</h1>
+{% if NAME %}
+    <P>{{NAME}}</P>
+    <a href="{% url 'home:logout' %}">logout</a>
+
+    {% for cust in CUSTOMER %}
+        <p> {{cust.cust_name}} {{cust.cust_nid}} {{cust.cust_mobile}} hello </p>
+    {% endfor %}
+{% endif %}
+</body>
+</html>
