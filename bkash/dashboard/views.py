@@ -2,7 +2,7 @@ from django.shortcuts import render,HttpResponse,redirect
 from django.views import View
 from django.core.files.storage import FileSystemStorage
 import os
-from .models import USERS,LoginAgent,LoginCustomer,execute_sql,Agent,Customer
+from .models import USERS,LoginAgent,LoginCustomer,execute_sql,Agent,Customer,Admin,LoginAdmin
 # Create your views here.
 
 class RegistrationAgentView(View):
@@ -97,3 +97,19 @@ class LoginAgentView(View):
             request.session['AGENT'] = user.user_id()
             return redirect('home:home')
         return render(request,"dashboard/loginAgentNew.html",{'message':logged_in})
+
+class LoginAdminView(View):
+    def get(self,request):
+        return render(request,"dashboard/loginAdmin.html")
+    def post(self,request):
+        user = LoginAdmin(request.POST.get('admin_name'),request.POST.get('password'))
+        logged_in=False
+        if user.is_valid_user():
+            if request.session.get('CUSTOMER'):
+                del(request.session['CUSTOMER'])
+            if request.session.get('AGENT'):
+                del(request.session['AGENT'])            
+            logged_in=True
+            request.session['ADMIN'] = user.user_id()
+            return redirect('home:home')
+        return render(request,"dashboard/loginAdmin.html",{'message':logged_in})

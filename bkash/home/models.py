@@ -14,6 +14,37 @@ class UserProfile:
 
         return context
 
+class AdminProfile:
+    def __init__(self,id):
+        self.id=id
+
+    def getProfile(self):
+        sql='SELECT ADMIN_NAME FROM ADMIN WHERE ADMIN_ID=: id'
+        ans = execute_sql(sql,[self.id],False,True)[0]
+        name = ans[0]
+
+        sql='SELECT USER_NAME,USER_NID,USER_MOBILE_NO FROM USERS U JOIN CUSTOMER C\
+             ON U.USER_ID=C.CUSTOMER_ID WHERE APPROVED_BY IS NULL'
+        customer = execute_sql(sql,[],False,True)
+        cont_cust = customer
+        i=0
+        for x in customer:
+            cont_cust[i] = {'cust_name':x[0],'cust_nid':x[1],'cust_mobile':x[2]}
+            i=i+1
+        
+        sql='SELECT USER_NAME,USER_NID,USER_MOBILE_NO,AGENT_BANK_AC FROM USERS U JOIN AGENT A\
+             ON U.USER_ID=A.AGENT_ID WHERE APPROVED_BY IS NULL'
+        agent = execute_sql(sql,[],False,True)
+        cont_agent = agent
+        i=0
+        for x in agent:
+            cont_agent[i] = {'agent_name':x[0],'agent_nid':x[1],'agent_mobile':x[2],'agent_bank_ac':x[3]}
+            i=i+1
+
+        context = {'NAME':name,'CUSTOMER':cont_cust,'AGENT':cont_agent}
+
+        return context
+
 class UpdateUser:
     def __init__(self,id):
         self.id = id

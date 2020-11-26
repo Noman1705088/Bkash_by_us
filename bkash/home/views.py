@@ -1,6 +1,6 @@
 from django.shortcuts import render,HttpResponse,redirect
 from django.views import View
-from .models import UserProfile,UpdateUser
+from .models import UserProfile,UpdateUser,AdminProfile
 # Create your views here.
 
 class HomeView(View):
@@ -18,7 +18,7 @@ class HomeView(View):
             context = {'NAME':request.COOKIES.get('NAME'),'PHOTO':request.COOKIES.get('PHOTO'),'MOBILE':request.COOKIES.get('MOBILE')}
             return render(request,'home/user_home.html',context)
         elif request.session.get('AGENT'):
-            if request.COOKIES.get('NAME') and request.COOKIES.get('PHOTO') and request.COOKIES.get('MOBILE'):
+            if not (request.COOKIES.get('NAME') and request.COOKIES.get('PHOTO') and request.COOKIES.get('MOBILE')):
                 user = UserProfile(request.session.get('AGENT'))
                 context = user.getProfile()               
                 resp = render(request,'home/user_home.html',context)
@@ -29,6 +29,21 @@ class HomeView(View):
 
             context = {'NAME':request.COOKIES.get('NAME'),'PHOTO':request.COOKIES.get('PHOTO'),'MOBILE':request.COOKIES.get('MOBILE')}
             return render(request,'home/user_home.html',context)
+        elif request.session.get('ADMIN'):
+            '''if not (request.COOKIES.get('NAME')):
+                user = AdminProfile(request.session.get('ADMIN'))
+                context = user.getProfile()               
+                resp = render(request,'home/admin_home.html',context)
+                resp.set_cookie('NAME',context['NAME'])
+                resp.set_cookie('CUSTOMER',context['CUSTOMER'])
+                resp.set_cookie('AGENT',context['AGENT'])
+                return resp'''           
+
+            #context = {'NAME':request.COOKIES.get('NAME'),'CUSTOMER':request.COOKIES.get('CUSTOMER')}
+            user = AdminProfile(request.session.get('ADMIN'))
+            context = user.getProfile()
+            return render(request,'home/admin_home.html',context)
+
         return render(request,'home/home.html')
 
 class LogoutView(View):
@@ -46,6 +61,11 @@ class LogoutView(View):
             resp.delete_cookie('NAME')
             resp.delete_cookie('MOBILE')
             resp.delete_cookie('PHOTO')
+            return resp
+        if request.session.get('ADMIN'):
+            del(request.session['ADMIN'])
+            resp=redirect('home:home')
+            resp.delete_cookie('NAME')
             return resp
         return redirect('home:home')
 
