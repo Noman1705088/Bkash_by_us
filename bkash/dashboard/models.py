@@ -110,7 +110,8 @@ class LoginCustomer(Login):
         super().__init__(mobile_no,Password)
 
     def is_valid_user(self):
-        sql= 'SELECT USER_PASSWORD FROM USERS U JOIN CUSTOMER C ON U.USER_ID=C.CUSTOMER_ID WHERE USER_MOBILE_NO=:mobile'
+        sql= 'SELECT USER_PASSWORD FROM USERS U JOIN CUSTOMER C ON U.USER_ID=C.CUSTOMER_ID WHERE USER_MOBILE_NO=:mobile\
+            AND APPROVED_BY IS NOT NULL'
         list= [self.mobile_no]
 
         if not execute_sql(sql,list,False,True):
@@ -125,7 +126,8 @@ class LoginAgent(Login):
         super().__init__(mobile_no,Password)
         
     def is_valid_user(self):
-        sql= 'SELECT USER_PASSWORD FROM USERS U JOIN AGENT A ON U.USER_ID=A.AGENT_ID WHERE USER_MOBILE_NO=:mobile'
+        sql= 'SELECT USER_PASSWORD FROM USERS U JOIN AGENT A ON U.USER_ID=A.AGENT_ID WHERE USER_MOBILE_NO=:mobile\
+            AND APPROVED_BY IS NOT NULL'
         list= [self.mobile_no]
 
         if not execute_sql(sql,list,False,True):
