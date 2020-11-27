@@ -82,10 +82,16 @@ class Agent:
         self.agent_balance = AGENT_BALANCE
 
     def insert(self):
+<<<<<<< HEAD
         sql = 'INSERT INTO AGENT VALUES(:id,:agent_bank_ac,:agent_balance)'
         list = [self.agent_id, self.agent_bank_ac, self.agent_balance]
         execute_sql(sql, list, True, False)
 
+=======
+        sql = 'INSERT INTO AGENT VALUES(:id,:agent_bank_ac,:agent_balance,:approved_by)'
+        list = [self.agent_id,self.agent_bank_ac,self.agent_balance,None]
+        execute_sql(sql,list,True,False)
+>>>>>>> 7103ec28dadb42a78c6ee9e65fdb7fee17c403f0
 
 class Customer:
     def __init__(self, cust_id, cust_balance):
@@ -93,10 +99,16 @@ class Customer:
         self.customer_balance = cust_balance
 
     def insert(self):
+<<<<<<< HEAD
         sql = 'INSERT INTO CUSTOMER VALUES(:id,:customer_balance)'
         list = [self.customer_id, self.customer_balance]
         execute_sql(sql, list, True, False)
 
+=======
+        sql = 'INSERT INTO CUSTOMER VALUES(:id,:customer_balance,:approved_by)'
+        list = [self.customer_id,self.customer_balance,None]
+        execute_sql(sql,list,True,False)
+>>>>>>> 7103ec28dadb42a78c6ee9e65fdb7fee17c403f0
 
 class Login:
     def __init__(self, mobile_no, Password):
@@ -116,8 +128,14 @@ class LoginCustomer(Login):
         super().__init__(mobile_no, Password)
 
     def is_valid_user(self):
+<<<<<<< HEAD
         sql = 'SELECT USER_PASSWORD FROM USERS U JOIN CUSTOMER C ON U.USER_ID=C.CUSTOMER_ID WHERE USER_MOBILE_NO=:mobile'
         list = [self.mobile_no]
+=======
+        sql= 'SELECT USER_PASSWORD FROM USERS U JOIN CUSTOMER C ON U.USER_ID=C.CUSTOMER_ID WHERE USER_MOBILE_NO=:mobile\
+            AND APPROVED_BY IS NOT NULL'
+        list= [self.mobile_no]
+>>>>>>> 7103ec28dadb42a78c6ee9e65fdb7fee17c403f0
 
         if not execute_sql(sql, list, False, True):
             return False
@@ -132,8 +150,14 @@ class LoginAgent(Login):
         super().__init__(mobile_no, Password)
 
     def is_valid_user(self):
+<<<<<<< HEAD
         sql = 'SELECT USER_PASSWORD FROM USERS U JOIN AGENT A ON U.USER_ID=A.AGENT_ID WHERE USER_MOBILE_NO=:mobile'
         list = [self.mobile_no]
+=======
+        sql= 'SELECT USER_PASSWORD FROM USERS U JOIN AGENT A ON U.USER_ID=A.AGENT_ID WHERE USER_MOBILE_NO=:mobile\
+            AND APPROVED_BY IS NOT NULL'
+        list= [self.mobile_no]
+>>>>>>> 7103ec28dadb42a78c6ee9e65fdb7fee17c403f0
 
         if not execute_sql(sql, list, False, True):
             return False

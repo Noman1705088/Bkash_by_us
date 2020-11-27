@@ -6,14 +6,32 @@
     <title>User_HomePage</title>
 </head>
 <body>
-    <h1>Agent Page</h1>
+    <h1>Admin Page</h1>
 {% if NAME %}
     <P>{{NAME}}</P>
     <a href="{% url 'home:logout' %}">logout</a>
 
-    {% for cust in CUSTOMER %}
-        <p> {{cust.cust_name}} {{cust.cust_nid}} {{cust.cust_mobile}} hello </p>
-    {% endfor %}
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h1> Customers </h1>
+        {% for cust in CUSTOMER %}
+            <p> {{cust.cust_name}} {{cust.cust_nid}} {{cust.cust_mobile}}</p>
+            <input type="checkbox" name={{cust.cust_post}} value={{cust.cust_val}}>
+        {% endfor %}
+
+        <h1> Agents </h1>
+        {% for agent in AGENT %}
+            <p> {{agent.agent_name}} {{agent.agent_nid}} {{agent.agent_mobile}} {{agent.agent_bank_ac}}</p>
+            <input type="checkbox" name={{agent.agent_post}} value={{agent.agent_val}}>
+        {% endfor %}
+
+        <h1> Admins </h1>
+        {% for admin in ADMIN %}
+            <p> {{admin.admin_name}}</p>
+            <input type="checkbox" name={{admin.admin_post}} value={{admin.admin_val}}>
+        {% endfor %}  
+        <button type="submit" class="btn btn-success">Approved</button>
+    </form>  
 {% endif %}
 </body>
 </html>

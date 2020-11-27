@@ -32,7 +32,7 @@ class RegistrationAgentView(View):
                 image= request.FILES.get("img")
                 fs = FileSystemStorage()
                 filename = fs.save(imagename, image)
-                redirect('home:home')
+                return redirect('home:home')
             else:
                 mobile_no_already_used=True
         return render(request,"dashboard/registrationAgentNew.html",{'message':mobile_no_already_used})
@@ -63,7 +63,7 @@ class RegistrationCustomerView(View):
                 image= request.FILES.get("img")
                 fs = FileSystemStorage()
                 filename = fs.save(imagename, image)
-                redirect('home:home')
+                return redirect('home:home')
             else:
                 mobile_no_already_used=True
         return render(request,"dashboard/registrationCustomerNew.html",{'message':mobile_no_already_used})
