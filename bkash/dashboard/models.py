@@ -138,7 +138,7 @@ class LoginAgent(Login):
             return False
 
 class Admin:
-    def __init__(self,id,name,password):
+    def __init__(self,name,password):
         if not execute_sql('select max(admin_id) from admin',[],False,True)[0][0]:
             self.id=1
         else:
@@ -147,17 +147,17 @@ class Admin:
         self.password=password
 
     def insert(self):
-        sql = 'INSERT INTO ADMIN VALUES(:id,:name,:pass)'
-        list = [self.id,self.name,self.password]
+        sql = 'INSERT INTO ADMIN VALUES(:id,:name,:pass,:approved_by)'
+        list = [self.id,self.name,self.password,None]
         execute_sql(sql,list,True,False)
 
     def uniqueName(self):
         sql = 'SELECT ADMIN_NAME FROM ADMIN WHERE ADMIN_NAME=:name'
         list = [self.name]
-        if execute_sql(sql,list,False,True)[0][0]:
-            return False
-        else:
+        if not execute_sql(sql,list,False,True):
             return True
+        else:
+            return False
     
 
 class LoginAdmin:

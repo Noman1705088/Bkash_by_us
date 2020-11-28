@@ -68,7 +68,23 @@ class RegistrationCustomerView(View):
                 mobile_no_already_used=True
         return render(request,"dashboard/registrationCustomerNew.html",{'message':mobile_no_already_used})
 
+class RegistrationAdminView(View):
+    def get(self,request):
+        return render(request,"dashboard/registrationAdmin.html")
+    def post(self,request):
+        admin_name=request.POST.get('username')
+        admin_pass=request.POST.get('password')
 
+        admin = Admin(admin_name,admin_pass)
+
+        user_name_exists=True
+        if admin.uniqueName():
+            user_name_exists = False
+            admin.insert()
+            return redirect('home:home')
+        else:
+            user_name_exists=True
+        return render(request,"dashboard/registrationAdmin.html",{'message':user_name_exists})
 
 class LoginCustomerView(View):
     def get(self,request):
@@ -89,27 +105,27 @@ class LoginAgentView(View):
         return render(request,"dashboard/loginAgentNew.html")
     def post(self,request):
         user = LoginAgent(request.POST.get('mobile_no'),request.POST.get('password'))
-        logged_in=False
+        logged_in_failed=True
         if user.is_valid_user():
             if request.session.get('CUSTOMER'):
                 del(request.session['CUSTOMER'])
-            logged_in=True
+            logged_in_failed=False
             request.session['AGENT'] = user.user_id()
             return redirect('home:home')
-        return render(request,"dashboard/loginAgentNew.html",{'message':logged_in})
+        return render(request,"dashboard/loginAgentNew.html",{'message':logged_in_failed})
 
 class LoginAdminView(View):
     def get(self,request):
         return render(request,"dashboard/loginAdmin.html")
     def post(self,request):
         user = LoginAdmin(request.POST.get('admin_name'),request.POST.get('password'))
-        logged_in=False
+        logged_in_failed=True
         if user.is_valid_user():
             if request.session.get('CUSTOMER'):
                 del(request.session['CUSTOMER'])
             if request.session.get('AGENT'):
                 del(request.session['AGENT'])            
-            logged_in=True
+            logged_in_failed=False
             request.session['ADMIN'] = user.user_id()
             return redirect('home:home')
-        return render(request,"dashboard/loginAdmin.html",{'message':logged_in})
+        return render(request,"dashboard/loginAdmin.html",{'message':logged_in_failed})
