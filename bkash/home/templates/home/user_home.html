@@ -48,7 +48,7 @@
                     <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Profile</a>
                     <ul class="collapse list-unstyled" id="pageSubmenu">
                         <li>
-                            <a href="profile.html">View Profile</a>
+                            <a href="{% url 'home:userInfo' %}">View Profile</a>
                         </li>
                         <li>
                             <a href="{% url 'home:updateUser' %}">Change Info</a>

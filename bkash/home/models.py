@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import date
+from django.shortcuts import render,HttpResponse,redirect
 # Create your models here.
 from dashboard.models import execute_sql,USERS,hash_the_password
 
@@ -90,7 +91,7 @@ class UpdateUser:
         if gender:
             self.gender= gender
         if dob:
-            self.dob= dob
+            self.dob= date.fromisoformat(dob)
         if nid:
             self.nid_no=nid
         if mobile:
@@ -101,9 +102,15 @@ class UpdateUser:
             ,USER_GENDER=:gender,USER_DOB=:dob,USER_NID=:nid,USER_MOBILE_NO=:mobile\
             WHERE USER_ID=:id'
 
-        list = [self.username,self.father_name,self.mother_name,self.password,self.gender,date.fromisoformat(self.dob),\
+        list = [self.username,self.father_name,self.mother_name,self.password,self.gender,self.dob,\
             self.nid_no,self.mobile_no,self.id]
         execute_sql(sql,list,True,False)
+
+
+        resp = redirect('home:home')
+        resp.set_cookie('NAME',str(self.username))
+        resp.set_cookie('MOBILE',str(self.mobile_no))
+        return resp
 
 
         

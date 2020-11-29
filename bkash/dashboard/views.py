@@ -91,14 +91,14 @@ class LoginCustomerView(View):
         return render(request,"dashboard/loginCustomerNew.html")
     def post(self,request):
         user = LoginCustomer(request.POST.get('mobile_no'),request.POST.get('password'))
-        logged_in=False
+        logged_in_failed=True
         if user.is_valid_user():
             if request.session.get('AGENT'):
                 del(request.session['AGENT'])
-            logged_in=True
+            logged_in_failed=False
             request.session['CUSTOMER'] = user.user_id()
             return redirect('home:home')
-        return render(request,"dashboard/loginCustomerNew.html",{'message':logged_in})
+        return render(request,"dashboard/loginCustomerNew.html",{'message':logged_in_failed})
 
 class LoginAgentView(View):
     def get(self,request):

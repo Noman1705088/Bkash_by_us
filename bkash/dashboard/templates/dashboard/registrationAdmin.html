@@ -65,7 +65,9 @@
                         </div>
                         <br>
                         {% if message %}
-                        <p>This Usernmae is already used,Try another</p>
+                            <div class="alert alert-danger mt-4">
+                            <strong>This Usernmae is already used,Try another</strong>
+                            </div>
                         {% endif %}
                         <input type="submit" value="SUBMIT" class="btn btn-success btn-block btn-lg">
                         <br>

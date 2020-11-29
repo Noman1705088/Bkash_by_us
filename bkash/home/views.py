@@ -113,9 +113,20 @@ class UpdateUserView(View):
                 image= request.FILES.get("img")
                 fs = FileSystemStorage()
                 filename = fs.save(context['PHOTO'], image)
-
+                return redirect('home:home')
             else:
-                user.update(request.POST.get('username'),request.POST.get('father_name'),\
+                resp = user.update(request.POST.get('username'),request.POST.get('father_name'),\
                     request.POST.get('mother_name'),request.POST.get('gender'),request.POST.get('dob'),\
                         request.POST.get('nid_no'),request.POST.get('mobile_no'),request.POST.get('password'))
-            return redirect('home:logout')
+                return resp
+
+class UserInfoView(View):
+    def get(self,request):
+        if request.session.get('CUSTOMER') or request.session.get('AGENT'):
+            id= request.session.get('AGENT')
+            if request.session.get('CUSTOMER'): 
+               id= request.session.get('CUSTOMER')
+
+            user= UpdateUser(id)
+            context = user.showForUpdate()
+            return render(request,'home/userInfo.html',context)        

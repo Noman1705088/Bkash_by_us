@@ -105,7 +105,7 @@
                         type="text"
                         name="username"
                         class="form-control"
-                        placeholder="Enter Your User Name"
+                        placeholder="{{NAME}}"
                         value=""
                       />
                     </div>
@@ -117,7 +117,7 @@
                           type="text"
                           name="father_name"
                           class="form-control"
-                          placeholder="Enter Your Father's Name"
+                          placeholder="{{FATHER}}"
                           value=""
                         />
                       </div>
@@ -127,7 +127,7 @@
                           type="text"
                           name="mother_name"
                           class="form-control"
-                          placeholder="Enter Your Mother's Name"
+                          placeholder="{{MOTHER}}"
                           value=""
                         />
                       </div>
@@ -167,9 +167,11 @@
                     <div>
                       <label for="dob">Date of Birth:</label>
                       <input
-                        type="date"
+                        type="text"
+                        onfocus="(this.type='date')"
                         class="form-control"
                         name="dob"
+                        placeholder="{{DOB}}"
                       />
                     </div>
                     <br />
@@ -180,7 +182,7 @@
                           type="text"
                           class="form-control"
                           name="nid_no"
-                          placeholder="Enter Your NID No"
+                          placeholder={{NID}}
                           value=""
                         />
                       </div>
@@ -190,7 +192,7 @@
                           type="text"
                           class="form-control"
                           name="mobile_no"
-                          placeholder="Enter Your Mobile No"
+                          placeholder={{MOBILE}}
                           value=""
                         />
                       </div>
@@ -263,7 +265,7 @@
               title=""
             />
           </div>
-          <h6 class="mt-2">Upload a different photo</h6>
+          <h6 class="mt-2">Upload Profile Picture</h6>
           <label class="custom-file">
             <input
               type="file"
@@ -273,7 +275,7 @@
             />
             <span class="custom-file-control">Choose file</span>
           </label>
-          </hr>
+          <p></p>
           <button type="submit" class="btn btn-success">Change Profile Pic</button>
         </form>
         </div>
