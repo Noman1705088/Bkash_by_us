@@ -29,7 +29,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
       <div class="container-fluid">
-        <a href="#" class="navbar-brand"
+        <a href="" class="navbar-brand"
           ><img
             src="{% static 'home/img/icon.png' %}"
             alt=""
@@ -73,11 +73,19 @@
                 class="dropdown-menu dropdown-menu-lg-left"
                 aria-labelledby="navbarDropdown"
               >
-                <a class="dropdown-item" href="{% url 'dashboard:loginCustomer' %}">As Customer</a>
+                <a
+                  class="dropdown-item"
+                  href="{% url 'dashboard:loginCustomer' %}"
+                  >As Customer</a
+                >
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{% url 'dashboard:loginAgent' %}">As Agent</a>
+                <a class="dropdown-item" href="{% url 'dashboard:loginAgent' %}"
+                  >As Agent</a
+                >
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{% url 'dashboard:loginAdmin' %}">As Admin</a>
+                <a class="dropdown-item" href="{% url 'dashboard:loginAdmin' %}"
+                  >As Admin</a
+                >
               </div>
             </li>
             <li class="nav-item dropdown">
@@ -96,11 +104,23 @@
                 class="dropdown-menu dropdown-menu-lg-left"
                 aria-labelledby="navbarDropdown"
               >
-                <a class="dropdown-item" href="{% url 'dashboard:registrationCustomer' %}">As Customer</a>
+                <a
+                  class="dropdown-item"
+                  href="{% url 'dashboard:registrationCustomer' %}"
+                  >As Customer</a
+                >
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{% url 'dashboard:registrationAgent' %}">As Agent</a>
+                <a
+                  class="dropdown-item"
+                  href="{% url 'dashboard:registrationAgent' %}"
+                  >As Agent</a
+                >
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{% url 'dashboard:registrationAdmin' %}">As Admin</a>
+                <a
+                  class="dropdown-item"
+                  href="{% url 'dashboard:registrationAdmin' %}"
+                  >As Admin</a
+                >
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">As Merchant</a>
                 <div class="dropdown-divider"></div>
@@ -282,7 +302,7 @@
           <div class="card">
             <div class="py-2 mx-auto w-50">
               <img
-                src="{% static 'home/img/Utsha.jpg' %}" 
+                src="{% static 'home/img/Utsha.jpg' %}"
                 alt=""
                 class="card-img-top rounded-circle"
               />
@@ -320,7 +340,11 @@
           <br />
         </div>
         <div class="col-lg-6">
-          <img src="{% static 'home/img/bootstrap2.png' %}"  alt="" class="img-fluid" />
+          <img
+            src="{% static 'home/img/prom1.jpg' %}"
+            alt=""
+            class="img-fluid"
+          />
         </div>
       </div>
       <hr class="my-4" />
