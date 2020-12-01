@@ -95,6 +95,8 @@ class LoginCustomerView(View):
         if user.is_valid_user():
             if request.session.get('AGENT'):
                 del(request.session['AGENT'])
+            if request.session.get('ADMIN'):
+                del(request.session['ADMIN'])
             logged_in_failed=False
             request.session['CUSTOMER'] = user.user_id()
             return redirect('home:home')
@@ -109,6 +111,8 @@ class LoginAgentView(View):
         if user.is_valid_user():
             if request.session.get('CUSTOMER'):
                 del(request.session['CUSTOMER'])
+            if request.session.get('ADMIN'):
+                del(request.session['ADMIN'])
             logged_in_failed=False
             request.session['AGENT'] = user.user_id()
             return redirect('home:home')

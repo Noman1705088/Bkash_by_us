@@ -1,0 +1,9 @@
+{% extends 'services/genericBlock.html' %}
+{% block content %}
+<h1>HISTORY page</h1>
+{% if NAME %}
+    {% for hist in HISTORY %}
+    <p>{{hist.SENDER}} {{hist.RECEIVER}} {{hist.AMOUNT}} {{hist.TXID}} {{hist.TIME}} {{hist.HIS_TYPE}}</P>
+    {% endfor %}
+{% endif %}
+{% endblock %}

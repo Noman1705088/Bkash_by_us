@@ -24,7 +24,7 @@
                 <!--<h3>BOOTSTRAP SIDEBAR</h3>-->
                 <div class="py-4 px-2 mb-4">
                     <div class="media d-flex align-items-center justify-content-center">
-                        <img src="{{PHOTO}}" alt="" width="100" height="100"
+                        <img src="../../{{PHOTO}}" alt="" width="100" height="100"
                             class="mr-3 rounded-circle img-thumbnail shadow-sm" />
                         <div class="media-body">
                             <h5 class="m-0">{{NAME}}</h5>
@@ -119,80 +119,7 @@
                 </div>
 
                 <!--- Three Column Section -->
-                <div class="container-fluid padding">
-                    <div class="row text-center padding">
-                            <div class="col-xs-12 col-sm-6 col-md-4 my-2">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <i class="fas fa-shopping-bag"></i>
-                                        <h3>Payment</h3>
-                                        <p>Do Shopping Payment with CashBack Offer</p>
-                                        <a href="introduction.html" class="btn btn-primary">Make Payment</a>
-                                    </div>
-                                </div>
-                            </div>
-                        <div class="col-xs-12 col-sm-6 col-md-4 my-2">
-                            <div class="card">
-                                <div class="card-body">
-                                    <i class="far fa-lightbulb"></i>
-                                    <h3>Bill</h3>
-                                    <p>Pay Your gas,electricity bill</p>
-                                    <a href="introduction.html" class="btn btn-primary">Pay Bill</a>
-                                </div>
-                            </div>
-                        </div>
-                
-                
-                        <div class="col-xs-12 col-sm-6 col-md-4 my-2">
-                            <div class="card">
-                                <div class="card-body">
-                                    <i class="fas fa-mobile-alt"></i>
-                                    <h3>Mobile Recharge</h3>
-                                    <p>Recharge Your Mobile Number</p>
-                                    <a href="introduction.html" class="btn btn-primary">Recharge</a>
-                                </div>
-                            </div>
-                        </div>
-                
-                        {% if TYPE == 'customer' %}
-                        <div class="col-xs-12 col-sm-6 col-md-4 my-2">
-                            <div class="card">
-                                <div class="card-body">
-                                    <i class="fas fa-comments-dollar"></i>
-                                    <h3>Send Money</h3>
-                                    <p>Send Money To other Customer</p>
-                                    <a href="{% url 'services:sendMoney' %}" class="btn btn-primary">Send Money</a>
-                                </div>
-                            </div>
-                        </div>
-                  
-                        <div class="col-xs-12 col-sm-6 col-md-4 my-2">
-                            <div class="card">
-                                <div class="card-body">
-                                    <i class="fas fa-hand-holding-usd"></i>
-                                    <h3>Cash Out</h3>
-                                    <p>Take Out Money From Your Account</p>
-                                    <a href="{% url 'services:cashOut' %}" class="btn btn-primary">Cash Out</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% elif TYPE == 'agent'%}
-                        <div class="col-xs-12 col-sm-6 col-md-4 my-2">
-                            <div class="card">
-                                <div class="card-body">
-                                    <i class="fas fa-funnel-dollar"></i>
-                                    <h3>Cash In</h3>
-                                    <p>Add Money To Your Account</p>
-                                    <a href="{% url 'services:cashIn' %}" class="btn btn-primary">Cash In</a>
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-             
-                    <hr class="my-4" />
-                </div>
-            </div>
+                {% block content %}{% endblock %}
 
             <footer id="contact">
                 <div class="container-fluid padding">
