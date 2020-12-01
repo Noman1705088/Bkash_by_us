@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="../css/adminStyle.css" />
+    <script
+      src="https://kit.fontawesome.com/e367819fd5.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <title>Admin bKash</title>
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <!--sidebar content-->
+      <nav id="sidebar">
+        <div class="sidebar-header">
+          <!--<h3>BOOTSTRAP SIDEBAR</h3>-->
+          <div class="py-4 px-2 mb-4">
+            <div class="media d-flex align-items-center justify-content-center">
+              <i
+                class="fas fa-user-secret fa-6x d-inline-block text-right px-2"
+                style="color: rgb(178, 177, 231)"
+              ></i>
+              <div class="media-body">
+                <h5 class="m-0">Asif Ahmed Utsha</h5>
+                <p class="font-weight-normal text-white mb-0">Admin</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ul class="list-unstyled components">
+          <li>
+            <a href="introduction.html">Home</a>
+          </li>
+          <!--<li>
+            <a
+              href="#pageSubmenu"
+              data-toggle="collapse"
+              aria-expanded="false"
+              class="dropdown-toggle"
+              >Profile</a
+            >
+            
+            <ul class="collapse list-unstyled" id="pageSubmenu">
+              <li>
+                <a href="profile.html">View Profile</a>
+              </li>
+              <li>
+                <a href="changeProfileInfo.html">Change Info</a>
+              </li>
+            </ul>
+          </li>
+          -->
+          <li>
+            <a href="#">Add Money</a>
+          </li>
+        </ul>
+
+        <ul class="list-unstyled CTAs">
+          <li>
+            <a href="index.html" class="download">Logout</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="content">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+          <button type="button" id="sidebarCollapse" class="btn btn-info">
+            <i class="fa fa-align-justify"></i>
+          </button>
+          <a href="" class="navbar-brand"
+            ><img
+              src="../img/icon.png"
+              alt=""
+              style="max-width: 50%; max-height: 50%; object-fit: contain"
+              class="px-3"
+          /></a>
+
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <i
+                  class="fas fa-user-secret fa-2x d-inline-block text-right px-2"
+                ></i>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <div class="content-wrapper">
+          <form action="">
+            <!-- Customer Approval Section-->
+            <div class="card my-4">
+              <div class="card-header text-center">
+                <i
+                  class="fas fa-user-circle fa-2x d-inline-block text-right px-2"
+                  style="color: rgb(18, 96, 128)"
+                ></i>
+                <h5 class="d-inline-block align-middle">
+                  Customers Waiting for Approval
+                </h5>
+              </div>
+              <div class="card-body">
+                <table class="table table-bordered table-hover text-center">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">Customer Name</th>
+                      <th scope="col">NID</th>
+                      <th scope="col">Mobile No</th>
+                      <th scope="col">Approval</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="align-middle">Jacob</td>
+                      <td class="align-middle">Otto</td>
+                      <td class="align-middle">01700545293</td>
+                      <td>
+                        <label>Approve</label>
+                        <input type="radio" id="approve" name="customer" />
+                        <br />
+                        <label>Reject</label>
+                        <input type="radio" id="reject" name="customer" />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Agents Approval Section-->
+
+            <div class="card my-4">
+              <div class="card-header text-center">
+                <i
+                  class="fas fa-user-tie fa-2x d-inline-block text-right px-2"
+                  style="color: rgb(235, 50, 17)"
+                ></i>
+                <h5 class="d-inline-block align-middle">
+                  Agents Waiting for Approval
+                </h5>
+              </div>
+              <div class="card-body">
+                <table class="table table-bordered table-hover text-center">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">Agent Name</th>
+                      <th scope="col">NID</th>
+                      <th scope="col">Mobile No</th>
+                      <th scope="col">Bank Account</th>
+                      <th scope="col">Approval</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="align-middle">Jacob</td>
+                      <td class="align-middle">Otto</td>
+                      <td class="align-middle">01700545293</td>
+                      <td class="align-middle">adbcde</td>
+                      <td>
+                        <label>Approve</label>
+                        <input type="radio" id="approve" name="agent" />
+                        <br />
+                        <label>Reject</label>
+                        <input type="radio" id="reject" name="agent" />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Merchants Approval Section-->
+
+            <div class="card my-4">
+              <div class="card-header text-center">
+                <i
+                  class="fas fa-warehouse fa-2x d-inline-block text-right px-2"
+                  style="color: rgb(42, 134, 19)"
+                ></i>
+                <h5 class="d-inline-block align-middle">
+                  Merchants Waiting for Approval
+                </h5>
+              </div>
+              <div class="card-body">
+                <table class="table table-bordered table-hover text-center">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">Merchant Name</th>
+                      <th scope="col">Branch Id</th>
+                      <th scope="col">Mobile No</th>
+                      <th scope="col">Bank Account</th>
+                      <th scope="col">Approval</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="align-middle">Jacob</td>
+                      <td class="align-middle">Otto</td>
+                      <td class="align-middle">01700545293</td>
+                      <td class="align-middle">adbcde</td>
+                      <td>
+                        <label>Approve</label>
+                        <input type="radio" id="approve" name="merchant" />
+                        <br />
+                        <label>Reject</label>
+                        <input type="radio" id="reject" name="merchant" />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Mobile Operator Approval Section-->
+
+            <div class="card my-4">
+              <div class="card-header text-center">
+                <i
+                  class="fas fa-mobile-alt fa-2x d-inline-block text-right px-2"
+                  style="color: rgb(52, 21, 192)"
+                ></i>
+                <h5 class="d-inline-block align-middle">
+                  Mobile Operator Waiting for Approval
+                </h5>
+              </div>
+              <div class="card-body">
+                <table class="table table-bordered table-hover text-center">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">Operator Name</th>
+                      <th scope="col">Bank Account</th>
+                      <th scope="col">Approval</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="align-middle">Jacob</td>
+                      <td class="align-middle">adbcde</td>
+                      <td>
+                        <label>Approve</label>
+                        <input type="radio" id="approve" name="operator" />
+                        <br />
+                        <label>Reject</label>
+                        <input type="radio" id="reject" name="operator" />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Service Provider Approval Section-->
+            <div class="card my-4">
+              <div class="card-header text-center">
+                <i
+                  class="fas fa-lightbulb fa-2x d-inline-block text-right px-2"
+                  style="color: rgb(151, 15, 185)"
+                ></i>
+                <h5 class="d-inline-block align-middle">
+                  Utility Service Provider Waiting for Approval
+                </h5>
+              </div>
+              <div class="card-body">
+                <table class="table table-bordered table-hover text-center">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">Service Name</th>
+                      <th scope="col">Service Type</th>
+                      <th scope="col">Bank Account</th>
+                      <th scope="col">Approval</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="align-middle">Jacob</td>
+                      <td class="align-middle">Electricity</td>
+                      <td class="align-middle">adbcde</td>
+                      <td>
+                        <label>Approve</label>
+                        <input type="radio" id="approve" name="service" />
+                        <br />
+                        <label>Reject</label>
+                        <input type="radio" id="reject" name="service" />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Admin Approval Section-->
+            <div class="card my-4">
+              <div class="card-header text-center">
+                <i
+                  class="fas fa-user-secret fa-2x d-inline-block text-right px-2"
+                  style="color: rgb(138, 151, 16)"
+                ></i>
+                <h5 class="d-inline-block align-middle">
+                  New Admin Waiting for Approval
+                </h5>
+              </div>
+              <div class="card-body">
+                <table class="table table-bordered table-hover text-center">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">Admin Name</th>
+                      <th scope="col">Approval</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="align-middle">Jacob</td>
+                      <td>
+                        <label>Approve</label>
+                        <input type="radio" id="approve" name="admin" />
+                        <br />
+                        <label>Reject</label>
+                        <input type="radio" id="reject" name="admin" />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4"></div>
+              <div class="col-4 text-center">
+                <input
+                  type="submit"
+                  name=""
+                  id=""
+                  class="btn btn-success btn-lg btn-block"
+                  value="Approve"
+                />
+              </div>
+              <div class="col-4"></div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#sidebarCollapse").on("click", function () {
+          $("#sidebar").toggleClass("active");
+        });
+      });
+    </script>
+  </body>
+</html>
