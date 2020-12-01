@@ -1,13 +1,26 @@
 from django.db import models
-from dashboard.models import execute_sql
+from dashboard.models import execute_sql,hash_the_password
 
 # Create your models here.
 
 class SendMoney:
-    def __init__(self,sender_id,receiver_mobile,amount):
+    def __init__(self,sender_id,receiver_mobile,amount,password):
         self.sender_id= sender_id
         self.receiver_mobile= receiver_mobile
         self.amount= amount
+        self.password = password
+
+    def isCorrectPass(self):
+        sql= 'SELECT USER_PASSWORD FROM USERS U JOIN CUSTOMER C ON U.USER_ID=C.CUSTOMER_ID WHERE CUSTOMER_ID=:CUST\
+            AND APPROVED_BY IS NOT NULL'
+        list= [self.sender_id]
+
+        if not execute_sql(sql, list, False, True):
+            return False
+        elif execute_sql(sql, list, False, True)[0][0] == hash_the_password(self.password):
+            return True
+        else:
+            return False
 
     def hasEnoughMoney(self):
         sql = 'SELECT CUSTOMER_BALANCE FROM CUSTOMER WHERE CUSTOMER_ID=: CUST_ID'
@@ -42,10 +55,23 @@ class SendMoney:
 
 
 class CashIn:
-    def __init__(self,sender_id,receiver_mobile,amount):
+    def __init__(self,sender_id,receiver_mobile,amount,password):
         self.sender_id= sender_id
         self.receiver_mobile= receiver_mobile
         self.amount= amount
+        self.password = password
+
+    def isCorrectPass(self):
+        sql= 'SELECT USER_PASSWORD FROM USERS U JOIN AGENT A ON U.USER_ID=A.AGENT_ID WHERE AGENT_ID=:AGENT\
+            AND APPROVED_BY IS NOT NULL'
+        list= [self.sender_id]
+
+        if not execute_sql(sql, list, False, True):
+            return False
+        elif execute_sql(sql, list, False, True)[0][0] == hash_the_password(self.password):
+            return True
+        else:
+            return False
 
     def hasEnoughMoney(self):
         sql = 'SELECT AGENT_BALANCE FROM AGENT WHERE AGENT_ID=: AGENT_ID'
@@ -80,10 +106,23 @@ class CashIn:
         execute_sql(sql,list,True,False)
 
 class CashOut:
-    def __init__(self,sender_id,receiver_mobile,amount):
+    def __init__(self,sender_id,receiver_mobile,amount,password):
         self.sender_id= sender_id
         self.receiver_mobile= receiver_mobile
         self.amount= amount
+        self.password = password
+
+    def isCorrectPass(self):
+        sql= 'SELECT USER_PASSWORD FROM USERS U JOIN CUSTOMER C ON U.USER_ID=C.CUSTOMER_ID WHERE CUSTOMER_ID=:CUST\
+            AND APPROVED_BY IS NOT NULL'
+        list= [self.sender_id]
+
+        if not execute_sql(sql, list, False, True):
+            return False
+        elif execute_sql(sql, list, False, True)[0][0] == hash_the_password(self.password):
+            return True
+        else:
+            return False
 
     def hasEnoughMoney(self):
         sql = 'SELECT CUSTOMER_BALANCE FROM CUSTOMER WHERE CUSTOMER_ID=: CUST_ID'
@@ -123,8 +162,8 @@ class HistoryOf:
 
     def getHistory(self):
         sql = 'SELECT SENDER,RECEIVER,AMOUNT,TRANSACTION_ID,TRANSACTION_TIME,TYPE_NAME FROM \
-            ((SELECT \'CUST_\'||CUSTOMER_ID SENDER,\'AGEN_\' || AGENT_ID RECEIVER,HISTORY_ID,TRANSACTION_AMOUNT_C_I AMOUNT FROM CASH_IN)\
-                UNION (SELECT \'AGEN_\'||AGENT_ID,\'CUST_\'||CUSTOMER_ID,HISTORY_ID,TRANSACTION_AMOUNT_C_O FROM CASH_OUT)\
+            ((SELECT \'AGEN_\' || AGENT_ID SENDER,\'CUST_\'||CUSTOMER_ID RECEIVER,HISTORY_ID,TRANSACTION_AMOUNT_C_I AMOUNT FROM CASH_IN)\
+                UNION (SELECT \'CUST_\'||CUSTOMER_ID,\'AGEN_\'||AGENT_ID,HISTORY_ID,TRANSACTION_AMOUNT_C_O FROM CASH_OUT)\
                     UNION (SELECT \'CUST_\'||FROM_CUSTOMER_ID,\'CUST_\'||TO_CUSTOMER_ID,HISTORY_ID,TRANSACTION_AMOUNT_S_M FROM SEND_MONEY))\
                         S JOIN HISTORY H ON S.HISTORY_ID=H.HISTORY_ID JOIN HISTORY_TYPE HT ON H.TYPE_ID=HT.TYPE_ID\
                             WHERE SENDER =: SENDER OR RECEIVER =: RECEIVER\

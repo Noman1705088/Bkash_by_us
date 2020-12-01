@@ -29,6 +29,10 @@
           font-size: 14px;
         }
       </style>
+      <script
+        src="https://kit.fontawesome.com/e367819fd5.js"
+        crossorigin="anonymous"
+      ></script>
       <title>Bkash</title>
     </head>
 
@@ -37,7 +41,8 @@
         <div class="col-lg-5 m-auto">
           <div class="card mt-5 bg-dark">
             <div class="card-title text-center mt-3">
-              <img src="https://png.pngtree.com/png-vector/20190919/ourlarge/pngtree-user-login-or-authenticate-icon-on-gray-background-flat-icon-ve-png-image_1742031.jpg" alt="" width="150px" height="150px" />
+              <!--img src="https://png.pngtree.com/png-vector/20190919/ourlarge/pngtree-user-login-or-authenticate-icon-on-gray-background-flat-icon-ve-png-image_1742031.jpg" alt="" width="150px" height="150px" /-->
+              <i class="fas fa-hand-holding-usd"></i>
             </div>
             <div class="card-title text-center mt-2">
               <h1 class="mb-3 font-weight-light text-white text-uppercase">
@@ -75,7 +80,23 @@
                     max = 10000
                   />
                 </div>
-                <button type="submit" class="btn btn-success">Cash Out</button>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="fa fa-lock fa-2x"></i>
+                    </span>
+                  </div>
+                  <input
+                    type="password"
+                    class="form-control py-4"
+                    placeholder="Password"
+                    name="password"
+                  />
+                </div>
+                <button type="submit" class="btn btn-success">
+                <span class="fas fa-hand-holding-usd" aria-hidden="true"></span>
+                Cash Out
+                </button>
               </form>
             </div>
           </div>

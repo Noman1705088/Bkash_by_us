@@ -12,15 +12,22 @@ class HomeView(View):
             if not (request.COOKIES.get('NAME') and request.COOKIES.get('PHOTO') and request.COOKIES.get('MOBILE')):
                 user = UserProfile(request.session.get('CUSTOMER'))
                 context = user.getProfile()
-                context['TYPE'] = 'customer'               
+                context['TYPE'] = 'customer'
+                sql='SELECT CUSTOMER_BALANCE FROM CUSTOMER WHERE CUSTOMER_ID=:cust'
+                balance = execute_sql(sql,[request.session.get('CUSTOMER')],False,True)[0][0]
+                context['BALANCE']=balance
+                               
                 resp = render(request,'home/user_home.html',context)
                 resp.set_cookie('NAME',context['NAME'])
                 resp.set_cookie('MOBILE',context['MOBILE'])
                 resp.set_cookie('PHOTO',context['PHOTO'])
-                return resp           
+                return resp 
+                          
+            sql='SELECT CUSTOMER_BALANCE FROM CUSTOMER WHERE CUSTOMER_ID=:cust'
+            balance = execute_sql(sql,[request.session.get('CUSTOMER')],False,True)[0][0]
 
             context = {'NAME':request.COOKIES.get('NAME'),'PHOTO':request.COOKIES.get('PHOTO'),\
-                'MOBILE':request.COOKIES.get('MOBILE'),'TYPE':'customer'}
+                'MOBILE':request.COOKIES.get('MOBILE'),'TYPE':'customer','BALANCE':balance}
             return render(request,'home/user_home.html',context)
         elif request.session.get('AGENT'):
             if not (request.COOKIES.get('NAME') and request.COOKIES.get('PHOTO') and request.COOKIES.get('MOBILE')):
@@ -33,8 +40,11 @@ class HomeView(View):
                 resp.set_cookie('PHOTO',context['PHOTO'])
                 return resp           
 
+            sql='SELECT AGENT_BALANCE FROM AGENT WHERE AGENT_ID=:agent'
+            balance = execute_sql(sql,[request.session.get('AGENT')],False,True)[0][0]
+
             context = {'NAME':request.COOKIES.get('NAME'),'PHOTO':request.COOKIES.get('PHOTO'),\
-                'MOBILE':request.COOKIES.get('MOBILE'),'TYPE':'agent'}
+                'MOBILE':request.COOKIES.get('MOBILE'),'TYPE':'agent','BALANCE':balance}
             return render(request,'home/user_home.html',context)
         elif request.session.get('ADMIN'):         
             #context = {'NAME':request.COOKIES.get('NAME'),'CUSTOMER':request.COOKIES.get('CUSTOMER')}
@@ -48,17 +58,36 @@ class HomeView(View):
         if request.session.get('ADMIN'):
             for name,key in request.POST.items():
                 if name[0:4] == 'CUST':
-                    sql = 'UPDATE CUSTOMER SET APPROVED_BY=:admin WHERE CUSTOMER_ID=:cust'
-                    list=[request.session.get('ADMIN'),key]
-                    execute_sql(sql,list,True,False)
+                    if int(key)>0:
+                        sql = 'UPDATE CUSTOMER SET APPROVED_BY=:admin WHERE CUSTOMER_ID=:cust'
+                        list=[request.session.get('ADMIN'),key]
+                        execute_sql(sql,list,True,False)
+                    elif int(key)<0:
+                        sql = 'DELETE CUSTOMER WHERE CUSTOMER_ID=:cust'
+                        list=[-int(key)]
+                        execute_sql(sql,list,True,False)  
+                        sql = 'DELETE USERS WHERE USER_ID=:user'
+                        execute_sql(sql,list,True,False)                        
                 elif name[0:4] == 'AGEN':
-                    sql = 'UPDATE AGENT SET APPROVED_BY=:admin WHERE AGENT_ID=:agent'
-                    list=[request.session.get('ADMIN'),key]
-                    execute_sql(sql,list,True,False)
+                    if int(key)>0:
+                        sql = 'UPDATE AGENT SET APPROVED_BY=:admin WHERE AGENT_ID=:agent'
+                        list=[request.session.get('ADMIN'),key]
+                        execute_sql(sql,list,True,False)
+                    elif int(key)<0:
+                        sql = 'DELETE AGENT WHERE AGENT_ID=:admin'
+                        list=[-int(key)]
+                        execute_sql(sql,list,True,False)  
+                        sql = 'DELETE USERS WHERE USER_ID=:user'
+                        execute_sql(sql,list,True,False)   
                 elif name[0:4] == 'ADMI':
-                    sql = 'UPDATE ADMIN SET APPROVED_BY=:admin WHERE ADMIN_ID=:admin'
-                    list=[request.session.get('ADMIN'),key]
-                    execute_sql(sql,list,True,False)
+                    if int(key)>0:
+                        sql = 'UPDATE ADMIN SET APPROVED_BY=:admin WHERE ADMIN_ID=:admin'
+                        list=[request.session.get('ADMIN'),key]
+                        execute_sql(sql,list,True,False)
+                    elif int(key)<0:
+                        sql = 'DELETE ADMIN WHERE ADMIN_ID=:admin'
+                        list=[-int(key)]
+                        execute_sql(sql,list,True,False)  
 
             return redirect('home:home')
 
