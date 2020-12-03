@@ -151,7 +151,7 @@ class Admin:
             self.id = int(execute_sql(
                 'select max(admin_id) from admin', [], False, True)[0][0]) + 1
         self.name = name
-        self.password = hash_the_password(password)
+        self.password = hash_the_password(Password)
 
     def insert(self):
         sql = 'INSERT INTO ADMIN VALUES(:id,:name,:pass,:approved_by)'

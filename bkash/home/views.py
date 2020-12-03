@@ -33,7 +33,11 @@ class HomeView(View):
             if not (request.COOKIES.get('NAME') and request.COOKIES.get('PHOTO') and request.COOKIES.get('MOBILE')):
                 user = UserProfile(request.session.get('AGENT'))
                 context = user.getProfile()    
-                context['TYPE'] = 'agent'            
+                context['TYPE'] = 'agent'
+                sql='SELECT AGENT_BALANCE FROM AGENT WHERE AGENT_ID=:agent'
+                balance = execute_sql(sql,[request.session.get('AGENT')],False,True)[0][0]
+                context['BALANCE']=balance
+                            
                 resp = render(request,'home/user_home.html',context)
                 resp.set_cookie('NAME',context['NAME'])
                 resp.set_cookie('MOBILE',context['MOBILE'])
@@ -72,6 +76,9 @@ class HomeView(View):
                     if int(key)>0:
                         sql = 'UPDATE AGENT SET APPROVED_BY=:admin WHERE AGENT_ID=:agent'
                         list=[request.session.get('ADMIN'),key]
+                        execute_sql(sql,list,True,False)
+                        sql = 'UPDATE AGENT SET AGENT_BALANCE=5000 WHERE AGENT_ID=:agent'
+                        list=[key]
                         execute_sql(sql,list,True,False)
                     elif int(key)<0:
                         sql = 'DELETE AGENT WHERE AGENT_ID=:admin'
