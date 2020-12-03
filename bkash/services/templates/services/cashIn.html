@@ -24,7 +24,10 @@
       <style>
         @import url("https://fonts.googleapis.com/css2?family=Poppins:100,200,300,400,500&display=swap");
         body {
-          background-image: url('https://i.pinimg.com/originals/52/ec/bb/52ecbb1273c5d9b78b7a07863fe63234.jpg');
+          background-image: url('https://rrbus.com/img/app/background/user-center/bg2.png');
+          background-size: cover;
+          background-position: center center;
+          background-attachment: fixed;
           font-family: "Poppins", sans-serif;
           font-size: 14px;
         }
@@ -41,7 +44,7 @@
         <div class="col-lg-5 m-auto">
           <div class="card mt-5 bg-dark">
             <div class="card-title text-center mt-3">
-              <img src="https://png.pngtree.com/png-vector/20190919/ourlarge/pngtree-user-login-or-authenticate-icon-on-gray-background-flat-icon-ve-png-image_1742031.jpg" alt="" width="150px" height="150px" />
+              <img src="https://cdn.iconscout.com/icon/premium/png-512-thumb/finance-141-123578.png" alt="" style="max-width: 40%; max-height: 40%; object-fit: contain" >
             </div>
             <div class="card-title text-center mt-2">
               <h1 class="mb-3 font-weight-light text-white text-uppercase">
@@ -92,11 +95,12 @@
                     name="password"
                   />
                 </div>
-                <button type="submit" class="btn btn-success">
+                <button type="submit" class="btn btn-lg btn-warning float-left">
                 <span class="faS fa-funnel-dollar" aria-hidden="true"></span>
                 Cash In
                 </button>
               </form>
+               <a href="{% url 'home:home' %}" class="btn btn-primary btn-lg float-right">Back To Home</a>
             </div>
           </div>
           {% if message %}

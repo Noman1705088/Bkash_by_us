@@ -17,6 +17,7 @@ class SendMoneyView(View):
         send_money_trans = SendMoney(sender_id,reciver_mobile_no,amount,request.POST.get('password'))
         if send_money_trans.validMobileNo() and send_money_trans.hasEnoughMoney() and send_money_trans.isCorrectPass():
             send_money_trans.doTransiction()
+            return redirect('services:history')
         else:
             trans_failed = True
             return render(request,'services/sendMoney.html',{'message':trans_failed})
@@ -36,6 +37,7 @@ class CashInView(View):
         cash_in_trans = CashIn(sender_id,reciver_mobile_no,amount,request.POST.get('password'))
         if cash_in_trans.validMobileNo() and cash_in_trans.hasEnoughMoney() and cash_in_trans.isCorrectPass():
             cash_in_trans.doTransiction()
+            return redirect('services:history')
         else:
             trans_failed = True
             return render(request,'services/cashIn.html',{'message':trans_failed})
@@ -55,6 +57,7 @@ class CashOutView(View):
         cash_out_trans = CashOut(sender_id,reciver_mobile_no,amount,request.POST.get('password'))
         if cash_out_trans.validMobileNo() and cash_out_trans.hasEnoughMoney() and cash_out_trans.isCorrectPass():
             cash_out_trans.doTransiction()
+            return redirect('services:history')
         else:
             trans_failed = True
             return render(request,'services/cashOut.html',{'message':trans_failed})
