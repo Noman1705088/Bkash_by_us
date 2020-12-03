@@ -213,6 +213,57 @@
                 </table>
               </div>
             </div>
+
+            <div class="card my-4">
+              <div class="card-header text-center">
+                <i
+                  class="fas fa-user-tie fa-2x d-inline-block text-right px-2"
+                  style="color: rgb(235, 50, 17)"
+                ></i>
+                <h5 class="d-inline-block align-middle">
+                  Agents Waiting for Approval
+                </h5>
+              </div>
+              <div class="card-body">
+                <table class="table table-bordered table-hover text-center">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">Service Photo</th>
+                      <th scope="col">Service Name</th>
+                      <th scope="col">Service Type</th>
+                      <th scope="col">Service Bank AC</th>
+                      <th scope="col">Approval</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for service in SERVICE %}
+                    <tr>
+                      <td class="align-middle">
+                        <img
+                          src="media\{{service.service_photo}}?lastmod=12345678"
+                          alt=""
+                          width="50"
+                          height="50"
+                          style="object-fit: contain"
+                          class="mr-3 rounded-circle img-thumbnail shadow-sm"
+                        />
+                      </td>
+                      <td class="align-middle">{{service.service_name}}</td>
+                      <td class="align-middle">{{service.service_type}}</td>
+                      <td class="align-middle">{{service.service_bank_ac}}</td>
+                      <td>
+                        <label>Approve</label>
+                        <input type="radio" id="approve" name={{service.service_post}} value={{service.service_val}}>
+                        <br />
+                        <label>Reject</label>
+                        <input type="radio" id="reject" name={{service.service_post}} value=-{{service.service_val}}>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
             
              <!-- Admin Approval Section-->
             <div class="card my-4">

@@ -53,7 +53,17 @@ class AdminProfile:
                 'admin_val':x[1]}
             i=i+1
 
-        context = {'NAME':name,'CUSTOMER':cont_cust,'AGENT':cont_agent,'ADMIN':cont_admin}
+        sql='SELECT SERVICE_PHOTO,SERVICE_NAME,SERVICE_TYPE,SERVICE_BANK_AC_NO,\
+            SERVICE_ID FROM UTILITY_SERVICE WHERE APPROVED_BY IS NULL'
+        service = execute_sql(sql,[],False,True)
+        cont_service = service
+        i=0
+        for x in service:
+            cont_service[i] = {'service_photo':x[0],'service_name':x[1],'service_type':x[2]\
+                ,'service_bank_ac':x[3],'service_post':'SERVICE'+str(x[4]),'service_val':x[4]}
+            i=i+1
+
+        context = {'NAME':name,'CUSTOMER':cont_cust,'AGENT':cont_agent,'ADMIN':cont_admin,'SERVICE':cont_service}
 
         return context
 
