@@ -4,7 +4,6 @@
 function submitform()
 {
 document.getElementById("myForm").submit();
-alert("your form submitted");
 }
 </script>
       <script
@@ -21,64 +20,88 @@ alert("your form submitted");
     height: 30px;
     display: inline-block;
   }
-  input {
+  #Electricity,#Gas,#Water,#internet,#Telephone,#TV,#card,#Education{
     display: none;
   }
 </style>
 </head>
 <body>
-<form method="post" action="#" id="myForm">
+  <form method="post" action="" id="myForm">
+  {% csrf_token %}
+    <label for="Electricity">
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <i class="far fa-lightbulb"></i>
+        <h3>Electricity</h3>
+      </div>
+    </label>
+    <input onclick="submitform()" type="radio" name="choice" id="Electricity" value = "Electricity">
 
-<label for="myId">
-  <div class="col-xs-12 col-sm-6 col-md-4">
-    <i class="far fa-lightbulb"></i>
-    <h3>Electricity</h3>
-  </div>
-</label>
-<input onclick="submitform()" type="radio" name="n" id="myId"><br/>
-<label for="myId">
-  <div class="col-xs-12 col-sm-6 col-md-4">
-    <i class="far fa-lightbulb"></i>
-    <h3>Electricity</h3>
-  </div>
-</label>
-<input onclick="submitform()" type="radio" name="n" id="myId"><br/>
-<label for="myId">
-  <div class="col-xs-12 col-sm-6 col-md-4">
-    <i class="far fa-lightbulb"></i>
-    <h3>Electricity</h3>
-  </div>
-</label>
-<input onclick="submitform()" type="radio" name="n" id="myId"><br/>
-<label for="myId">
-  <div class="col-xs-12 col-sm-6 col-md-4">
-    <i class="far fa-lightbulb"></i>
-    <h3>Electricity</h3>
-  </div>
-</label>
-<input onclick="submitform()" type="radio" name="n" id="myId"><br/>
-<label for="myId">
-  <div class="col-xs-12 col-sm-6 col-md-4">
-    <i class="far fa-lightbulb"></i>
-    <h3>Electricity</h3>
-  </div>
-</label>
-<input onclick="submitform()" type="radio" name="n" id="myId"><br/>
-<label for="myId">
-  <div class="col-xs-12 col-sm-6 col-md-4">
-    <i class="far fa-lightbulb"></i>
-    <h3>Electricity</h3>
-  </div>
-</label>
-<input onclick="submitform()" type="radio" name="n" id="myId"><br/>
-<label for="myId">
-  <div class="col-xs-12 col-sm-6 col-md-4">
-    <i class="far fa-lightbulb"></i>
-    <h3>Electricity</h3>
-  </div>
-</label>
-<input onclick="submitform()" type="radio" name="n" id="myId"><br/>
+    <label for="Gas">
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <i class="far fa-lightbulb"></i>
+        <h3>Gas</h3>
+      </div>
+    </label>
+    <input onclick="submitform()" type="radio" name="choice" id="Gas" value = "Gas">
 
-</form>
+    <label for="Water">
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <i class="far fa-lightbulb"></i>
+        <h3>Water</h3>
+      </div>
+    </label>
+    <input onclick="submitform()" type="radio" name="choice" id="Water" value = "Water">
+
+    <label for="Internet">
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <i class="far fa-lightbulb"></i>
+        <h3>Internet</h3>
+      </div>
+    </label>
+    <input onclick="submitform()" type="radio" name="choice" id="Internet" value = "Internet">
+
+    <label for="Telephone">
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <i class="far fa-lightbulb"></i>
+        <h3>Telephone</h3>
+      </div>
+    </label>
+    <input onclick="submitform()" type="radio" name="choice" id="Telephone" value = "Telephone">
+
+    <label for="TV">
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <i class="far fa-lightbulb"></i>
+        <h3>TV</h3>
+      </div>
+    </label>
+    <input onclick="submitform()" type="radio" name="choice" id="TV" value = "TV">
+
+    <label for="Education">
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <i class="far fa-lightbulb"></i>
+        <h3>Education</h3>
+      </div>
+    </label>
+    <input onclick="submitform()" type="radio" name="choice" id="Education" value = "Education">
+
+    <label for="Card">
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <i class="far fa-lightbulb"></i>
+        <h3>Credit Card</h3>
+      </div>
+    </label>
+    <input onclick="submitform()" type="radio" name="choice" id="Card" value = "Credit Card">
+  </form>
+
+  {% if type_services %}
+    {% for x in  type_services%}
+    <img src="..\..\media\{{x.service_photo}}" alt="" style="max-width: 20%; max-height: 20%; object-fit: contain" >
+    <a href="{% url 'services:payBill' x.service_id %}" >
+      <h3>{{x.servie_name}}</h3>
+    </a>
+    <h5>{{x.service_type}}</h5>
+    
+    {% endfor %}  
+  {% endif %}
 </body>
 </html>
