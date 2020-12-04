@@ -156,6 +156,39 @@ class CashOut:
         list = [self.receiver_id,self.sender_id,self.amount]
         execute_sql(sql,list,True,False)
 
+class PayBill:
+    def __init__(self,sender_id):
+        self.sender_id= sender_id
+
+    def servicesOfType(self,service_type):
+        sql = 'SELECT SERVICE_NAME,SERVICE_TYPE,SERVICE_PHOTO FROM UTILITY_SERVICE\
+             WHERE UPPER(SERVICE_TYPE) = UPPER(\':type\') AND APPROVED_BY IS NOT NULL'
+
+        list = [service_type]
+        services = execute_sql(sql,list,False,True)
+        cont_service = services
+        i=0
+        for x in services:
+            cont_service[i] = {'servie_name':x[0],'service_type':x[1],'service_photo':x[2]}
+            i=i+1
+
+        context = {'types_services':cont_service}
+        return context
+
+    def doTransiction(self):
+        sql = 'UPDATE AGENT SET AGENT_BALANCE = AGENT_BALANCE+ :amount WHERE AGENT_ID = :receiver' 
+        list = [self.amount,self.receiver_id]
+        execute_sql(sql,list,True,False)
+
+        sql = 'UPDATE CUSTOMER SET CUSTOMER_BALANCE = CUSTOMER_BALANCE- :amount WHERE CUSTOMER_ID = :reciver'
+        list = [self.amount,self.sender_id]
+        execute_sql(sql,list,True,False) 
+
+        sql = 'INSERT INTO CASH_OUT(AGENT_ID,CUSTOMER_ID,TRANSACTION_AMOUNT_C_O) VALUES(:receiver,:sender,:amount)'
+        list = [self.receiver_id,self.sender_id,self.amount]
+        execute_sql(sql,list,True,False)
+
+
 class HistoryOf:
     def __init__(self,user):
         self.user = user
