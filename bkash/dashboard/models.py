@@ -83,8 +83,9 @@ class Agent:
 
     def insert(self):
         sql = 'INSERT INTO AGENT VALUES(:id,:agent_bank_ac,:agent_balance,:approved_by)'
-        list = [self.agent_id,self.agent_bank_ac,self.agent_balance,None]
-        execute_sql(sql,list,True,False)
+        list = [self.agent_id, self.agent_bank_ac, self.agent_balance, None]
+        execute_sql(sql, list, True, False)
+
 
 class Customer:
     def __init__(self, cust_id, cust_balance):
@@ -93,8 +94,9 @@ class Customer:
 
     def insert(self):
         sql = 'INSERT INTO CUSTOMER VALUES(:id,:customer_balance,:approved_by)'
-        list = [self.customer_id,self.customer_balance,None]
-        execute_sql(sql,list,True,False)
+        list = [self.customer_id, self.customer_balance, None]
+        execute_sql(sql, list, True, False)
+
 
 class Login:
     def __init__(self, mobile_no, Password):
@@ -114,9 +116,9 @@ class LoginCustomer(Login):
         super().__init__(mobile_no, Password)
 
     def is_valid_user(self):
-        sql= 'SELECT USER_PASSWORD FROM USERS U JOIN CUSTOMER C ON U.USER_ID=C.CUSTOMER_ID WHERE USER_MOBILE_NO=:mobile\
+        sql = 'SELECT USER_PASSWORD FROM USERS U JOIN CUSTOMER C ON U.USER_ID=C.CUSTOMER_ID WHERE USER_MOBILE_NO=:mobile\
             AND APPROVED_BY IS NOT NULL'
-        list= [self.mobile_no]
+        list = [self.mobile_no]
 
         if not execute_sql(sql, list, False, True):
             return False
@@ -131,9 +133,9 @@ class LoginAgent(Login):
         super().__init__(mobile_no, Password)
 
     def is_valid_user(self):
-        sql= 'SELECT USER_PASSWORD FROM USERS U JOIN AGENT A ON U.USER_ID=A.AGENT_ID WHERE USER_MOBILE_NO=:mobile\
+        sql = 'SELECT USER_PASSWORD FROM USERS U JOIN AGENT A ON U.USER_ID=A.AGENT_ID WHERE USER_MOBILE_NO=:mobile\
             AND APPROVED_BY IS NOT NULL'
-        list= [self.mobile_no]
+        list = [self.mobile_no]
 
         if not execute_sql(sql, list, False, True):
             return False
@@ -144,9 +146,9 @@ class LoginAgent(Login):
 
 
 class Admin:
-    def __init__(self,name,password):
-        if not execute_sql('select max(admin_id) from admin',[],False,True)[0][0]:
-            self.id=1
+    def __init__(self, name, Password):
+        if not execute_sql('select max(admin_id) from admin', [], False, True)[0][0]:
+            self.id = 1
         else:
             self.id = int(execute_sql(
                 'select max(admin_id) from admin', [], False, True)[0][0]) + 1
@@ -155,17 +157,17 @@ class Admin:
 
     def insert(self):
         sql = 'INSERT INTO ADMIN VALUES(:id,:name,:pass,:approved_by)'
-        list = [self.id,self.name,self.password,None]
-        execute_sql(sql,list,True,False)
+        list = [self.id, self.name, self.password, None]
+        execute_sql(sql, list, True, False)
 
     def uniqueName(self):
         sql = 'SELECT ADMIN_NAME FROM ADMIN WHERE ADMIN_NAME=:name'
         list = [self.name]
-        if not execute_sql(sql,list,False,True):
+        if not execute_sql(sql, list, False, True):
             return True
         else:
             return False
-    
+
 
 class LoginAdmin:
     def __init__(self, name, Password):
@@ -189,32 +191,48 @@ class LoginAdmin:
 
         return execute_sql(sql, list, False, True)[0][0]
 
-class ServiceProvider:
-    def __init__(self,img,service_name,service_type,bank_acc):
-        self.img = img
-        self.service_name = service_name
-        self.service_type = service_type
-        self.bank_acc = bank_acc
-        if not execute_sql('SELECT MAX(SERVICE_ID) FROM UTILITY_SERVICE', [], False, True)[0][0]:
-            self.id = 1
-        else:
-            self.id = int(execute_sql(
-                'SELECT MAX(SERVICE_ID) FROM UTILITY_SERVICE', [], False, True)[0][0]) + 1
-    
-    def insert(self):
-        sql = 'INSERT INTO UTILITY_SERVICE(SERVICE_ID,SERVICE_PHOTO,SERVICE_NAME,SERVICE_TYPE,\
-            SERVICE_BANK_AC_NO,BALANCE,APPROVED_BY) VALUES(:id,:img,:name,:type,:bank_acc,:balance,:approved_by)'
-        list = [self.id,self.img,self.service_name,self.service_type,self.bank_acc,0,None]
-        execute_sql(sql,list,True,False)
 
-    def uniqueServiceProvider(self):
-        sql = 'SELECT COUNT(SERVICE_ID) FROM UTILITY_SERVICE WHERE \
-            UPPER(SERVICE_NAME)=UPPER(:name) AND UPPER(SERVICE_TYPE)=UPPER(:type)'
-        list = [self.service_name,self.service_type]
-        
-        if execute_sql(sql, list, False, True)[0][0] == 0:
+class Merchant:
+    def __init__(self, merchant_id,image, name,trade_license,head_office,Password):
+        self.id = merchant_id
+        self.img = image
+        self.name = name
+        self.trade_license = trade_license
+        self.head_office_loc = head_office
+        self.password = hash_the_password(Password)
+
+    def insert(self):
+        sql = 'INSERT INTO MERCHANTS(MERCHANT_ID,MERCHANT_NAME,MERCHANT_LOGO_IMAGE,TRADE_LICENSE_NO,HEAD_OFFICE_LOCATION,MERCHANT_PASSWORD,OFFER_ID,APPROVED_BY) VALUES (:id,:name,:img,:trade_license,:head_office,:password,:offer_id,:approved_by)'
+        list = [self.id, self.name, self.img,self.trade_license,self.head_office_loc,self.password, None, None]
+        execute_sql(sql, list, True, False)
+
+    def uniqueMerchantName(self):
+        sql = 'SELECT MERCHANT_NAME FROM MERCHANTS WHERE MERCHANT_NAME=:name'
+        list = [self.name]
+        if not execute_sql(sql, list, False, True):
             return True
-        else :
+        else:
             return False
 
 
+class LoginMerchant:
+    def __init__(self,name,Password):
+        self.name = name
+        self.password = Password
+    
+    def is_a_valid_Merchant(self):
+        sql = 'SELECT MERCHANT_PASSWORD FROM MERCHANTS WHERE APPROVED_BY IS NOT NULL AND MERCHANT_NAME=:name'
+        list = [self.name]
+
+        if not execute_sql(sql, list, False, True):
+            return False
+        elif execute_sql(sql, list, False, True)[0][0] == hash_the_password(self.password):
+            return True
+        else:
+            return False
+    
+    def merchant_id(self):
+        sql = 'select MERCHANT_ID from MERCHANTS where MERCHANT_NAME=:name'
+        list = [self.name]
+
+        return execute_sql(sql, list, False, True)[0][0]

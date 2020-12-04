@@ -20,7 +20,7 @@
   </head>
 
   <body>
-  {% if NAME %}
+    {% if NAME %}
     <div class="wrapper">
       <!--sidebar content-->
       <nav id="sidebar">
@@ -113,7 +113,7 @@
 
         <div class="content-wrapper">
           <form action="" method="POST" enctype="multipart/form-data">
-          {% csrf_token %}
+            {% csrf_token %}
             <!-- Customer Approval Section-->
             <div class="card my-4">
               <div class="card-header text-center">
@@ -136,18 +136,28 @@
                     </tr>
                   </thead>
                   <tbody>
-                  {% for cust in CUSTOMER %}
+                    {% for cust in CUSTOMER %}
                     <tr>
                       <td class="align-middle">{{cust.cust_name}}</td>
                       <td class="align-middle">{{cust.cust_nid}}</td>
                       <td class="align-middle">{{cust.cust_mobile}}</td>
                       <td>
                         <label>Approve</label>
-                        <input type="radio" id="approve" name={{cust.cust_post}} value={{cust.cust_val}}>
+                        <input
+                          type="radio"
+                          id="approve"
+                          name="{{cust.cust_post}}"
+                          value="{{cust.cust_val}}"
+                        />
                         <br />
                         <label>Reject</label>
-                        <input type="radio" id="reject" name={{cust.cust_post}} value= -{{cust.cust_val}}>
-                      <!--select
+                        <input
+                          type="radio"
+                          id="reject"
+                          name="{{cust.cust_post}}"
+                          value="-{{cust.cust_val}}"
+                        />
+                        <!--select
                         name={{cust.cust_post}}
                         id=""
                         class="form-control"
@@ -164,7 +174,7 @@
                       </select-->
                       </td>
                     </tr>
-                  {% endfor %}
+                    {% endfor %}
                   </tbody>
                 </table>
               </div>
@@ -194,7 +204,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                  {% for agent in AGENT %}
+                    {% for agent in AGENT %}
                     <tr>
                       <td class="align-middle">{{agent.agent_name}}</td>
                       <td class="align-middle">{{agent.agent_nid}}</td>
@@ -202,13 +212,23 @@
                       <td class="align-middle">{{agent.agent_bank_ac}}</td>
                       <td>
                         <label>Approve</label>
-                        <input type="radio" id="approve" name={{agent.agent_post}} value={{agent.agent_val}}>
+                        <input
+                          type="radio"
+                          id="approve"
+                          name="{{agent.agent_post}}"
+                          value="{{agent.agent_val}}"
+                        />
                         <br />
                         <label>Reject</label>
-                        <input type="radio" id="reject" name={{agent.agent_post}} value=-{{agent.agent_val}}>
+                        <input
+                          type="radio"
+                          id="reject"
+                          name="{{agent.agent_post}}"
+                          value="-{{agent.agent_val}}"
+                        />
                       </td>
                     </tr>
-                  {% endfor %}
+                    {% endfor %}
                   </tbody>
                 </table>
               </div>
@@ -229,79 +249,91 @@
                 <table class="table table-bordered table-hover text-center">
                   <thead class="thead-dark">
                     <tr>
-                      <th scope="col">Service Photo</th>
-                      <th scope="col">Service Name</th>
-                      <th scope="col">Service Type</th>
-                      <th scope="col">Service Bank AC</th>
+                      <th scope="col">Admin Name</th>
                       <th scope="col">Approval</th>
                     </tr>
                   </thead>
                   <tbody>
-                  {% for service in SERVICE %}
+                    {% for admin in ADMIN %}
                     <tr>
-                      <td class="align-middle">
-                        <img
-                          src="media\{{service.service_photo}}?lastmod=12345678"
-                          alt=""
-                          width="50"
-                          height="50"
-                          style="object-fit: contain"
-                          class="mr-3 rounded-circle img-thumbnail shadow-sm"
-                        />
-                      </td>
-                      <td class="align-middle">{{service.service_name}}</td>
-                      <td class="align-middle">{{service.service_type}}</td>
-                      <td class="align-middle">{{service.service_bank_ac}}</td>
+                      <td class="align-middle">{{admin.admin_name}}</td>
                       <td>
                         <label>Approve</label>
-                        <input type="radio" id="approve" name={{service.service_post}} value={{service.service_val}}>
+                        <input
+                          type="radio"
+                          id="approve"
+                          name="{{admin.admin_post}}"
+                          value="{{admin.admin_val}}"
+                        />
                         <br />
                         <label>Reject</label>
-                        <input type="radio" id="reject" name={{service.service_post}} value=-{{service.service_val}}>
+                        <input
+                          type="radio"
+                          id="reject"
+                          name="{{admin.admin_post}}"
+                          value="-{{admin.admin_val}}"
+                        />
                       </td>
                     </tr>
-                  {% endfor %}
+                    {% endfor %}
                   </tbody>
                 </table>
               </div>
             </div>
-            
-             <!-- Admin Approval Section-->
+
+            <!-- Merchants Waiting For approval -->
+
             <div class="card my-4">
               <div class="card-header text-center">
                 <i
-                  class="fas fa-user-secret fa-2x d-inline-block text-right px-2"
-                  style="color: rgb(138, 151, 16)"
+                  class="fas fa-warehouse fa-2x d-inline-block text-right px-2"
+                  style="color: rgba(78, 14, 226, 0.658)"
                 ></i>
                 <h5 class="d-inline-block align-middle">
-                  New Admin Waiting for Approval
+                  Merchant Waiting for Approval
                 </h5>
               </div>
               <div class="card-body">
                 <table class="table table-bordered table-hover text-center">
                   <thead class="thead-dark">
                     <tr>
-                      <th scope="col">Admin Name</th>
+                      <th scope="col">Merchant Name</th>
+                      <th scope="col">Trade License No</th>
+                      <th scope="col">Head Office Location</th>
                       <th scope="col">Approval</th>
                     </tr>
                   </thead>
                   <tbody>
-                  {% for admin in ADMIN %}
+                    {% for merchant in MERCHANT %}
                     <tr>
-                      <td class="align-middle">{{admin.admin_name}}</td>
+                      <td class="align-middle">{{merchant.merchant_name}}</td>
+                      <td class="align-middle">{{merchant.trade_license_no}}</td>
+                      <td class="align-middle">{{merchant.head_office_loc}}</td>
                       <td>
                         <label>Approve</label>
-                        <input type="radio" id="approve"  name={{admin.admin_post}} value={{admin.admin_val}}>
+                        <input
+                          type="radio"
+                          id="approve"
+                          name="{{merchant.merchant_post}}"
+                          value="{{merchant.merchant_val}}"
+                        />
                         <br />
                         <label>Reject</label>
-                        <input type="radio" id="reject"  name={{admin.admin_post}} value=-{{admin.admin_val}}>
+                        <input
+                          type="radio"
+                          id="reject"
+                          name="{{merchant.merchant_post}}"
+                          value="-{{merchant.merchant_val}}"
+                        />
                       </td>
                     </tr>
-                  {% endfor %}
+                    {% endfor %}
                   </tbody>
                 </table>
               </div>
             </div>
+
+            <!-- submit Button -->
             <div class="row">
               <div class="col-4"></div>
               <div class="col-4 text-center">

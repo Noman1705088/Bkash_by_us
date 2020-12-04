@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="{% static 'home/css/homestyle.css' %}" />
+    <script
+      src="https://kit.fontawesome.com/e367819fd5.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <title>Merchant Home</title>
+  </head>
+  <body>
+    <div class="wrapper">
+      <nav id="sidebar">
+        <div class="sidebar-header">
+          <!--<h3>BOOTSTRAP SIDEBAR</h3>-->
+          <div class="py-4 px-2 mb-4">
+            <div class="media d-flex align-items-center justify-content-center">
+              <img
+                src="{{PHOTO}}"
+                alt=""
+                width="100"
+                height="100"
+                class="mr-3 rounded-circle img-thumbnail shadow-sm"
+              />
+              <div class="media-body">
+                <h5 class="m-0">{{NAME}}</h5>
+                {% if TYPE == 'customer' %}
+                <p class="font-weight-normal text-white mb-0">Customer</p>
+                {% elif TYPE == 'agent' %}
+                <p class="font-weight-normal text-white mb-0">Agent</p>
+                {% elif TYPE == 'merchant' %}
+                <p class="font-weight-normal text-white mb-0">Merchant</p>
+                {% endif %}
+              </div>
+            </div>
+            <p class="float-left text-white mb-0">
+              Trade License No: {{TRADE_LICENSE_NO}}
+            </p>
+            <p class="float-left text-white mb-0">
+              Head Office Location: {{HEAD_OFFICE_LOCATION}}
+            </p>
+          </div>
+        </div>
+
+        <ul class="list-unstyled components">
+          <li>
+            <a href="{% url 'home:home' %}">Home</a>
+          </li>
+        </ul>
+
+        <ul class="list-unstyled CTAs">
+          <li>
+            <a href="{% url 'home:logout' %}" class="download">Logout</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#sidebarCollapse").on("click", function () {
+          $("#sidebar").toggleClass("active");
+        });
+      });
+    </script>
+  </body>
+</html>
