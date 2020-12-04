@@ -234,53 +234,6 @@
               </div>
             </div>
 
-            <!-- Service Provider Approval Section-->
-            <div class="card my-4">
-              <div class="card-header text-center">
-                <i
-                  class="fas fa-lightbulb fa-2x d-inline-block text-right px-2"
-                  style="color: rgb(151, 15, 185)"
-                ></i>
-                <h5 class="d-inline-block align-middle">
-                  Utility Service Provider Waiting for Approval
-                </h5>
-              </div>
-              <div class="card-body">
-                <table class="table table-bordered table-hover text-center">
-                  <thead class="thead-dark">
-                    <tr>
-                      <th scope="col">Admin Name</th>
-                      <th scope="col">Approval</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% for admin in ADMIN %}
-                    <tr>
-                      <td class="align-middle">{{admin.admin_name}}</td>
-                      <td>
-                        <label>Approve</label>
-                        <input
-                          type="radio"
-                          id="approve"
-                          name="{{admin.admin_post}}"
-                          value="{{admin.admin_val}}"
-                        />
-                        <br />
-                        <label>Reject</label>
-                        <input
-                          type="radio"
-                          id="reject"
-                          name="{{admin.admin_post}}"
-                          value="-{{admin.admin_val}}"
-                        />
-                      </td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
             <!-- Merchants Waiting For approval -->
 
             <div class="card my-4">
@@ -332,6 +285,111 @@
                 </table>
               </div>
             </div>
+
+            <!-- Service Provider Approval Section-->
+            <div class="card my-4">
+              <div class="card-header text-center">
+                <i
+                  class="fas fa-lightbulb fa-2x d-inline-block text-right px-2"
+                  style="color: rgb(151, 15, 185)"
+                ></i>
+                <h5 class="d-inline-block align-middle">
+                  Utility Service Provider Waiting for Approval
+                </h5>
+              </div>
+              <div class="card-body">
+                <table class="table table-bordered table-hover text-center">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">Service Photo</th>
+                      <th scope="col">Service Name</th>
+                      <th scope="col">Service Type</th>
+                      <th scope="col">Service Bank AC</th>
+                      <th scope="col">Approval</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for service in SERVICE %}
+                    <tr>
+                      <td class="align-middle">
+                        <img
+                          src="media\{{service.service_photo}}?lastmod=12345678"
+                          alt=""
+                          width="50"
+                          height="50"
+                          style="object-fit: contain"
+                          class="mr-3 rounded-circle img-thumbnail shadow-sm"
+                        />
+                      </td>
+                      <td class="align-middle">{{service.service_name}}</td>
+                      <td class="align-middle">{{service.service_type}}</td>
+                      <td class="align-middle">{{service.service_bank_ac}}</td>
+                      <td>
+                        <label>Approve</label>
+                        <input type="radio" id="approve" name={{service.service_post}} value={{service.service_val}}>
+                        <br />
+                        <label>Reject</label>
+                        <input type="radio" id="reject" name={{service.service_post}} value=-{{service.service_val}}>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+             <!-- Admin Approval Section-->
+            <div class="card my-4">
+              <div class="card-header text-center">
+                <i
+                  class="fas fa-user-secret fa-2x d-inline-block text-right px-2"
+                  style="color: rgb(138, 151, 16)"
+                ></i>
+                <h5 class="d-inline-block align-middle">
+                  New Admin Waiting for Approval
+                </h5>
+              </div>
+              <div class="card-body">
+                <table class="table table-bordered table-hover text-center">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">Admin Name</th>
+                      <th scope="col">Approval</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for admin in ADMIN %}
+                    <tr>
+                      <td class="align-middle">{{admin.admin_name}}</td>
+                      <td>
+                        <label>Approve</label>
+                        <input type="radio" id="approve"  name={{admin.admin_post}} value={{admin.admin_val}}>
+                        <br />
+                        <label>Reject</label>
+                        <input type="radio" id="reject"  name={{admin.admin_post}} value=-{{admin.admin_val}}>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4"></div>
+              <div class="col-4 text-center">
+                <input
+                  type="submit"
+                  name=""
+                  id=""
+                  class="btn btn-success btn-lg btn-block"
+                  value="Approve"
+                />
+              </div>
+              <div class="col-4"></div>
+            </div>
+          </form>
+        </div>
+      </div>
 
             <!-- submit Button -->
             <div class="row">

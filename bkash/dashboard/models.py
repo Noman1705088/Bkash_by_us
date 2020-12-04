@@ -236,3 +236,33 @@ class LoginMerchant:
         list = [self.name]
 
         return execute_sql(sql, list, False, True)[0][0]
+
+class ServiceProvider:
+    def __init__(self,img,service_name,service_type,bank_acc):
+        self.img = img
+        self.service_name = service_name
+        self.service_type = service_type
+        self.bank_acc = bank_acc
+        if not execute_sql('SELECT MAX(SERVICE_ID) FROM UTILITY_SERVICE', [], False, True)[0][0]:
+            self.id = 1
+        else:
+            self.id = int(execute_sql(
+                'SELECT MAX(SERVICE_ID) FROM UTILITY_SERVICE', [], False, True)[0][0]) + 1
+    
+    def insert(self):
+        sql = 'INSERT INTO UTILITY_SERVICE(SERVICE_ID,SERVICE_PHOTO,SERVICE_NAME,SERVICE_TYPE,\
+            SERVICE_BANK_AC_NO,BALANCE,APPROVED_BY) VALUES(:id,:img,:name,:type,:bank_acc,:balance,:approved_by)'
+        list = [self.id,self.img,self.service_name,self.service_type,self.bank_acc,0,None]
+        execute_sql(sql,list,True,False)
+
+    def uniqueServiceProvider(self):
+        sql = 'SELECT COUNT(SERVICE_ID) FROM UTILITY_SERVICE WHERE \
+            UPPER(SERVICE_NAME)=UPPER(:name) AND UPPER(SERVICE_TYPE)=UPPER(:type)'
+        list = [self.service_name,self.service_type]
+        
+        if execute_sql(sql, list, False, True)[0][0] == 0:
+            return True
+        else :
+            return False
+
+

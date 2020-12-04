@@ -127,6 +127,15 @@ class HomeView(View):
                         sql = 'DELETE MERCHANTS WHERE MERCHANT_ID=:merchant'
                         list = [-int(key)]
                         execute_sql(sql, list, True, False)
+                elif name[0:4] == 'SERV':
+                    if int(key)>0:
+                        sql = 'UPDATE UTILITY_SERVICE SET APPROVED_BY=:admin WHERE SERVICE_ID=:service'
+                        list=[request.session.get('ADMIN'),key]
+                        execute_sql(sql,list,True,False)
+                    elif int(key)<0:
+                        sql = 'DELETE UTILITY_SERVICE WHERE SERVICE_ID=:service'
+                        list=[-int(key)]
+                        execute_sql(sql,list,True,False)  
 
             return redirect('home:home')
 
