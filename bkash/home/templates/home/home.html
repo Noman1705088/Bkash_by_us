@@ -86,6 +86,12 @@
                 <a class="dropdown-item" href="{% url 'dashboard:loginAdmin' %}"
                   >As Admin</a
                 >
+                <div class="dropdown-divider"></div>
+                <a
+                  class="dropdown-item"
+                  href="{% url 'dashboard:loginMerchant' %}"
+                  >As Merchant</a
+                >
               </div>
             </li>
             <li class="nav-item dropdown">
@@ -122,17 +128,15 @@
                   >As Admin</a
                 >
                 <div class="dropdown-divider"></div>
-                <a 
-                  class="dropdown-item" 
-                  href="#"
-                  >As Merchant</a>
+                <a
+                  class="dropdown-item"
+                  href="{% url 'dashboard:registrationMerchant' %}"
+                  >As Merchant</a
+                >
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">As Mobile Operator</a>
                 <div class="dropdown-divider"></div>
-                <a 
-                  class="dropdown-item" 
-                  href="{% url 'dashboard:registrationServiceProvider' %}"
-                  >As Service Provider</a>
+                <a class="dropdown-item" href="#">As Service Provider</a>
               </div>
             </li>
           </ul>
