@@ -1,0 +1,150 @@
+{% load static %}
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous" />
+    <link rel="stylesheet" href="{% static 'home/css/homestyle.css' %}" />
+    <script src="https://kit.fontawesome.com/e367819fd5.js" crossorigin="anonymous"></script>
+    <script>
+    function submitform()
+    {
+    document.getElementById("myForm").submit();
+    }
+    </script>
+    <title>bootstrap 4 sidebar</title>
+<style>
+  label {
+    display: inline-block;
+  }
+  label:before {
+    content: '';
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+  }
+  #Electricity,#Gas,#Water,#internet,#Telephone,#TV,#card,#Education{
+    display: none;
+  }
+</style>
+</head>
+<body>
+  <form method="post" action="" id="myForm">
+  {% csrf_token %}
+  <div class="container-fluid padding">
+    <div class="row text-center padding">
+    <div class="col-xs-12 col-sm-6 col-md-4 my-2">
+        <div class="card">
+            <div class="card-body">
+            <label for="Electricity">
+                <i class="fas fa-lightbulb"></i> 
+                <h3>Electricity</h3>
+            </label>  
+            <input onclick="submitform()" type="radio" name="choice" id="Electricity" value = "Electricity">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-6 col-md-4 my-2">
+        <div class="card">
+            <div class="card-body">
+            <label for="Gas">
+                <i class="fas fa-burn"></i>
+                <h3>Gas</h3>
+            </label>  
+            <input onclick="submitform()" type="radio" name="choice" id="Gas" value = "Gas">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-6 col-md-4 my-2">
+        <div class="card">
+            <div class="card-body">
+            <label for="Water">
+                <i class="fas fa-water"></i> 
+                <h3>Water</h3>
+            </label>  
+            <input onclick="submitform()" type="radio" name="choice" id="Water" value = "Water">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-6 col-md-4 my-2">
+        <div class="card">
+            <div class="card-body">
+            <label for="Internet">
+                <i class="	fab fa-internet-explorer"></i> 
+                <h3>Internet</h3>
+            </label>  
+            <input onclick="submitform()" type="radio" name="choice" id="Internet" value = "Internet">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-6 col-md-4 my-2">
+        <div class="card">
+            <div class="card-body">
+            <label for="Telephone">
+                <i class="fa fa-phone" aria-hidden="true"></i>
+                <h3>Telephone</h3>
+            </label>  
+            <input onclick="submitform()" type="radio" name="choice" id="Telephone" value = "Telephone">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-6 col-md-4 my-2">
+        <div class="card">
+            <div class="card-body">
+            <label for="TV">
+                <i class="fa fa-television"></i> 
+                <h3>TV</h3>
+            </label>  
+            <input onclick="submitform()" type="radio" name="choice" id="TV" value = "TV">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-6 col-md-4 my-2">
+        <div class="card">
+            <div class="card-body">
+            <label for="Education">
+                <i class="fas fa-book-reader"></i> 
+                <h3>Education</h3>
+            </label>  
+            <input onclick="submitform()" type="radio" name="choice" id="Education" value = "Education">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-6 col-md-4 my-2">
+        <div class="card">
+            <div class="card-body">
+            <label for="Card">
+                <i class="fa fa-credit-card"></i> 
+                <h3>Credit Card</h3>
+            </label>  
+            <input onclick="submitform()" type="radio" name="choice" id="Card" value = "Card">
+            </div>
+        </div>
+    </div>
+    </div>
+  </div>
+  </form>
+
+  {% if type_services %}
+    {% for x in  type_services%}
+    <img src="..\..\media\{{x.service_photo}}" alt="" style="max-width: 20%; max-height: 20%; object-fit: contain" >
+    <a href="{% url 'services:payBill' x.service_id %}" >
+      <h3>{{x.servie_name}}</h3>
+    </a>
+    <h5>{{x.service_type}}</h5>
+    
+    {% endfor %}  
+  {% endif %}
+</body>
+</html>
