@@ -246,7 +246,9 @@ class HistoryOf:
             ((SELECT \'USER_\' || AGENT_ID SENDER,\'USER_\'||CUSTOMER_ID RECEIVER,HISTORY_ID,TRANSACTION_AMOUNT_C_I AMOUNT FROM CASH_IN)\
                 UNION (SELECT \'USER_\'||CUSTOMER_ID,\'USER_\'||AGENT_ID,HISTORY_ID,TRANSACTION_AMOUNT_C_O FROM CASH_OUT)\
                     UNION (SELECT \'USER_\'||FROM_CUSTOMER_ID,\'USER_\'||TO_CUSTOMER_ID,HISTORY_ID,TRANSACTION_AMOUNT_S_M FROM SEND_MONEY)\
-                        UNION (SELECT \'USER_\'||USER_ID,\'SERV_\'||SERVICE_ID,HISTORY_ID,TRANSACTION_AMOUNT_P_U_B FROM PAY_UTILITY_BILL))\
+                        UNION (SELECT \'USER_\'||USER_ID,\'SERV_\'||SERVICE_ID,HISTORY_ID,TRANSACTION_AMOUNT_P_U_B FROM PAY_UTILITY_BILL)\
+                        UNION (SELECT \'USER_\'||USER_ID,\'MERC_\'||MERCHANT_BRANCH_ID,HISTORY_ID,TRANSACTION_AMOUNT_PAYMENT FROM PAYMENT)\
+                        UNION (SELECT \'CBAK_\'||MERCHANT_BRANCH_ID,\'USER_\'||USER_ID,HISTORY_ID,CASHBACK_AMOUNT FROM CASHBACK))\
                         S JOIN HISTORY H ON S.HISTORY_ID=H.HISTORY_ID JOIN HISTORY_TYPE HT ON H.TYPE_ID=HT.TYPE_ID\
                             WHERE SENDER =: SENDER OR RECEIVER =: RECEIVER\
                                 ORDER BY TRANSACTION_TIME DESC'
@@ -262,11 +264,17 @@ class HistoryOf:
             if sender[:5] == 'USER_':
                 sql1 = 'SELECT USER_MOBILE_NO FROM USERS WHERE USER_ID=: id'
                 sender = execute_sql(sql1,[sender[5:]],False,True)[0][0]
+            elif sender[:5] == 'CBAK_' :
+                sender = 'Bkash'
             if receiver[:5] == 'USER_' :
                 sql2 = 'SELECT USER_MOBILE_NO FROM USERS WHERE USER_ID=: id'
                 receiver = execute_sql(sql2,[receiver[5:]],False,True)[0][0]
             elif receiver[:5] == 'SERV_' :
                 sql2 = 'SELECT SERVICE_NAME,SERVICE_TYPE FROM UTILITY_SERVICE WHERE SERVICE_ID=: id'
+                receiver = execute_sql(sql2,[receiver[5:]],False,True)[0][0] +'('+execute_sql(sql2,[receiver[5:]],False,True)[0][1]+')'
+            elif receiver[:5] == 'MERC_' :
+                sql2 = 'SELECT (SELECT MERCHANT_NAME FROM MERCHANTS WHERE MERCHANT_ID=BRANCH_MERCHANT_ID),\
+                    BRANCH_NAME FROM BRANCH WHERE BRANCH_ID=: id'
                 receiver = execute_sql(sql2,[receiver[5:]],False,True)[0][0] +'('+execute_sql(sql2,[receiver[5:]],False,True)[0][1]+')'
             
             billing_id = None
@@ -367,4 +375,8 @@ class MerchantPayment:
 
             sql = 'INSERT INTO CASHBACK(USER_ID,MERCHANT_BRANCH_ID,CASHBACK_AMOUNT) VALUES(:sender,:merchant,:amount)'
             list = [self.sender_id, self.merchant_branch_id, disc_amount]
+            execute_sql(sql, list, True, False)
+        else:
+            sql = 'INSERT INTO PAYMENT(MERCHANT_BRANCH_ID,USER_ID,TRANSACTION_AMOUNT_PAYMENT) VALUES(:receiver,:sender,:amount)'
+            list = [self.merchant_branch_id, self.sender_id, self.amount]
             execute_sql(sql, list, True, False)

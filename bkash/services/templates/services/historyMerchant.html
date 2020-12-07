@@ -1,0 +1,49 @@
+{% extends 'services/genericBlock2.html' %}
+
+{% block content %}
+    {% if NAME %}
+        {% for hist in HISTORY %}
+        <h3 style="color:red;padding-left: 100px;font-family: Garamond, serif;"><u>Branch Name:</u> {{hist.NAME_BRANCH}}</h3>
+        <br><br>
+        {% for branch_his in hist.BRANCH_HIS %}
+        <div class="card-body" style="border-color: rgb(66, 57, 57); border-radius: 5px; border-style: solid; width:80%; margin: auto;">
+            <table class="table table-borderless text-center">
+              <tbody>
+                <tr>
+                  <td style="text-align:left;"><b>{{branch_his.HIS_TYPE}}</b></td>
+                  <td class="align-middle"></td>
+                  <td style="text-align:right">{{branch_his.TIME}}</td>
+                </tr>
+                <tr>
+                {% if MOBILE == branch_his.SENDER %} 
+                    <td style="text-align:left;"><span style="color:red;">To: </span>{{branch_his.RECEIVER}}</td>
+                {% else %}
+                    <td style="text-align:left;"><span style="color:green;">From: </span>{{branch_his.SENDER}}</td>
+                {% endif %}
+                    <td class="align-middle">
+                    </td>
+                    <td style="text-align:right">
+                    {% if branch_his.Billing_Id %}
+                    <span style="font-family: cursive;">Billing ID: {{branch_his.Billing_Id}}</span>
+                    {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:left;">Txid: {{branch_his.TXID}}</td>
+                    <td class="align-middle">
+                    </td>
+                {% if MOBILE == branch_his.SENDER %} 
+                    <td style="text-align:right"><span style="color:red;">-{{branch_his.AMOUNT}}</span><i class="fas fa-dollar-sign"></i></td>
+                {% else %}
+                    <td style="text-align:right"><span style="color:green;">+{{branch_his.AMOUNT}}</span><i class="fas fa-dollar-sign"></i></td>
+                {% endif %}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        <p></p>
+        <p></p>
+        {% endfor %}
+        {% endfor %}
+    {% endif %}
+{% endblock %}

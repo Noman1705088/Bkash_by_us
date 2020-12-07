@@ -79,8 +79,10 @@ class HomeView(View):
                 resp.set_cookie('OFFER_PERCENT', context['OFFER_PERCENT'])
                 return resp
 
-            context = {'NAME': request.COOKIES.get('NAME'), 'PHOTO': request.COOKIES.get('PHOTO'),
-                       'TRADE_LICENSE_NO': request.COOKIES.get('TRADE_LICENSE_NO'), 'TYPE': 'merchant', 'HEAD_OFFICE_LOCATION': request.COOKIES.get('HEAD_OFFICE_LOCATION'), 'BRANCH': request.COOKIES.get('BRANCH_NAME'), 'OFFER_PERCENT': request.COOKIES.get('OFFER_PERCENT')}
+            context = {'NAME': request.COOKIES.get('NAME'), 'PHOTO': request.COOKIES.get('PHOTO'),\
+                       'TRADE_LICENSE_NO': request.COOKIES.get('TRADE_LICENSE_NO'), 'TYPE': 'merchant',\
+                            'HEAD_OFFICE_LOCATION': request.COOKIES.get('HEAD_OFFICE_LOCATION'),\
+                                 'BRANCH': request.COOKIES.get('BRANCH_NAME'), 'OFFER_PERCENT': request.COOKIES.get('OFFER_PERCENT')}
             return render(request, 'home/merchant_home.html', context)
 
         return render(request, 'home/home.html')

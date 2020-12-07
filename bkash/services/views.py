@@ -132,6 +132,22 @@ class HistoryView(View):
 
             context = {'NAME': request.COOKIES.get('NAME'), 'PHOTO': request.COOKIES.get('PHOTO'),
                        'MOBILE': request.COOKIES.get('MOBILE'), 'TYPE': 'agent', 'BALANCE': balance}
+        elif request.session.get('MERCHANT'):
+            sender = request.session.get('MERCHANT')
+            context = {'NAME': request.COOKIES.get('NAME'), 'PHOTO': request.COOKIES.get('PHOTO'),\
+                       'TRADE_LICENSE_NO': request.COOKIES.get('TRADE_LICENSE_NO'), 'TYPE': 'merchant',\
+                            'HEAD_OFFICE_LOCATION': request.COOKIES.get('HEAD_OFFICE_LOCATION'),\
+                                 'BRANCH': request.COOKIES.get('BRANCH_NAME'), 'OFFER_PERCENT': request.COOKIES.get('OFFER_PERCENT')}
+
+            sql = 'SELECT BRANCH_NAME,BRANCH_ID FROM BRANCH WHERE BRANCH_MERCHANT_ID=:id'
+            ans = execute_sql(sql,[sender],False,True)
+            cont_mar_his = ans
+            i = 0
+            for x in ans:
+                cont_mar_his[i] = {'NAME_BRANCH':x[0],'BRANCH_HIS':HistoryOf('MERC_'+str(x[1])).getHistory()}
+                i = i+1
+            context['HISTORY'] = cont_mar_his
+            return render(request, 'services/historyMerchant.html', context)
         else:
             return Http404('Not verified user')
 
