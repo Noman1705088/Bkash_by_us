@@ -71,6 +71,7 @@ class PayBillView(View):
             return render(request,'services/payBill.html')
         elif request.session.get('CUSTOMER') or request.session.get('AGENT'):
             context = PayBill().serviceOfID(service_id)
+            context['PHOTO'] = request.COOKIES.get('PHOTO')
             return render(request,'services/payBillForm.html',context)
         else:
             return Http404('Wrong Info')
