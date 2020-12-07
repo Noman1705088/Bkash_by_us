@@ -16,12 +16,18 @@
                 {% else %}
                     <td style="text-align:left;"><span style="color:green;">From: </span>{{hist.SENDER}}</td>
                 {% endif %}
-                    <td class="align-middle"></td>
-                    <td class="align-middle"></td>
+                    <td class="align-middle">
+                    </td>
+                    <td style="text-align:right">
+                    {% if hist.Billing_Id %}
+                    <span style="font-family: cursive;">Billing ID: {{hist.Billing_Id}}</span>
+                    {% endif %}
+                    </td>
                 </tr>
                 <tr>
                     <td style="text-align:left;">Txid: {{hist.TXID}}</td>
-                    <td class="align-middle"></td>
+                    <td class="align-middle">
+                    </td>
                 {% if MOBILE == hist.SENDER %} 
                     <td style="text-align:right"><span style="color:red;">-{{hist.AMOUNT}}</span><i class="fas fa-dollar-sign"></i></td>
                 {% else %}

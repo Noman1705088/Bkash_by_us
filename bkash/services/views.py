@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.views import View
-from .models import SendMoney, CashIn, CashOut, HistoryOf, MerchantPayment
+from .models import SendMoney,CashIn,CashOut,HistoryOf,PayBill, MerchantPayment
 from dashboard.models import execute_sql
 from django.http import Http404
 
@@ -74,22 +74,61 @@ class CashOutView(View):
         return render(request, 'services/cashOut.html', {'message': trans_failed})
 
 
+
+class PayBillView(View):
+    def get(self,request,service_id=0):
+        if (request.session.get('CUSTOMER') or request.session.get('AGENT')) and service_id==0:
+            return render(request,'services/payBill.html')
+        elif request.session.get('CUSTOMER') or request.session.get('AGENT'):
+            context = PayBill().serviceOfID(service_id)
+            context['PHOTO'] = request.COOKIES.get('PHOTO')
+            return render(request,'services/payBillForm.html',context)
+        else:
+            return Http404('Wrong Info')
+    def post(self,request,service_id=0):
+        if (request.session.get('CUSTOMER') or request.session.get('AGENT')) and service_id==0:
+            serviceChoice = request.POST.get('choice')
+            services = PayBill()
+            context = services.servicesOfType(serviceChoice)
+            return render(request,'services/payBill.html',context)
+        elif request.session.get('CUSTOMER') or request.session.get('AGENT'):
+            if request.session.get('CUSTOMER'):
+                user_id = request.session.get('CUSTOMER')
+                billing_id = request.POST.get('billing_id')
+                amount = request.POST.get('amount')
+                password = request.POST.get('password')
+
+                if PayBill().isCorrectPass(True,user_id,password) and PayBill().hasEnoughMoney(True,user_id,amount):
+                    PayBill().doTransictionCustomer(service_id,user_id,amount,billing_id)
+                    return redirect('services:history')
+            elif request.session.get('AGENT'):
+                user_id = request.session.get('AGENT')
+                billing_id = request.POST.get('billing_id')
+                amount = int(request.POST.get('amount'))
+                password = request.POST.get('password')
+
+                if PayBill().isCorrectPass(False,user_id,password) and PayBill().hasEnoughMoney(False,user_id,amount):
+                    PayBill().doTransictionAgent(service_id,user_id,amount,billing_id)
+                    return redirect('services:history')
+        else:
+            return Http404('Wrong Info')               
+                
+
+
 class HistoryView(View):
     def get(self, request):
         sender = 0
         if request.session.get('CUSTOMER'):
-            sender = 'CUST_' + str(request.session.get('CUSTOMER'))
-            sql = 'SELECT CUSTOMER_BALANCE FROM CUSTOMER WHERE CUSTOMER_ID=:cust'
-            balance = execute_sql(
-                sql, [request.session.get('CUSTOMER')], False, True)[0][0]
+            sender= 'USER_' + str(request.session.get('CUSTOMER'))
+            sql='SELECT CUSTOMER_BALANCE FROM CUSTOMER WHERE CUSTOMER_ID=:cust'
+            balance = execute_sql(sql,[request.session.get('CUSTOMER')],False,True)[0][0]
 
             context = {'NAME': request.COOKIES.get('NAME'), 'PHOTO': request.COOKIES.get('PHOTO'),
                        'MOBILE': request.COOKIES.get('MOBILE'), 'TYPE': 'customer', 'BALANCE': balance}
         elif request.session.get('AGENT'):
-            sender = 'AGEN_' + str(request.session.get('AGENT'))
-            sql = 'SELECT AGENT_BALANCE FROM AGENT WHERE AGENT_ID=:agent'
-            balance = execute_sql(
-                sql, [request.session.get('AGENT')], False, True)[0][0]
+            sender= 'USER_' + str(request.session.get('AGENT'))
+            sql='SELECT AGENT_BALANCE FROM AGENT WHERE AGENT_ID=:agent'
+            balance = execute_sql(sql,[request.session.get('AGENT')],False,True)[0][0]
 
             context = {'NAME': request.COOKIES.get('NAME'), 'PHOTO': request.COOKIES.get('PHOTO'),
                        'MOBILE': request.COOKIES.get('MOBILE'), 'TYPE': 'agent', 'BALANCE': balance}

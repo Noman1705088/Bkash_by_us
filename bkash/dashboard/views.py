@@ -2,7 +2,8 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.views import View
 from django.core.files.storage import FileSystemStorage
 import os
-from .models import USERS, LoginAgent, LoginCustomer, execute_sql, Agent, Customer, Admin, LoginAdmin, Merchant, LoginMerchant
+from .models import USERS, LoginAgent, LoginCustomer, execute_sql, Agent, Customer, Admin, LoginAdmin, Merchant, LoginMerchant,ServiceProvider
+# Create your views here.
 # Create your views here.
 
 
@@ -124,6 +125,31 @@ class RegistrationMerchantView(View):
                 merchant_name_exists = True
         return render(request, "dashboard/registrationMerchant.html", {'message': merchant_name_exists})
 
+class RegistrationServiceProviderView(View):
+    def get(self,request):
+        return render(request,"dashboard/registrationServiceProvider.html")
+    def post(self,request):
+        if request.FILES.get("img"):
+            if not execute_sql('SELECT MAX(SERVICE_ID) FROM UTILITY_SERVICE',[],False,True)[0][0]:
+                service_id=1
+            else:
+                service_id = int(execute_sql('SELECT MAX(SERVICE_ID) FROM UTILITY_SERVICE',[],False,True)[0][0]) + 1
+                
+            imagename= 'service_'+str(service_id)+'.jpg'
+            service = ServiceProvider(imagename,request.POST.get('servicename'),request.POST.get('servicetype'),\
+                request.POST.get('bank_acc'))
+
+            service_exists = False
+            if service.uniqueServiceProvider():
+                service.insert()
+                image= request.FILES.get("img")
+                fs = FileSystemStorage()
+                filename = fs.save(imagename, image)
+                return redirect('home:home')
+            else:
+                service_exists = True
+
+        return render(request,"dashboard/registrationServiceProvider.html",{'message':service_exists})
 class RegistrationOperatorView(View):
     def get(self,request):
         return render(request,"dashboard/registrationOperator.html")
