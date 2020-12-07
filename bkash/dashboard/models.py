@@ -237,3 +237,9 @@ class LoginMerchant:
         list = [self.name]
 
         return execute_sql(sql, list, False, True)[0][0]
+
+
+class MobileOperator:
+    def __init__(self, operator_name, operator_type):
+        self.operator_name = operator_name
+        self.operator_type = operator_type

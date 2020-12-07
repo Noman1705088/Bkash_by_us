@@ -124,6 +124,13 @@ class RegistrationMerchantView(View):
                 merchant_name_exists = True
         return render(request, "dashboard/registrationMerchant.html", {'message': merchant_name_exists})
 
+class RegistrationOperatorView(View):
+    def get(self,request):
+        return render(request,"dashboard/registrationOperator.html")
+    def post(self,request):
+        operator_name = request.POST.get("operator_name")
+        operator_type = request.POST.get("operator_type")
+
 
 class LoginCustomerView(View):
     def get(self, request):
