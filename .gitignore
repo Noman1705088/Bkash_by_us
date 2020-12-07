@@ -1,2 +1,5 @@
 bkash/media/
 bkash/db.sqlite3/
+bkash/dashboard/__pycache__/
+bkash/home/__pycache__/
+bkash/services/__pycache__/
