@@ -267,3 +267,8 @@ class ServiceProvider:
             return False
 
 
+
+class MobileOperator:
+    def __init__(self, operator_name, operator_type):
+        self.operator_name = operator_name
+        self.operator_type = operator_type

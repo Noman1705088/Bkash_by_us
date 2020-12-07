@@ -150,6 +150,12 @@ class RegistrationServiceProviderView(View):
                 service_exists = True
 
         return render(request,"dashboard/registrationServiceProvider.html",{'message':service_exists})
+class RegistrationOperatorView(View):
+    def get(self,request):
+        return render(request,"dashboard/registrationOperator.html")
+    def post(self,request):
+        operator_name = request.POST.get("operator_name")
+        operator_type = request.POST.get("operator_type")
 
 
 class LoginCustomerView(View):
