@@ -193,7 +193,7 @@ class LoginAdmin:
 
 
 class Merchant:
-    def __init__(self, merchant_id,image, name,trade_license,head_office,Password):
+    def __init__(self, merchant_id, image, name, trade_license, head_office, Password):
         self.id = merchant_id
         self.img = image
         self.name = name
@@ -203,7 +203,8 @@ class Merchant:
 
     def insert(self):
         sql = 'INSERT INTO MERCHANTS(MERCHANT_ID,MERCHANT_NAME,MERCHANT_LOGO_IMAGE,TRADE_LICENSE_NO,HEAD_OFFICE_LOCATION,MERCHANT_PASSWORD,OFFER_ID,APPROVED_BY) VALUES (:id,:name,:img,:trade_license,:head_office,:password,:offer_id,:approved_by)'
-        list = [self.id, self.name, self.img,self.trade_license,self.head_office_loc,self.password, None, None]
+        list = [self.id, self.name, self.img, self.trade_license,
+                self.head_office_loc, self.password, None, None]
         execute_sql(sql, list, True, False)
 
     def uniqueMerchantName(self):
@@ -216,10 +217,10 @@ class Merchant:
 
 
 class LoginMerchant:
-    def __init__(self,name,Password):
+    def __init__(self, name, Password):
         self.name = name
         self.password = Password
-    
+
     def is_a_valid_Merchant(self):
         sql = 'SELECT MERCHANT_PASSWORD FROM MERCHANTS WHERE APPROVED_BY IS NOT NULL AND MERCHANT_NAME=:name'
         list = [self.name]
@@ -230,7 +231,7 @@ class LoginMerchant:
             return True
         else:
             return False
-    
+
     def merchant_id(self):
         sql = 'select MERCHANT_ID from MERCHANTS where MERCHANT_NAME=:name'
         list = [self.name]
