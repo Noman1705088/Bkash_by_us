@@ -242,7 +242,6 @@ class addBranchView(View):
             id = request.session.get('MERCHANT')
             merchant = MerchantProfile(id)
             context = merchant.getProfile()
-
             return render(request, 'home/merchantBrachAdd.html', context)
 
     def post(self, request):
@@ -256,4 +255,8 @@ class addBranchView(View):
                 return redirect('home:home')
             else:
                 branch_name_exists = True
-            return render(request, "home/merchantBrachAdd.html", {'message': branch_name_exists})
+
+            merchant = MerchantProfile(id)
+            context = merchant.getProfile()
+            context['message'] = branch_name_exists
+            return render(request, "home/merchantBrachAdd.html", context)
