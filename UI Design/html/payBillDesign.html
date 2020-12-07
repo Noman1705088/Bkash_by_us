@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://kit.fontawesome.com/e367819fd5.js"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      #Electricity,
+      #Gas,
+      #Water,
+      #Internet,
+      #Telephone,
+      #TV,
+      #Card,
+      #Education {
+        display: none;
+      }
+      a {
+        text-decoration: none;
+      }
+      a:link,
+      a:visited {
+        color: rgb(9, 64, 109);
+      }
+      a:hover {
+        color: red;
+        text-decoration: none;
+      }
+    </style>
+    <script>
+      function submitform() {
+        document.getElementById("myForm").submit();
+      }
+    </script>
+    <title>Pay Bill</title>
+  </head>
+  <body>
+    <!--Navbar -->
+    <nav
+      class="navbar navbar-expand-lg navbar-light sticky-top"
+      style="background: linear-gradient(to bottom, #31b5e0 0%, #815dc4 100%)"
+    >
+      <a href="" class="navbar-brand"
+        ><img
+          src="img/icon.png"
+          alt=""
+          style="max-width: 50%; max-height: 50%; object-fit: contain"
+          class="px-3"
+      /></a>
+
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <div class="media d-flex align-items-center justify-content-center">
+              <a href="" class="nav-link">
+                <img
+                  src="img/Utsha.jpg"
+                  alt=""
+                  width="50"
+                  height="50"
+                  style="object-fit: contain"
+                  class="mr-3 rounded-circle img-thumbnail shadow-sm"
+                />
+              </a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Services  -->
+    <form method="post" action="" id="myForm">
+      <div class="container-fluid padding">
+        <div class="row text-center padding">
+          <div class="col-xs-12 col-sm-6 col-md-3 my-2">
+            <div class="card">
+              <div
+                class="card-body"
+                style="
+                  background: linear-gradient(
+                    to bottom,
+                    #93d825 0%,
+                    #cc4e6a 100%
+                  );
+                "
+              >
+                <label for="Electricity">
+                  <i
+                    class="fas fa-lightbulb fa-2x"
+                    style="color: rgb(31, 48, 20)"
+                  ></i>
+                  <h3>Electricity</h3>
+                </label>
+                <input
+                  onclick="submitform()"
+                  type="radio"
+                  name="choice"
+                  id="Electricity"
+                  value="Electricity"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xs-12 col-sm-6 col-md-3 my-2">
+            <div class="card">
+              <div
+                class="card-body"
+                style="
+                  background: linear-gradient(
+                    to bottom,
+                    #33ccff 0%,
+                    #4fd84f 100%
+                  );
+                "
+              >
+                <label for="Gas">
+                  <i
+                    class="fas fa-burn fa-2x"
+                    style="color: rgb(146, 123, 18)"
+                  ></i>
+                  <h3>Gas</h3>
+                </label>
+                <input
+                  onclick="submitform()"
+                  type="radio"
+                  name="choice"
+                  id="Gas"
+                  value="Gas"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xs-12 col-sm-6 col-md-3 my-2">
+            <div class="card">
+              <div
+                class="card-body"
+                style="
+                  background: linear-gradient(
+                    to bottom,
+                    #0d648b 0%,
+                    #4fd84f 100%
+                  );
+                "
+              >
+                <label for="Water">
+                  <i
+                    class="fas fa-water fa-2x"
+                    style="color: rgb(133, 208, 238)"
+                  ></i>
+                  <h3>Water</h3>
+                </label>
+                <input
+                  onclick="submitform()"
+                  type="radio"
+                  name="choice"
+                  id="Water"
+                  value="Water"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xs-12 col-sm-6 col-md-3 my-2">
+            <div class="card">
+              <div
+                class="card-body"
+                style="
+                  background: linear-gradient(
+                    to bottom,
+                    #ad8a27 0%,
+                    #4fd84f 100%
+                  );
+                "
+              >
+                <label for="Internet">
+                  <i
+                    class="fab fa-internet-explorer fa-2x"
+                    style="color: rgb(38, 19, 216)"
+                  ></i>
+                  <h3>Internet</h3>
+                </label>
+                <input
+                  onclick="submitform()"
+                  type="radio"
+                  name="choice"
+                  id="Internet"
+                  value="Internet"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xs-12 col-sm-6 col-md-3 my-2">
+            <div class="card">
+              <div
+                class="card-body"
+                style="
+                  background: linear-gradient(
+                    to bottom,
+                    #4d4caf 0%,
+                    #4fd84f 100%
+                  );
+                "
+              >
+                <label for="Telephone">
+                  <i
+                    class="fa fa-phone fa-2x"
+                    style="color: rgb(226, 175, 34)"
+                  ></i>
+                  <h3>Telephone</h3>
+                </label>
+                <input
+                  onclick="submitform()"
+                  type="radio"
+                  name="choice"
+                  id="Telephone"
+                  value="Telephone"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xs-12 col-sm-6 col-md-3 my-2">
+            <div class="card">
+              <div
+                class="card-body"
+                style="
+                  background: linear-gradient(
+                    to bottom,
+                    #3e8baf 0%,
+                    #ca33b6 100%
+                  );
+                "
+              >
+                <label for="TV">
+                  <i
+                    class="fa fa-television fa-2x"
+                    style="color: rgb(115, 24, 199)"
+                  ></i>
+                  <h3>TV</h3>
+                </label>
+                <input
+                  onclick="submitform()"
+                  type="radio"
+                  name="choice"
+                  id="TV"
+                  value="TV"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xs-12 col-sm-6 col-md-3 my-2">
+            <div class="card">
+              <div
+                class="card-body"
+                style="
+                  background: linear-gradient(
+                    to bottom,
+                    #0d648b 0%,
+                    #32c0b9 100%
+                  );
+                "
+              >
+                <label for="Education">
+                  <i
+                    class="fas fa-book-reader fa-2x"
+                    style="color: rgb(33, 230, 16)"
+                  ></i>
+                  <h3>Education</h3>
+                </label>
+                <input
+                  onclick="submitform()"
+                  type="radio"
+                  name="choice"
+                  id="Education"
+                  value="Education"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xs-12 col-sm-6 col-md-3 my-2">
+            <div class="card">
+              <div
+                class="card-body"
+                style="
+                  background: linear-gradient(
+                    to bottom,
+                    #207435 0%,
+                    #d6d84f 100%
+                  );
+                "
+              >
+                <label for="Card">
+                  <i
+                    class="fa fa-credit-card fa-2x"
+                    style="color: rgb(114, 23, 156)"
+                  ></i>
+                  <h3>Credit Card</h3>
+                </label>
+                <input
+                  onclick="submitform()"
+                  type="radio"
+                  name="choice"
+                  id="Card"
+                  value="Card"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div class="container text-center py-4">
+      <h3 class="py-2">All Organizations</h3>
+
+      <!--add your service info here-->
+      <div class="row px-2 py-1">
+        <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"></div>
+        <div
+          class="col-xs-12 col-sm-12 col-md-10 col-lg-10"
+          style="border: 2px solid rgb(221, 202, 165)"
+        >
+          <div class="pt-3 px-2 mb-4">
+            <div class="media d-flex align-items-center justify-content-center">
+              <img
+                src="img/Utsha.jpg"
+                alt=""
+                width="100"
+                height="100"
+                class="mr-3 rounded-circle img-thumbnail shadow-sm"
+              />
+              <div class="media-body">
+                <a href=""><h5 class="m-0 d-flex">BUET</h5></a>
+                <p class="font-weight-normal d-flex mb-0 pt-1 text-uppercase">
+                  Education
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"></div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+  </body>
+</html>
