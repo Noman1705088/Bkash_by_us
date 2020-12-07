@@ -230,7 +230,7 @@ class MerchantPayment:
         if self.sender_type == "customer":
             sql = 'SELECT CUSTOMER_BALANCE FROM CUSTOMER WHERE CUSTOMER_ID=: CUST_ID'
         elif self.sender_type == "agent":
-            sql = 'SELECT AGENT_BALANCE FROM AGENTS WHERE AGENT_ID=: AGNT_ID'
+            sql = 'SELECT AGENT_BALANCE FROM AGENT WHERE AGENT_ID=: AGNT_ID'
         list = [self.sender_id]
         sender_balance = execute_sql(sql, list, False, True)[0][0]
 
