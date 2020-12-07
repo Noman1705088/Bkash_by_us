@@ -1,0 +1,140 @@
+{% load static %}
+<doctype html>
+  <html lang="en">
+    <head>
+      <!-- Required meta tags -->
+      <meta charset="utf-8" />
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, shrink-to-fit=no"
+      />
+
+      <!-- Bootstrap CSS -->
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
+        crossorigin="anonymous"
+      />
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+      />
+      <link rel="stylesheet" href="{% static 'dashboard/style.css' %}" />
+      <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:100,200,300,400,500&display=swap");
+        body {
+          background-image: url("https://rrbus.com/img/app/background/user-center/bg2.png");
+          background-size: cover;
+          background-position: center center;
+          background-attachment: fixed;
+          font-family: "Poppins", sans-serif;
+          font-size: 14px;
+        }
+      </style>
+      <script
+        src="https://kit.fontawesome.com/e367819fd5.js"
+        crossorigin="anonymous"
+      ></script>
+      <title>Merchant Payment</title>
+    </head>
+
+    <body>
+      <div class="row">
+        <div class="col-lg-5 m-auto">
+          <div class="card mt-5 bg-dark">
+            <div class="card-title text-center mt-3">
+              <img
+                src="https://image.flaticon.com/icons/png/512/438/438560.png"
+                alt=""
+                style="max-width: 40%; max-height: 40%; object-fit: contain"
+              />
+            </div>
+            <div class="card-title text-center mt-2">
+              <h1 class="mb-3 font-weight-light text-white text-uppercase">
+                Payment To
+              </h1>
+            </div>
+            <div class="card-body text-center">
+              <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="fa fa-phone fa-2x"></i>
+                    </span>
+                  </div>
+                  <input
+                    type="text"
+                    class="form-control py-4"
+                    placeholder="Merchant Mobile No"
+                    name="merchant_mobile_no"
+                  />
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="fa fa-money fa-2x"></i>
+                    </span>
+                  </div>
+                  <input
+                    type="number"
+                    class="form-control py-4"
+                    placeholder="Amount"
+                    name="amount"
+                    min="10"
+                    max="10000"
+                  />
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="fa fa-lock fa-2x"></i>
+                    </span>
+                  </div>
+                  <input
+                    type="password"
+                    class="form-control py-4"
+                    placeholder="Password"
+                    name="password"
+                  />
+                </div>
+                <button type="submit" class="btn btn-lg btn-warning float-left">
+                  <span class="faS fa-funnel-dollar" aria-hidden="true"></span>
+                  Make Payment
+                </button>
+              </form>
+              <a
+                href="{% url 'home:home' %}"
+                class="btn btn-primary btn-lg float-right"
+                >Back To Home</a
+              >
+            </div>
+          </div>
+          {% if message %}
+          <div class="alert alert-danger mt-4">
+            <strong>Check Your Balace or Correct The Phone No</strong>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <script
+        src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"
+      ></script>
+      <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+        crossorigin="anonymous"
+      ></script>
+
+      <!-- Option 2: jQuery, Popper.js, and Bootstrap JS
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+      -->
+    </body>
+  </html>
+</doctype>
