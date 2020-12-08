@@ -64,9 +64,10 @@ class USERS:
     def is_a_new_user(self):
         sql1 = 'select count(*) from users where USER_MOBILE_NO=:mobile_no'
         sql2 = 'select count(*) from users where USER_NID=:nid'
+        sql3 = 'select count(*) from BRANCH where BRANCH_MOBILE_NO=:mobile_no'
         list1 = [self.mobile_no]
         list2 = [self.nid_no]
-        if execute_sql(sql1, list1, False, True)[0][0] == 0 and execute_sql(sql2, list2, False, True)[0][0] == 0:
+        if execute_sql(sql1, list1, False, True)[0][0] == 0 and execute_sql(sql2, list2, False, True)[0][0] == 0 and execute_sql(sql3, list1, False, True)[0][0] == 0:
             return True
         else:
             return False
