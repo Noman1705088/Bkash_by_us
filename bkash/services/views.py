@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.views import View
 from .models import SendMoney,CashIn,CashOut,HistoryOf,PayBill, MerchantPayment,MobileRecharge
-from dashboard.models import execute_sql
+from dashboard.models import execute_sql,connection
 from django.http import Http404
 
 
@@ -121,14 +121,14 @@ class HistoryView(View):
         if request.session.get('CUSTOMER'):
             sender= 'USER_' + str(request.session.get('CUSTOMER'))
             sql='SELECT CUSTOMER_BALANCE FROM CUSTOMER WHERE CUSTOMER_ID=:cust'
-            balance = execute_sql(sql,[request.session.get('CUSTOMER')],False,True)[0][0]
+            balance = execute_sql(sql,[request.session.get('CUSTOMER')],False,True,connection)[0][0]
 
             context = {'NAME': request.COOKIES.get('NAME'), 'PHOTO': request.COOKIES.get('PHOTO'),
                        'MOBILE': request.COOKIES.get('MOBILE'), 'TYPE': 'customer', 'BALANCE': balance}
         elif request.session.get('AGENT'):
             sender= 'USER_' + str(request.session.get('AGENT'))
             sql='SELECT AGENT_BALANCE FROM AGENT WHERE AGENT_ID=:agent'
-            balance = execute_sql(sql,[request.session.get('AGENT')],False,True)[0][0]
+            balance = execute_sql(sql,[request.session.get('AGENT')],False,True,connection)[0][0]
 
             context = {'NAME': request.COOKIES.get('NAME'), 'PHOTO': request.COOKIES.get('PHOTO'),
                        'MOBILE': request.COOKIES.get('MOBILE'), 'TYPE': 'agent', 'BALANCE': balance}
@@ -140,7 +140,7 @@ class HistoryView(View):
                                  'BRANCH': request.COOKIES.get('BRANCH_NAME'), 'OFFER_PERCENT': request.COOKIES.get('OFFER_PERCENT')}
 
             sql = 'SELECT BRANCH_NAME,BRANCH_ID FROM BRANCH WHERE BRANCH_MERCHANT_ID=:id'
-            ans = execute_sql(sql,[sender],False,True)
+            ans = execute_sql(sql,[sender],False,True,connection)
             cont_mar_his = ans
             i = 0
             for x in ans:
@@ -204,7 +204,7 @@ class MobileRechargeView(View):
             mobile_recharge_trans.make_recharge()
             return redirect('services:history')
         else:
-            mobile_recharge_failed = True;
+            mobile_recharge_failed = True
             return render(request, 'services/rechargeMobile.html', {'message': mobile_recharge_failed})
 
 

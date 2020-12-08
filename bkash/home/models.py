@@ -2,7 +2,7 @@ from django.db import models
 from datetime import date
 from django.shortcuts import render, HttpResponse, redirect
 # Create your models here.
-from dashboard.models import execute_sql, USERS, hash_the_password
+from dashboard.models import execute_sql,connection, USERS, hash_the_password
 
 
 class UserProfile:
@@ -11,7 +11,7 @@ class UserProfile:
 
     def getProfile(self):
         sql = 'SELECT USER_NAME,USER_PHOTO,USER_MOBILE_NO FROM USERS WHERE USER_ID =: id'
-        ans = execute_sql(sql, [self.id], False, True)[0]
+        ans = execute_sql(sql, [self.id], False, True,connection)[0]
         context = {'NAME': ans[0], 'PHOTO': 'media\\'+ans[1], 'MOBILE': ans[2]}
 
         return context
@@ -23,12 +23,12 @@ class AdminProfile:
 
     def getProfile(self):
         sql = 'SELECT ADMIN_NAME FROM ADMIN WHERE ADMIN_ID=: id'
-        ans = execute_sql(sql, [self.id], False, True)[0]
+        ans = execute_sql(sql, [self.id], False, True,connection)[0]
         name = ans[0]
 
         sql = 'SELECT USER_NAME,USER_NID,USER_MOBILE_NO,USER_ID FROM USERS U JOIN CUSTOMER C\
              ON U.USER_ID=C.CUSTOMER_ID WHERE APPROVED_BY IS NULL'
-        customer = execute_sql(sql, [], False, True)
+        customer = execute_sql(sql, [], False, True,connection)
         cont_cust = customer
         i = 0
         for x in customer:
@@ -38,7 +38,7 @@ class AdminProfile:
 
         sql = 'SELECT USER_NAME,USER_NID,USER_MOBILE_NO,AGENT_BANK_AC,USER_ID FROM USERS U JOIN AGENT A\
              ON U.USER_ID=A.AGENT_ID WHERE APPROVED_BY IS NULL'
-        agent = execute_sql(sql, [], False, True)
+        agent = execute_sql(sql, [], False, True,connection)
         cont_agent = agent
         i = 0
         for x in agent:
@@ -47,7 +47,7 @@ class AdminProfile:
             i = i+1
 
         sql = 'SELECT ADMIN_NAME,ADMIN_ID FROM ADMIN WHERE APPROVED_BY IS NULL'
-        admin = execute_sql(sql, [], False, True)
+        admin = execute_sql(sql, [], False, True,connection)
         cont_admin = admin
         i = 0
         for x in admin:
@@ -56,7 +56,7 @@ class AdminProfile:
             i = i+1
 
         sql = 'SELECT MERCHANT_NAME,MERCHANT_ID,TRADE_LICENSE_NO,HEAD_OFFICE_LOCATION FROM MERCHANTS WHERE APPROVED_BY IS NULL'
-        merchant = execute_sql(sql, [], False, True)
+        merchant = execute_sql(sql, [], False, True,connection)
         cont_merchant = merchant
         i = 0
         for x in merchant:
@@ -66,7 +66,7 @@ class AdminProfile:
 
         sql = 'SELECT SERVICE_PHOTO,SERVICE_NAME,SERVICE_TYPE,SERVICE_BANK_AC_NO,\
             SERVICE_ID FROM UTILITY_SERVICE WHERE APPROVED_BY IS NULL'
-        service = execute_sql(sql, [], False, True)
+        service = execute_sql(sql, [], False, True,connection)
         cont_service = service
         i = 0
         for x in service:
@@ -75,7 +75,7 @@ class AdminProfile:
             i = i+1
 
         sql = 'SELECT OPERATOR_ID,OPERATOR_NAME,OPERATOR_DIGIT,OPERATOR_BANK_AC_NO FROM MOBILE_OPERATOR WHERE APPROVED_BY IS NULL'
-        operator = execute_sql(sql, [], False, True)
+        operator = execute_sql(sql, [], False, True,connection)
         cont_operator = operator
         i = 0
         for x in operator:
@@ -93,7 +93,7 @@ class MerchantProfile:
     def __init__(self, id):
         self.merchantid = id
         sql = 'SELECT MERCHANT_NAME,MERCHANT_LOGO_IMAGE,TRADE_LICENSE_NO,HEAD_OFFICE_LOCATION,OFFER_ID FROM MERCHANTS WHERE MERCHANT_ID =: merchantid'
-        ans = execute_sql(sql, [self.merchantid], False, True)[0]
+        ans = execute_sql(sql, [self.merchantid], False, True,connection)[0]
         self.merchantName = ans[0]
         self.img = ans[1]
         self.trade_license = ans[2]
@@ -104,12 +104,12 @@ class MerchantProfile:
             offer_id = ans[4]
             sql = 'SELECT DISCOUNT_PERCENT FROM OFFERS WHERE OFFER_ID =: offer_id'
             self.offer_percent = execute_sql(
-                sql, [offer_id], False, True)[0][0]
+                sql, [offer_id], False, True,connection)[0][0]
 
     def getProfile(self):
         sql = 'SELECT BRANCH_NAME,BRANCH_MOBILE_NO,MERCHANT_BRANCH_BALANCE FROM BRANCH WHERE BRANCH_MERCHANT_ID =: merchant_id'
         list = [self.merchantid]
-        branch = execute_sql(sql, list, False, True)
+        branch = execute_sql(sql, list, False, True,connection)
         cont_branch = branch
         i = 0
         for x in branch:
@@ -124,11 +124,11 @@ class MerchantProfile:
 class Branch:
     def __init__(self, branch_name, branch_mobile_no, branch_merchant_id):
         # super.__init__(id)
-        if not execute_sql('select max(BRANCH_ID) from BRANCH', [], False, True)[0][0]:
+        if not execute_sql('select max(BRANCH_ID) from BRANCH', [], False, True,connection)[0][0]:
             self.branch_id = 1
         else:
             self.branch_id = int(execute_sql(
-                'select max(BRANCH_ID) from BRANCH', [], False, True)[0][0]) + 1
+                'select max(BRANCH_ID) from BRANCH', [], False, True,connection)[0][0]) + 1
         self.branchname = branch_name
         self.mobile_no = branch_mobile_no
         self.balance = 0
@@ -141,7 +141,8 @@ class Branch:
         list1 = [self.mobile_no]
         list2 = [self.mobile_no]
         list3 = [self.branch_merchant_id, self.branchname]
-        if execute_sql(sql1, list1, False, True)[0][0] == 0 and execute_sql(sql2, list2, False, True)[0][0] == 0 and execute_sql(sql3, list3, False, True)[0][0] == 0:
+        if execute_sql(sql1, list1, False, True,connection)[0][0] == 0 and execute_sql(sql2, list2, False, True,connection)[0][0] == 0\
+             and execute_sql(sql3, list3, False, True,connection)[0][0] == 0:
             return True
         else:
             return False
@@ -150,7 +151,7 @@ class Branch:
         sql = 'INSERT INTO BRANCH VALUES(:branch_id,:branch_name,:branch_mobile_no,:balance,:branch_merchant_id)'
         list = [self.branch_id, self.branchname, self.mobile_no,
                 self.balance, self.branch_merchant_id]
-        execute_sql(sql, list, True, False)
+        execute_sql(sql, list, True, False,connection)
 
 
 class UpdateUser:
@@ -159,7 +160,7 @@ class UpdateUser:
         sql = 'SELECT USER_ID,USER_NAME,USER_PHOTO,USER_FATHER_NAME\
         ,USER_MOTHER_NAME,USER_GENDER,USER_DOB,USER_NID,USER_MOBILE_NO,USER_PASSWORD \
         FROM USERS WHERE USER_ID=:id'
-        ans = execute_sql(sql, [self.id], False, True)[0]
+        ans = execute_sql(sql, [self.id], False, True,connection)[0]
         self.img = ans[2]
         self.username = ans[1]
         self.father_name = ans[3]
@@ -200,7 +201,7 @@ class UpdateUser:
 
         list = [self.username, self.father_name, self.mother_name, self.password, self.gender, self.dob,
                 self.nid_no, self.mobile_no, self.id]
-        execute_sql(sql, list, True, False)
+        execute_sql(sql, list, True, False,connection)
 
         resp = redirect('home:home')
         resp.set_cookie('NAME', str(self.username))
@@ -213,21 +214,21 @@ class Offer:
 
         sql = 'SELECT OFFER_ID FROM OFFERS WHERE DISCOUNT_PERCENT =: discount_percent'
         list = [discount_percentage]
-        if not execute_sql(sql, list, False, True):
-            if not execute_sql('select max(OFFER_ID) from OFFERS', [], False, True)[0][0]:
+        if not execute_sql(sql, list, False, True,connection):
+            if not execute_sql('select max(OFFER_ID) from OFFERS', [], False, True,connection)[0][0]:
                 self.offer_id = 1
             else:
                 self.offer_id = int(execute_sql(
-                    'select max(OFFER_ID) from OFFERS', [], False, True)[0][0]) + 1
+                    'select max(OFFER_ID) from OFFERS', [], False, True,connection)[0][0]) + 1
             self.discount_percent = discount_percentage
 
             sql_insert = 'INSERT INTO OFFERS VALUES(:offer_id,:discount_percent)'
             execute_sql(sql_insert, [self.offer_id,
-                                     self.discount_percent], True, False)
+                                     self.discount_percent], True, False,connection)
 
         else:
             self.offer_id = execute_sql(
-                'SELECT OFFER_ID FROM OFFERS WHERE DISCOUNT_PERCENT =: discount_percent', [discount_percentage], False, True)[0][0]
+                'SELECT OFFER_ID FROM OFFERS WHERE DISCOUNT_PERCENT =: discount_percent', [discount_percentage], False, True,connection)[0][0]
             self.discount_percent = discount_percentage
 
     def getOfferId(self):

@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.views import View
 from django.core.files.storage import FileSystemStorage
 import os
-from .models import USERS, LoginAgent, LoginCustomer, execute_sql, Agent, Customer, Admin, LoginAdmin, Merchant, LoginMerchant, ServiceProvider, MobileOperator
+from .models import USERS, LoginAgent, LoginCustomer, execute_sql,connection, Agent, Customer, Admin, LoginAdmin, Merchant, LoginMerchant, ServiceProvider, MobileOperator
 # Create your views here.
 # Create your views here.
 
@@ -13,11 +13,11 @@ class RegistrationAgentView(View):
 
     def post(self, request):
         if request.FILES.get("img"):
-            if not execute_sql('select max(user_id) from users', [], False, True)[0][0]:
+            if not execute_sql('select max(user_id) from users', [], False, True,connection)[0][0]:
                 user_id = 1
             else:
                 user_id = int(execute_sql(
-                    'select max(user_id) from users', [], False, True)[0][0]) + 1
+                    'select max(user_id) from users', [], False, True,connection)[0][0]) + 1
 
             imagename = 'user_'+str(user_id)+'.jpg'
 
@@ -49,11 +49,11 @@ class RegistrationCustomerView(View):
 
     def post(self, request):
         if request.FILES.get("img"):
-            if not execute_sql('select max(user_id) from users', [], False, True)[0][0]:
+            if not execute_sql('select max(user_id) from users', [], False, True,connection)[0][0]:
                 user_id = 1
             else:
                 user_id = int(execute_sql(
-                    'select max(user_id) from users', [], False, True)[0][0]) + 1
+                    'select max(user_id) from users', [], False, True,connection)[0][0]) + 1
 
             imagename = 'user_'+str(user_id)+'.jpg'
 
@@ -104,11 +104,11 @@ class RegistrationMerchantView(View):
 
     def post(self, request):
         if request.FILES.get("img"):
-            if not execute_sql('select max(merchant_id) from merchants', [], False, True)[0][0]:
+            if not execute_sql('select max(merchant_id) from merchants', [], False, True,connection)[0][0]:
                 merchant_id = 1
             else:
                 merchant_id = int(execute_sql(
-                    'select max(merchant_id) from merchants', [], False, True)[0][0]) + 1
+                    'select max(merchant_id) from merchants', [], False, True,connection)[0][0]) + 1
 
             imagename = 'merchant_'+str(merchant_id)+'.jpg'
 
@@ -132,11 +132,11 @@ class RegistrationServiceProviderView(View):
 
     def post(self, request):
         if request.FILES.get("img"):
-            if not execute_sql('SELECT MAX(SERVICE_ID) FROM UTILITY_SERVICE', [], False, True)[0][0]:
+            if not execute_sql('SELECT MAX(SERVICE_ID) FROM UTILITY_SERVICE', [], False, True,connection)[0][0]:
                 service_id = 1
             else:
                 service_id = int(execute_sql(
-                    'SELECT MAX(SERVICE_ID) FROM UTILITY_SERVICE', [], False, True)[0][0]) + 1
+                    'SELECT MAX(SERVICE_ID) FROM UTILITY_SERVICE', [], False, True,connection)[0][0]) + 1
 
             imagename = 'service_'+str(service_id)+'.jpg'
             service = ServiceProvider(imagename, request.POST.get('servicename'), request.POST.get('servicetype'),

@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.views import View
 from .models import UserProfile, UpdateUser, AdminProfile, MerchantProfile, Branch, Offer
 from django.core.files.storage import FileSystemStorage
-from dashboard.models import execute_sql
+from dashboard.models import execute_sql,connection
 import os
 # Create your views here.
 
@@ -16,7 +16,7 @@ class HomeView(View):
                 context['TYPE'] = 'customer'
                 sql = 'SELECT CUSTOMER_BALANCE FROM CUSTOMER WHERE CUSTOMER_ID=:cust'
                 balance = execute_sql(
-                    sql, [request.session.get('CUSTOMER')], False, True)[0][0]
+                    sql, [request.session.get('CUSTOMER')], False, True,connection)[0][0]
                 context['BALANCE'] = balance
 
                 resp = render(request, 'home/user_home.html', context)
@@ -27,7 +27,7 @@ class HomeView(View):
 
             sql = 'SELECT CUSTOMER_BALANCE FROM CUSTOMER WHERE CUSTOMER_ID=:cust'
             balance = execute_sql(
-                sql, [request.session.get('CUSTOMER')], False, True)[0][0]
+                sql, [request.session.get('CUSTOMER')], False, True,connection)[0][0]
 
             context = {'NAME': request.COOKIES.get('NAME'), 'PHOTO': request.COOKIES.get('PHOTO'),
                        'MOBILE': request.COOKIES.get('MOBILE'), 'TYPE': 'customer', 'BALANCE': balance}
@@ -40,7 +40,7 @@ class HomeView(View):
                 context['TYPE'] = 'agent'
                 sql = 'SELECT AGENT_BALANCE FROM AGENT WHERE AGENT_ID=:agent'
                 balance = execute_sql(
-                    sql, [request.session.get('AGENT')], False, True)[0][0]
+                    sql, [request.session.get('AGENT')], False, True,connection)[0][0]
                 context['BALANCE'] = balance
 
                 resp = render(request, 'home/user_home.html', context)
@@ -51,7 +51,7 @@ class HomeView(View):
 
             sql = 'SELECT AGENT_BALANCE FROM AGENT WHERE AGENT_ID=:agent'
             balance = execute_sql(
-                sql, [request.session.get('AGENT')], False, True)[0][0]
+                sql, [request.session.get('AGENT')], False, True,connection)[0][0]
 
             context = {'NAME': request.COOKIES.get('NAME'), 'PHOTO': request.COOKIES.get('PHOTO'),
                        'MOBILE': request.COOKIES.get('MOBILE'), 'TYPE': 'agent', 'BALANCE': balance}
@@ -94,63 +94,63 @@ class HomeView(View):
                     if int(key) > 0:
                         sql = 'UPDATE CUSTOMER SET APPROVED_BY=:admin WHERE CUSTOMER_ID=:cust'
                         list = [request.session.get('ADMIN'), key]
-                        execute_sql(sql, list, True, False)
+                        execute_sql(sql, list, True, False,connection)
                     elif int(key) < 0:
                         sql = 'DELETE CUSTOMER WHERE CUSTOMER_ID=:cust'
                         list = [-int(key)]
-                        execute_sql(sql, list, True, False)
+                        execute_sql(sql, list, True, False,connection)
                         sql = 'DELETE USERS WHERE USER_ID=:user'
-                        execute_sql(sql, list, True, False)
+                        execute_sql(sql, list, True, False,connection)
                 elif name[0:4] == 'AGEN':
                     if int(key) > 0:
                         sql = 'UPDATE AGENT SET APPROVED_BY=:admin WHERE AGENT_ID=:agent'
                         list = [request.session.get('ADMIN'), key]
-                        execute_sql(sql, list, True, False)
+                        execute_sql(sql, list, True, False,connection)
                         sql = 'UPDATE AGENT SET AGENT_BALANCE=5000 WHERE AGENT_ID=:agent'
                         list = [key]
-                        execute_sql(sql, list, True, False)
+                        execute_sql(sql, list, True, False,connection)
                     elif int(key) < 0:
                         sql = 'DELETE AGENT WHERE AGENT_ID=:admin'
                         list = [-int(key)]
-                        execute_sql(sql, list, True, False)
+                        execute_sql(sql, list, True, False,connection)
                         sql = 'DELETE USERS WHERE USER_ID=:user'
-                        execute_sql(sql, list, True, False)
+                        execute_sql(sql, list, True, False,connection)
                 elif name[0:4] == 'ADMI':
                     if int(key) > 0:
                         sql = 'UPDATE ADMIN SET APPROVED_BY=:admin WHERE ADMIN_ID=:admin'
                         list = [request.session.get('ADMIN'), key]
-                        execute_sql(sql, list, True, False)
+                        execute_sql(sql, list, True, False,connection)
                     elif int(key) < 0:
                         sql = 'DELETE ADMIN WHERE ADMIN_ID=:admin'
                         list = [-int(key)]
-                        execute_sql(sql, list, True, False)
+                        execute_sql(sql, list, True, False,connection)
                 elif name[0:4] == 'MERC':
                     if int(key) > 0:
                         sql = 'UPDATE MERCHANTS SET APPROVED_BY=:admin WHERE MERCHANT_ID=:merchant'
                         list = [request.session.get('ADMIN'), key]
-                        execute_sql(sql, list, True, False)
+                        execute_sql(sql, list, True, False,connection)
                     elif int(key) < 0:
                         sql = 'DELETE MERCHANTS WHERE MERCHANT_ID=:merchant'
                         list = [-int(key)]
-                        execute_sql(sql, list, True, False)
+                        execute_sql(sql, list, True, False,connection)
                 elif name[0:4] == 'SERV':
                     if int(key)>0:
                         sql = 'UPDATE UTILITY_SERVICE SET APPROVED_BY=:admin WHERE SERVICE_ID=:service'
                         list=[request.session.get('ADMIN'),key]
-                        execute_sql(sql,list,True,False)
+                        execute_sql(sql,list,True,False,connection)
                     elif int(key)<0:
                         sql = 'DELETE UTILITY_SERVICE WHERE SERVICE_ID=:service'
                         list=[-int(key)]
-                        execute_sql(sql,list,True,False) 
+                        execute_sql(sql,list,True,False,connection) 
                 elif name[0:4] == 'OPER':
                     if int(key)>0:
                         sql = 'UPDATE MOBILE_OPERATOR SET APPROVED_BY=:admin WHERE OPERATOR_ID=:operator'
                         list=[request.session.get('ADMIN'),key]
-                        execute_sql(sql,list,True,False)
+                        execute_sql(sql,list,True,False,connection)
                     elif int(key)<0:
                         sql = 'DELETE MOBILE_OPERATOR WHERE OPERATOR_ID=:operator'
                         list=[-int(key)]
-                        execute_sql(sql,list,True,False)  
+                        execute_sql(sql,list,True,False,connection)  
 
             return redirect('home:home')
 
@@ -160,7 +160,7 @@ class HomeView(View):
             offer_id = offer.getOfferId()
             sql = 'UPDATE MERCHANTS SET OFFER_ID =: offer_id WHERE MERCHANT_ID =:merchant'
             list = [offer_id, request.session.get('MERCHANT')]
-            execute_sql(sql, list, True, False)
+            execute_sql(sql, list, True, False,connection)
             return redirect('home:home')
 
 
