@@ -1,7 +1,18 @@
 from django.db import models
 from dashboard.models import execute_sql, hash_the_password
+import cx_Oracle as db
 
-# Create your models here.
+def execute_PROCEDURE(procedure_name, list):
+    try:
+        with db.connect(
+                user='bkash_db',
+                password='123',
+                dsn='localhost/orcl',
+                encoding='UTF-8') as connection:
+            with connection.cursor() as cursor:
+                cursor.callproc(procedure_name,list)
+    except db.Error as error:
+        print(error)
 
 
 class SendMoney:
@@ -42,17 +53,7 @@ class SendMoney:
         return False
 
     def doTransiction(self):
-        sql = 'UPDATE CUSTOMER SET CUSTOMER_BALANCE = CUSTOMER_BALANCE+ :amount WHERE CUSTOMER_ID = :reciver'
-        list = [self.amount, self.receiver_id]
-        execute_sql(sql, list, True, False)
-
-        sql = 'UPDATE CUSTOMER SET CUSTOMER_BALANCE = CUSTOMER_BALANCE- :amount WHERE CUSTOMER_ID = :sender'
-        list = [self.amount, self.sender_id]
-        execute_sql(sql, list, True, False)
-
-        sql = 'INSERT INTO SEND_MONEY(FROM_CUSTOMER_ID,TO_CUSTOMER_ID,TRANSACTION_AMOUNT_S_M) VALUES(:sender,:receiver,:amount)'
-        list = [self.sender_id, self.receiver_id, self.amount]
-        execute_sql(sql, list, True, False)
+        execute_PROCEDURE('SEND_MONEY_TRANSACTION',[self.sender_id,self.receiver_id,self.amount])        
 
 
 class CashIn:
@@ -94,17 +95,7 @@ class CashIn:
         return False
 
     def doTransiction(self):
-        sql = 'UPDATE CUSTOMER SET CUSTOMER_BALANCE = CUSTOMER_BALANCE+ :amount WHERE CUSTOMER_ID = :reciver'
-        list = [self.amount, self.receiver_id]
-        execute_sql(sql, list, True, False)
-
-        sql = 'UPDATE AGENT SET AGENT_BALANCE = AGENT_BALANCE- :amount WHERE AGENT_ID = :sender'
-        list = [self.amount, self.sender_id]
-        execute_sql(sql, list, True, False)
-
-        sql = 'INSERT INTO CASH_IN(CUSTOMER_ID,AGENT_ID,TRANSACTION_AMOUNT_C_I) VALUES(:receiver,:sender,:amount)'
-        list = [self.receiver_id, self.sender_id, self.amount]
-        execute_sql(sql, list, True, False)
+        execute_PROCEDURE('CASH_IN_TRANSACTION',[self.sender_id,self.receiver_id,self.amount])
 
 
 class CashOut:
@@ -146,17 +137,7 @@ class CashOut:
         return False
 
     def doTransiction(self):
-        sql = 'UPDATE AGENT SET AGENT_BALANCE = AGENT_BALANCE+ :amount WHERE AGENT_ID = :receiver'
-        list = [self.amount, self.receiver_id]
-        execute_sql(sql, list, True, False)
-
-        sql = 'UPDATE CUSTOMER SET CUSTOMER_BALANCE = CUSTOMER_BALANCE- :amount WHERE CUSTOMER_ID = :reciver'
-        list = [self.amount, self.sender_id]
-        execute_sql(sql, list, True, False)
-
-        sql = 'INSERT INTO CASH_OUT(AGENT_ID,CUSTOMER_ID,TRANSACTION_AMOUNT_C_O) VALUES(:receiver,:sender,:amount)'
-        list = [self.receiver_id, self.sender_id, self.amount]
-        execute_sql(sql, list, True, False)
+        execute_PROCEDURE('CASH_OUT_TRANSACTION',[self.sender_id,self.receiver_id,self.amount])
 
 
 class PayBill:
@@ -187,24 +168,10 @@ class PayBill:
         return context        
 
     def doTransictionCustomer(self,service_id,user_id,amount,billing_id):
-        sql = 'UPDATE CUSTOMER SET CUSTOMER_BALANCE = CUSTOMER_BALANCE- :amount WHERE CUSTOMER_ID = :sender'
-        list = [amount,user_id]
-        execute_sql(sql,list,True,False) 
-
-        sql = 'INSERT INTO PAY_UTILITY_BILL(SERVICE_ID,USER_ID,TRANSACTION_AMOUNT_P_U_B,BILLING_ID)\
-             VALUES(:ser_id,:user_id,:amount,:billing_id)'
-        list = [service_id,user_id,amount,billing_id]
-        execute_sql(sql,list,True,False)
+        PAYBILL_TRANSACTION(user_id,service_id,amount,'CUSTOMER',billing_id)
 
     def doTransictionAgent(self,service_id,user_id,amount,billing_id):
-        sql = 'UPDATE AGENT SET AGENT_BALANCE = AGENT_BALANCE- :amount WHERE AGENT_ID = :sender' 
-        list = [amount,user_id]
-        execute_sql(sql,list,True,False) 
-
-        sql = 'INSERT INTO PAY_UTILITY_BILL(SERVICE_ID,USER_ID,TRANSACTION_AMOUNT_P_U_B,BILLING_ID) VALUES \
-            (:ser_id,:user_id,:amount,:billing_id)'
-        list = [service_id,user_id,amount,billing_id]
-        execute_sql(sql,list,True,False)
+        PAYBILL_TRANSACTION(user_id,service_id,amount,'AGENT',billing_id)
 
     def isCorrectPass(self,isCustomer,user_id,password):
         if isCustomer:
@@ -348,41 +315,12 @@ class MerchantPayment:
         sql = 'SELECT DISCOUNT_PERCENT FROM OFFERS O,MERCHANTS M WHERE M.OFFER_ID = O.OFFER_ID  AND MERCHANT_ID =: MERC_ID'
         list = [self.merchant_id]
 
-        if execute_sql(sql, list, False, True)[0][0]:
-            disc_percent = int(execute_sql(sql, list, False, True)[0][0])
-        else:
+        if not execute_sql(sql, list, False, True):
             disc_percent = 0
+        else:
+            disc_percent = int(execute_sql(sql, list, False, True)[0][0])
 
-        if self.sender_type == "customer":
-            sql = 'UPDATE CUSTOMER SET CUSTOMER_BALANCE = CUSTOMER_BALANCE- :amount WHERE CUSTOMER_ID =:sender_id'
-            list = [self.amount, self.sender_id]
-        elif self.sender_type == "agent":
-            sql = 'UPDATE AGENT SET AGENT_BALANCE = AGENT_BALANCE- :amount WHERE AGENT_ID =:sender_id'
-            list = [self.amount, self.sender_id]
-
-        execute_sql(sql, list, True, False)
-
-        sql = 'UPDATE BRANCH SET MERCHANT_BRANCH_BALANCE = MERCHANT_BRANCH_BALANCE+ :amount WHERE BRANCH_ID =: merchant_branch_id'
-        list = [self.amount, self.merchant_branch_id]
-        execute_sql(sql, list, True, False)
-
-        sql = 'INSERT INTO PAYMENT(MERCHANT_BRANCH_ID,USER_ID,TRANSACTION_AMOUNT_PAYMENT) VALUES(:receiver,:sender,:amount)'
-        list = [self.merchant_branch_id, self.sender_id, self.amount]
-        execute_sql(sql, list, True, False)
-
-        if disc_percent > 0:
-            disc_amount = (self.amount*disc_percent)/100.0
-            if self.sender_type == "customer":
-                sql = 'UPDATE CUSTOMER SET CUSTOMER_BALANCE = CUSTOMER_BALANCE+ :cashback_amount WHERE CUSTOMER_ID =:sender_id'
-                list = [disc_amount, self.sender_id]
-            elif self.sender_type == "agent":
-                sql = 'UPDATE AGENT SET AGENT_BALANCE = AGENT_BALANCE+ :cashback_amount WHERE AGENT_ID =:sender_id'
-                list = [disc_amount, self.sender_id]
-            execute_sql(sql, list, True, False)
-
-            sql = 'INSERT INTO CASHBACK(USER_ID,MERCHANT_BRANCH_ID,CASHBACK_AMOUNT) VALUES(:sender,:merchant,:amount)'
-            list = [self.sender_id, self.merchant_branch_id, disc_amount]
-            execute_sql(sql, list, True, False)
+        execute_PROCEDURE('PAYMENT_TRANSACTION',[self.sender_id,self.merchant_branch_id,self.amount,self.sender_type,disc_percent])
 
 
 class MobileRecharge:
@@ -439,18 +377,5 @@ class MobileRecharge:
         list = [digit]
         operator_id = execute_sql(sql,list,False,True)[0][0]
 
-        if self.sender_type == "customer":
-            sql = 'UPDATE CUSTOMER SET CUSTOMER_BALANCE = CUSTOMER_BALANCE- :amount WHERE CUSTOMER_ID =:sender_id'
-            list = [self.recharge_amount, self.sender_id]
-        elif self.sender_type == "agent":
-            sql = 'UPDATE AGENT SET AGENT_BALANCE = AGENT_BALANCE- :amount WHERE AGENT_ID =:sender_id'
-            list = [self.recharge_amount, self.sender_id]
-        execute_sql(sql, list, True, False)
-        
-        sql ='UPDATE MOBILE_OPERATOR SET OPERATOR_BALANCE = OPERATOR_BALANCE+ :amount WHERE OPERATOR_ID =: operator'
-        list = [self.recharge_amount,operator_id]
-        execute_sql(sql,list,True,False)
-
-        sql = 'INSERT INTO MOBILE_RECHARGE(OPERATOR_ID,USER_ID,TRANSACTION_AMOUNT_M_R,TO_MOBILE_NUMBER_RECHARGE) VALUES(:operator_id,:user_id,:recharge_amount,:receiver_mobile_no)'
-        list = [operator_id,self.sender_id,self.recharge_amount,self.receiver_mobile_no]
-        execute_sql(sql,list,True,False)
+        list = [self.sender_id,operator_id,self.recharge_amount,self.sender_type,self.receiver_mobile_no]
+        execute_PROCEDURE('MOBILE_RECHARGE_TRANSACTION',list)
