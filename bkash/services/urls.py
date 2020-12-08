@@ -11,5 +11,6 @@ urlpatterns = [
     path('payBill/',views.PayBillView.as_view(),name='payBill'),
     path('payBill/<int:service_id>/',views.PayBillView.as_view(),name='payBill'),
     path('history/',views.HistoryView.as_view(),name='history'),
-    path('payment/', views.MerchantPaymentView.as_view(), name='merchantpayment')
+    path('payment/', views.MerchantPaymentView.as_view(), name='merchantpayment'),
+    path('recharge/', views.MobileRechargeView.as_view(), name='mobileRecharge')
 ]

@@ -1,5 +1,5 @@
 {
     "python.formatting.provider": "autopep8",
     "liveServer.settings.port": 5501,
-    "python.pythonPath": "C:\\Users\\Noman\\envs\\django3\\Scripts\\python.exe"
+    "python.pythonPath": "C:\\Program Files\\Python37\\python.exe"
 }

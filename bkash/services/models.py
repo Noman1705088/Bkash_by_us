@@ -246,7 +246,8 @@ class HistoryOf:
             ((SELECT \'USER_\' || AGENT_ID SENDER,\'USER_\'||CUSTOMER_ID RECEIVER,HISTORY_ID,TRANSACTION_AMOUNT_C_I AMOUNT FROM CASH_IN)\
                 UNION (SELECT \'USER_\'||CUSTOMER_ID,\'USER_\'||AGENT_ID,HISTORY_ID,TRANSACTION_AMOUNT_C_O FROM CASH_OUT)\
                     UNION (SELECT \'USER_\'||FROM_CUSTOMER_ID,\'USER_\'||TO_CUSTOMER_ID,HISTORY_ID,TRANSACTION_AMOUNT_S_M FROM SEND_MONEY)\
-                        UNION (SELECT \'USER_\'||USER_ID,\'SERV_\'||SERVICE_ID,HISTORY_ID,TRANSACTION_AMOUNT_P_U_B FROM PAY_UTILITY_BILL))\
+                        UNION (SELECT \'USER_\'||USER_ID,\'SERV_\'||SERVICE_ID,HISTORY_ID,TRANSACTION_AMOUNT_P_U_B FROM PAY_UTILITY_BILL)\
+                            UNION (SELECT \'USER_\'||USER_ID,\'OPER_\'||OPERATOR_ID,HISTORY_ID,TRANSACTION_AMOUNT_M_R FROM MOBILE_RECHARGE))\
                         S JOIN HISTORY H ON S.HISTORY_ID=H.HISTORY_ID JOIN HISTORY_TYPE HT ON H.TYPE_ID=HT.TYPE_ID\
                             WHERE SENDER =: SENDER OR RECEIVER =: RECEIVER\
                                 ORDER BY TRANSACTION_TIME DESC'
@@ -268,6 +269,12 @@ class HistoryOf:
             elif receiver[:5] == 'SERV_' :
                 sql2 = 'SELECT SERVICE_NAME,SERVICE_TYPE FROM UTILITY_SERVICE WHERE SERVICE_ID=: id'
                 receiver = execute_sql(sql2,[receiver[5:]],False,True)[0][0] +'('+execute_sql(sql2,[receiver[5:]],False,True)[0][1]+')'
+            elif receiver[:5] == 'OPER_':
+                sql2 = 'SELECT TO_MOBILE_NUMBER_RECHARGE,OPERATOR_NAME\
+                    FROM MOBILE_OPERATOR O,MOBILE_RECHARGE M\
+                        WHERE O.OPERATOR_ID = M.OPERATOR_ID AND HISTORY_ID = :hist_id'
+                receiver_first = execute_sql(sql2,[x[6]],False,True)[0]
+                receiver = receiver_first[0] +'(' + receiver_first[1] +')'
             
             billing_id = None
             if x[5] == 'Pay Utility Bill':
@@ -351,6 +358,10 @@ class MerchantPayment:
         list = [self.amount, self.merchant_branch_id]
         execute_sql(sql, list, True, False)
 
+        sql = 'INSERT INTO PAYMENT(MERCHANT_BRANCH_ID,USER_ID,TRANSACTION_AMOUNT_PAYMENT) VALUES(:receiver,:sender,:amount)'
+        list = [self.merchant_branch_id, self.sender_id, self.amount]
+        execute_sql(sql, list, True, False)
+
         if disc_percent > 0:
             disc_amount = (self.amount*disc_percent)/100.0
             if self.sender_type == "customer":
@@ -361,10 +372,77 @@ class MerchantPayment:
                 list = [disc_amount, self.sender_id]
             execute_sql(sql, list, True, False)
 
-            sql = 'INSERT INTO PAYMENT(MERCHANT_BRANCH_ID,USER_ID,TRANSACTION_AMOUNT_PAYMENT) VALUES(:receiver,:sender,:amount)'
-            list = [self.merchant_branch_id, self.sender_id, self.amount]
-            execute_sql(sql, list, True, False)
-
             sql = 'INSERT INTO CASHBACK(USER_ID,MERCHANT_BRANCH_ID,CASHBACK_AMOUNT) VALUES(:sender,:merchant,:amount)'
             list = [self.sender_id, self.merchant_branch_id, disc_amount]
             execute_sql(sql, list, True, False)
+
+
+class MobileRecharge:
+    def __init__(self,sender_id,receiver_mobile_no,recharge_amount,password,sender_type):
+        self.sender_id = sender_id
+        self.receiver_mobile_no = receiver_mobile_no
+        self.recharge_amount = recharge_amount
+        self.password =password
+        self.sender_type = sender_type
+    
+    def is_correct_password(self):
+        if self.sender_type == "customer":
+            sql = 'SELECT USER_PASSWORD FROM USERS U JOIN CUSTOMER C ON U.USER_ID=C.CUSTOMER_ID WHERE CUSTOMER_ID=:CUST\
+                AND APPROVED_BY IS NOT NULL'
+        elif self.sender_type == "agent":
+            sql = 'SELECT USER_PASSWORD FROM USERS U JOIN AGENT A ON U.USER_ID=A.AGENT_ID WHERE AGENT_ID=:AGNT\
+                AND APPROVED_BY IS NOT NULL'
+        list = [self.sender_id]
+
+        if not execute_sql(sql, list, False, True):
+            return False
+        elif execute_sql(sql, list, False, True)[0][0] == hash_the_password(self.password):
+            return True
+        else:
+            return False
+    
+    def hasEnoughMoney(self):
+        if self.sender_type == "customer":
+            sql = 'SELECT CUSTOMER_BALANCE FROM CUSTOMER WHERE CUSTOMER_ID=: CUST_ID'
+        elif self.sender_type == "agent":
+            sql = 'SELECT AGENT_BALANCE FROM AGENT WHERE AGENT_ID=: AGNT_ID'
+        list = [self.sender_id]
+        sender_balance = execute_sql(sql, list, False, True)[0][0]
+
+        if sender_balance >= self.recharge_amount:
+            return True
+        return False
+
+    def isOperatorAvailable(self):
+        digit = int(self.receiver_mobile_no[2])
+
+        sql = 'SELECT COUNT(OPERATOR_ID) FROM MOBILE_OPERATOR WHERE OPERATOR_DIGIT =: digit AND APPROVED_BY IS NOT NULL'
+        list = [digit]
+
+        if execute_sql(sql,list,False,True)[0][0] == 0:
+            return False
+        else:
+            return True
+    
+    def make_recharge(self):
+        digit = int(self.receiver_mobile_no[2])
+
+        sql = 'SELECT OPERATOR_ID FROM MOBILE_OPERATOR WHERE OPERATOR_DIGIT =: digit'
+        list = [digit]
+        operator_id = execute_sql(sql,list,False,True)[0][0]
+
+        if self.sender_type == "customer":
+            sql = 'UPDATE CUSTOMER SET CUSTOMER_BALANCE = CUSTOMER_BALANCE- :amount WHERE CUSTOMER_ID =:sender_id'
+            list = [self.recharge_amount, self.sender_id]
+        elif self.sender_type == "agent":
+            sql = 'UPDATE AGENT SET AGENT_BALANCE = AGENT_BALANCE- :amount WHERE AGENT_ID =:sender_id'
+            list = [self.recharge_amount, self.sender_id]
+        execute_sql(sql, list, True, False)
+        
+        sql ='UPDATE MOBILE_OPERATOR SET OPERATOR_BALANCE = OPERATOR_BALANCE+ :amount WHERE OPERATOR_ID =: operator'
+        list = [self.recharge_amount,operator_id]
+        execute_sql(sql,list,True,False)
+
+        sql = 'INSERT INTO MOBILE_RECHARGE(OPERATOR_ID,USER_ID,TRANSACTION_AMOUNT_M_R,TO_MOBILE_NUMBER_RECHARGE) VALUES(:operator_id,:user_id,:recharge_amount,:receiver_mobile_no)'
+        list = [operator_id,self.sender_id,self.recharge_amount,self.receiver_mobile_no]
+        execute_sql(sql,list,True,False)

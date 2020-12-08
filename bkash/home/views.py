@@ -139,6 +139,15 @@ class HomeView(View):
                     elif int(key)<0:
                         sql = 'DELETE UTILITY_SERVICE WHERE SERVICE_ID=:service'
                         list=[-int(key)]
+                        execute_sql(sql,list,True,False) 
+                elif name[0:4] == 'OPER':
+                    if int(key)>0:
+                        sql = 'UPDATE MOBILE_OPERATOR SET APPROVED_BY=:admin WHERE OPERATOR_ID=:operator'
+                        list=[request.session.get('ADMIN'),key]
+                        execute_sql(sql,list,True,False)
+                    elif int(key)<0:
+                        sql = 'DELETE MOBILE_OPERATOR WHERE OPERATOR_ID=:operator'
+                        list=[-int(key)]
                         execute_sql(sql,list,True,False)  
 
             return redirect('home:home')

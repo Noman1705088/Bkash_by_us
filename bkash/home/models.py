@@ -64,18 +64,27 @@ class AdminProfile:
                                 'merchant_val': x[1], 'trade_license_no': x[2], 'head_office_loc': x[3]}
             i = i+1
 
-        sql='SELECT SERVICE_PHOTO,SERVICE_NAME,SERVICE_TYPE,SERVICE_BANK_AC_NO,\
+        sql = 'SELECT SERVICE_PHOTO,SERVICE_NAME,SERVICE_TYPE,SERVICE_BANK_AC_NO,\
             SERVICE_ID FROM UTILITY_SERVICE WHERE APPROVED_BY IS NULL'
-        service = execute_sql(sql,[],False,True)
+        service = execute_sql(sql, [], False, True)
         cont_service = service
-        i=0
+        i = 0
         for x in service:
-            cont_service[i] = {'service_photo':x[0],'service_name':x[1],'service_type':x[2]\
-                ,'service_bank_ac':x[3],'service_post':'SERVICE'+str(x[4]),'service_val':x[4]}
-            i=i+1
+            cont_service[i] = {'service_photo': x[0], 'service_name': x[1], 'service_type': x[2],
+                               'service_bank_ac': x[3], 'service_post': 'SERVICE'+str(x[4]), 'service_val': x[4]}
+            i = i+1
+
+        sql = 'SELECT OPERATOR_ID,OPERATOR_NAME,OPERATOR_DIGIT,OPERATOR_BANK_AC_NO FROM MOBILE_OPERATOR WHERE APPROVED_BY IS NULL'
+        operator = execute_sql(sql, [], False, True)
+        cont_operator = operator
+        i = 0
+        for x in operator:
+            cont_operator[i] = {'operator_post': 'OPERATOR'+str(
+                x[0]), 'operator_val': x[0], 'operator_name': x[1], 'operator_digit': x[2], 'operator_bank_ac': x[3]}
+            i = i+1
 
         context = {'NAME': name, 'CUSTOMER': cont_cust,
-                   'AGENT': cont_agent, 'ADMIN': cont_admin, 'MERCHANT': cont_merchant, 'SERVICE':cont_service}
+                   'AGENT': cont_agent, 'ADMIN': cont_admin, 'MERCHANT': cont_merchant, 'SERVICE': cont_service, 'OPERATOR': cont_operator}
 
         return context
 
@@ -90,13 +99,12 @@ class MerchantProfile:
         self.trade_license = ans[2]
         self.head_office = ans[3]
         if not ans[4]:
-            self.offer_percent = 0;
-        else :
+            self.offer_percent = 0
+        else:
             offer_id = ans[4]
-            sql = 'SELECT DISCOUNT_PERCENT FROM OFFERS WHERE OFFER_ID =: offer_id';
-            self.offer_percent = execute_sql(sql,[offer_id],False,True)[0][0]
-
-
+            sql = 'SELECT DISCOUNT_PERCENT FROM OFFERS WHERE OFFER_ID =: offer_id'
+            self.offer_percent = execute_sql(
+                sql, [offer_id], False, True)[0][0]
 
     def getProfile(self):
         sql = 'SELECT BRANCH_NAME,BRANCH_MOBILE_NO,MERCHANT_BRANCH_BALANCE FROM BRANCH WHERE BRANCH_MERCHANT_ID =: merchant_id'
@@ -109,7 +117,7 @@ class MerchantProfile:
                               'branch_mobile_no': x[1], 'branch_balance': x[2]}
             i = i+1
         context = {'NAME': self.merchantName, 'PHOTO': '..\media\\'+self.img,
-                   'TRADE_LICENSE_NO': self.trade_license, 'HEAD_OFFICE_LOCATION': self.head_office, 'BRANCH': cont_branch,'OFFER_PERCENT':self.offer_percent}
+                   'TRADE_LICENSE_NO': self.trade_license, 'HEAD_OFFICE_LOCATION': self.head_office, 'BRANCH': cont_branch, 'OFFER_PERCENT': self.offer_percent}
         return context
 
 
@@ -199,12 +207,13 @@ class UpdateUser:
         resp.set_cookie('MOBILE', str(self.mobile_no))
         return resp
 
+
 class Offer:
-    def __init__(self,discount_percentage):
+    def __init__(self, discount_percentage):
 
         sql = 'SELECT OFFER_ID FROM OFFERS WHERE DISCOUNT_PERCENT =: discount_percent'
         list = [discount_percentage]
-        if not execute_sql(sql,list,False,True):
+        if not execute_sql(sql, list, False, True):
             if not execute_sql('select max(OFFER_ID) from OFFERS', [], False, True)[0][0]:
                 self.offer_id = 1
             else:
@@ -213,12 +222,13 @@ class Offer:
             self.discount_percent = discount_percentage
 
             sql_insert = 'INSERT INTO OFFERS VALUES(:offer_id,:discount_percent)'
-            execute_sql(sql_insert,[self.offer_id,self.discount_percent],True,False)
-        
-        else :
+            execute_sql(sql_insert, [self.offer_id,
+                                     self.discount_percent], True, False)
+
+        else:
             self.offer_id = execute_sql(
-                                'SELECT OFFER_ID FROM OFFERS WHERE DISCOUNT_PERCENT =: discount_percent',[discount_percentage],False,True)[0][0]
+                'SELECT OFFER_ID FROM OFFERS WHERE DISCOUNT_PERCENT =: discount_percent', [discount_percentage], False, True)[0][0]
             self.discount_percent = discount_percentage
-    
+
     def getOfferId(self):
         return self.offer_id
