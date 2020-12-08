@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.views import View
 from django.core.files.storage import FileSystemStorage
 import os
-from .models import USERS, LoginAgent, LoginCustomer, execute_sql, Agent, Customer, Admin, LoginAdmin, Merchant, LoginMerchant,ServiceProvider
+from .models import USERS, LoginAgent, LoginCustomer, execute_sql, Agent, Customer, Admin, LoginAdmin, Merchant, LoginMerchant, ServiceProvider, MobileOperator
 # Create your views here.
 # Create your views here.
 
@@ -113,7 +113,7 @@ class RegistrationMerchantView(View):
             imagename = 'merchant_'+str(merchant_id)+'.jpg'
 
             merchant = Merchant(merchant_id, imagename, request.POST.get(
-                "merchantname"), request.POST.get("trade_license_no"),request.POST.get("head_office_loc"),request.POST.get("password"))
+                "merchantname"), request.POST.get("trade_license_no"), request.POST.get("head_office_loc"), request.POST.get("password"))
             merchant_name_exists = True
             if merchant.uniqueMerchantName():
                 merchant.insert()
@@ -125,37 +125,55 @@ class RegistrationMerchantView(View):
                 merchant_name_exists = True
         return render(request, "dashboard/registrationMerchant.html", {'message': merchant_name_exists})
 
+
 class RegistrationServiceProviderView(View):
-    def get(self,request):
-        return render(request,"dashboard/registrationServiceProvider.html")
-    def post(self,request):
+    def get(self, request):
+        return render(request, "dashboard/registrationServiceProvider.html")
+
+    def post(self, request):
         if request.FILES.get("img"):
-            if not execute_sql('SELECT MAX(SERVICE_ID) FROM UTILITY_SERVICE',[],False,True)[0][0]:
-                service_id=1
+            if not execute_sql('SELECT MAX(SERVICE_ID) FROM UTILITY_SERVICE', [], False, True)[0][0]:
+                service_id = 1
             else:
-                service_id = int(execute_sql('SELECT MAX(SERVICE_ID) FROM UTILITY_SERVICE',[],False,True)[0][0]) + 1
-                
-            imagename= 'service_'+str(service_id)+'.jpg'
-            service = ServiceProvider(imagename,request.POST.get('servicename'),request.POST.get('servicetype'),\
-                request.POST.get('bank_acc'))
+                service_id = int(execute_sql(
+                    'SELECT MAX(SERVICE_ID) FROM UTILITY_SERVICE', [], False, True)[0][0]) + 1
+
+            imagename = 'service_'+str(service_id)+'.jpg'
+            service = ServiceProvider(imagename, request.POST.get('servicename'), request.POST.get('servicetype'),
+                                      request.POST.get('bank_acc'))
 
             service_exists = False
             if service.uniqueServiceProvider():
                 service.insert()
-                image= request.FILES.get("img")
+                image = request.FILES.get("img")
                 fs = FileSystemStorage()
                 filename = fs.save(imagename, image)
                 return redirect('home:home')
             else:
                 service_exists = True
 
-        return render(request,"dashboard/registrationServiceProvider.html",{'message':service_exists})
+        return render(request, "dashboard/registrationServiceProvider.html", {'message': service_exists})
+
+
 class RegistrationOperatorView(View):
-    def get(self,request):
-        return render(request,"dashboard/registrationOperator.html")
-    def post(self,request):
+    def get(self, request):
+        return render(request, "dashboard/registrationOperator.html")
+
+    def post(self, request):
         operator_name = request.POST.get("operator_name")
-        operator_type = request.POST.get("operator_type")
+        operator_name = operator_name.upper()
+        operator_digit = int(request.POST.get("operator_digit"))
+        operator_bank_ac = request.POST.get("bank_acc")
+
+        operator = MobileOperator(
+            operator_name, operator_digit, operator_bank_ac)
+
+        if operator.is_selected_digit_available() and operator.is_name_available():
+            operator.insert()
+            return redirect('home:home')
+        else:
+            operator_exists = True
+            return render(request, "dashboard/registrationOperator.html", {'message': operator_exists})
 
 
 class LoginCustomerView(View):

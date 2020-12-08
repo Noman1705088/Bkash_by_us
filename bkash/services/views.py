@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.views import View
-from .models import SendMoney,CashIn,CashOut,HistoryOf,PayBill, MerchantPayment
+from .models import SendMoney,CashIn,CashOut,HistoryOf,PayBill, MerchantPayment,MobileRecharge
 from dashboard.models import execute_sql
 from django.http import Http404
 
@@ -184,3 +184,27 @@ class MerchantPaymentView(View):
             return render(request, 'services/merchantPayment.html', {'message': merchant_payment_failed})
 
         return render(request, 'services/merchantPayment.html', {'message': merchant_payment_failed})
+class MobileRechargeView(View):
+    def get(self,request):
+        return render(request,'services/rechargeMobile.html')
+    def post(self,request):
+        if request.session.get('CUSTOMER'):
+            sender_id = request.session.get('CUSTOMER')
+            sender_type = "customer"
+        elif request.session.get('AGENT'):
+            sender_id = request.session.get('AGENT')
+            sender_type = "agent"
+
+        receiver_mobile_no = request.POST.get('to_mobile_no')
+        recharge_amount = int(request.POST.get('amount'))
+        password = request.POST.get('password')
+
+        mobile_recharge_trans = MobileRecharge(sender_id,receiver_mobile_no,recharge_amount,password,sender_type)
+        if mobile_recharge_trans.isOperatorAvailable() and mobile_recharge_trans.hasEnoughMoney() and mobile_recharge_trans.is_correct_password():
+            mobile_recharge_trans.make_recharge()
+            return redirect('services:history')
+        else:
+            mobile_recharge_failed = True;
+            return render(request, 'services/rechargeMobile.html', {'message': mobile_recharge_failed})
+
+

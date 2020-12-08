@@ -82,7 +82,7 @@
           </button>
           <a href="" class="navbar-brand"
             ><img
-              src="../img/icon.png"
+              src="{% static 'home/img/icon.png' %}"
               alt=""
               style="max-width: 50%; max-height: 50%; object-fit: contain"
               class="px-3"
@@ -337,6 +337,46 @@
                 </table>
               </div>
             </div>
+            <!--Mobile Operator Waiting For approval-->
+            <div class="card my-4">
+              <div class="card-header text-center">
+                <i
+                  class="fas fa-mobile-alt fa-2x d-inline-block text-right px-2"
+                  style="color: rgb(216, 18, 51)"
+                ></i>
+                <h5 class="d-inline-block align-middle">
+                 Mobile Operator Provider Waiting for Approval
+                </h5>
+              </div>
+              <div class="card-body">
+                <table class="table table-bordered table-hover text-center">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">Operator Name</th>
+                      <th scope="col">Operator Digit</th>
+                      <th scope="col">Operator Bank AC</th>
+                      <th scope="col">Approval</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for operator in OPERATOR %}
+                    <tr>
+                      <td class="align-middle">{{operator.operator_name}}</td>
+                      <td class="align-middle">{{operator.operator_digit}}</td>
+                      <td class="align-middle">{{operator.operator_bank_ac}}</td>
+                      <td>
+                        <label>Approve</label>
+                        <input type="radio" id="approve" name={{operator.operator_post}} value={{operator.operator_val}}>
+                        <br />
+                        <label>Reject</label>
+                        <input type="radio" id="reject" name={{operator.operator_post}} value=-{{operator.operator_val}}>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
             
              <!-- Admin Approval Section-->
             <div class="card my-4">
@@ -374,6 +414,8 @@
                 </table>
               </div>
             </div>
+
+
             <div class="row">
               <div class="col-4"></div>
               <div class="col-4 text-center">
@@ -392,20 +434,6 @@
       </div>
 
             <!-- submit Button -->
-            <div class="row">
-              <div class="col-4"></div>
-              <div class="col-4 text-center">
-                <input
-                  type="submit"
-                  name=""
-                  id=""
-                  class="btn btn-success btn-lg btn-block"
-                  value="Approve"
-                />
-              </div>
-              <div class="col-4"></div>
-            </div>
-          </form>
         </div>
       </div>
     </div>

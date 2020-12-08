@@ -238,8 +238,9 @@ class LoginMerchant:
 
         return execute_sql(sql, list, False, True)[0][0]
 
+
 class ServiceProvider:
-    def __init__(self,img,service_name,service_type,bank_acc):
+    def __init__(self, img, service_name, service_type, bank_acc):
         self.img = img
         self.service_name = service_name
         self.service_type = service_type
@@ -249,26 +250,55 @@ class ServiceProvider:
         else:
             self.id = int(execute_sql(
                 'SELECT MAX(SERVICE_ID) FROM UTILITY_SERVICE', [], False, True)[0][0]) + 1
-    
+
     def insert(self):
         sql = 'INSERT INTO UTILITY_SERVICE(SERVICE_ID,SERVICE_PHOTO,SERVICE_NAME,SERVICE_TYPE,\
             SERVICE_BANK_AC_NO,BALANCE,APPROVED_BY) VALUES(:id,:img,:name,:type,:bank_acc,:balance,:approved_by)'
-        list = [self.id,self.img,self.service_name,self.service_type,self.bank_acc,0,None]
-        execute_sql(sql,list,True,False)
+        list = [self.id, self.img, self.service_name,
+                self.service_type, self.bank_acc, 0, None]
+        execute_sql(sql, list, True, False)
 
     def uniqueServiceProvider(self):
         sql = 'SELECT COUNT(SERVICE_ID) FROM UTILITY_SERVICE WHERE \
             UPPER(SERVICE_NAME)=UPPER(:name) AND UPPER(SERVICE_TYPE)=UPPER(:type)'
-        list = [self.service_name,self.service_type]
-        
+        list = [self.service_name, self.service_type]
+
         if execute_sql(sql, list, False, True)[0][0] == 0:
             return True
-        else :
+        else:
             return False
 
 
-
 class MobileOperator:
-    def __init__(self, operator_name, operator_type):
+    def __init__(self, operator_name, operator_digit, operator_bank_ac):
+        if not execute_sql('select max(operator_id) from mobile_operator', [], False, True)[0][0]:
+            self.operator_id = 1
+        else:
+            self.operator_id = int(execute_sql(
+                'select max(operator_id) from mobile_operator', [], False, True)[0][0]) + 1
         self.operator_name = operator_name
-        self.operator_type = operator_type
+        self.operator_digit = operator_digit
+        self.operator_bank_ac = operator_bank_ac
+        self.balance = 0
+
+    def is_selected_digit_available(self):
+        sql = 'SELECT COUNT(OPERATOR_ID) FROM MOBILE_OPERATOR WHERE OPERATOR_DIGIT =: digit'
+        list = [self.operator_digit]
+        if execute_sql(sql, list, False, True)[0][0] == 0:
+            return True
+        else:
+            return False
+
+    def is_name_available(self):
+        sql = 'SELECT COUNT(OPERATOR_ID) FROM MOBILE_OPERATOR WHERE OPERATOR_NAME =: name'
+        list = [self.operator_name]
+        if execute_sql(sql, list, False, True)[0][0] == 0:
+            return True
+        else:
+            return False
+
+    def insert(self):
+        sql = 'INSERT INTO MOBILE_OPERATOR(OPERATOR_ID,OPERATOR_NAME,OPERATOR_DIGIT,OPERATOR_BANK_AC_NO,OPERATOR_BALANCE,APPROVED_BY) VALUES(:id,:name,:digit,:bank_ac,:balance,:approved_by)'
+        list = [self.operator_id, self.operator_name,
+                self.operator_digit, self.operator_bank_ac, self.balance,None]
+        execute_sql(sql, list, True, False)

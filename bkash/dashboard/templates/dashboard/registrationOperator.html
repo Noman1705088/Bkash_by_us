@@ -58,13 +58,20 @@
                         </div>
                         <br>
                         <div>
-                            <label for="operator_type">Operator Type:</label>
-                            <select name="operator_type" required id="" class="form-control" required>
+                            <label for="operator_type">Operator Number 3rd Digit:</label>
+                            <select name="operator_digit" required id="" class="form-control" required>
                                 <option value="null" disabled="disabled" selected="selected">
                                     --Choose Option--
                                 </option>
-                                <option value="prepaid">Prepaid</option>
-                                <option value="postpaid">Postpaid</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
                             </select>
                         </div>
                         <br>
@@ -76,7 +83,7 @@
                         <br>
                         {% if message %}
                         <div class="alert alert-danger mt-4">
-                            <strong>This operator and type is already used,Try another</strong>
+                            <strong>This operator and digit is already used,Try another</strong>
                         </div>
                         {% endif %}
                         <input type="submit" value="SUBMIT" class="btn btn-success btn-block btn-lg">
