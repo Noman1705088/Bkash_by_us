@@ -161,7 +161,7 @@ class RegistrationOperatorView(View):
 
     def post(self, request):
         operator_name = request.POST.get("operator_name")
-        operator_name = operator_name.upper()
+        #operator_name = operator_name.upper()
         operator_digit = int(request.POST.get("operator_digit"))
         operator_bank_ac = request.POST.get("bank_acc")
 

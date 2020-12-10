@@ -2,7 +2,7 @@ from django.db import models
 from datetime import date
 from django.shortcuts import render, HttpResponse, redirect
 # Create your models here.
-from dashboard.models import execute_sql, USERS, hash_the_password
+from dashboard.models import execute_sql, USERS, hash_the_password, execute_sql_func
 
 
 class UserProfile:
@@ -87,6 +87,22 @@ class AdminProfile:
                    'AGENT': cont_agent, 'ADMIN': cont_admin, 'MERCHANT': cont_merchant, 'SERVICE': cont_service, 'OPERATOR': cont_operator}
 
         return context
+    def addMoney(self,receiver_mobile_no,amount):
+        sql = """SELECT AGENT_ID
+                FROM AGENT A,USERS U
+                WHERE A.AGENT_ID = U.USER_ID AND U.USER_MOBILE_NO =: receiver_id"""
+        if execute_sql(sql,[receiver_mobile_no],False,True):
+            receiver_id = execute_sql(sql,[receiver_mobile_no],False,True)[0][0]
+            
+            sql = 'UPDATE AGENT SET AGENT_BALANCE = AGENT_BALANCE+ :add_money_amount WHERE AGENT_ID =:receiver_id'
+            list = [amount,receiver_id]
+            execute_sql(sql,list,True,False)
+            sql = 'INSERT INTO ADD_MONEY(SENDER_ID,RECEIVER_ID,ADD_MONEY_AMOUNT) VALUES(:sender_id,:receiver_id,:add_amount)'
+            list = [self.id,receiver_id,amount]
+            execute_sql(sql,list,True,False)
+            return True
+        else:
+            return False
 
 
 class MerchantProfile:
@@ -116,7 +132,7 @@ class MerchantProfile:
             cont_branch[i] = {'branch_name': x[0],
                               'branch_mobile_no': x[1], 'branch_balance': x[2]}
             i = i+1
-        context = {'NAME': self.merchantName, 'PHOTO': '..\media\\'+self.img,
+        context = {'NAME': self.merchantName, 'PHOTO': '\media\\'+self.img,
                    'TRADE_LICENSE_NO': self.trade_license, 'HEAD_OFFICE_LOCATION': self.head_office, 'BRANCH': cont_branch, 'OFFER_PERCENT': self.offer_percent}
         return context
 
@@ -232,3 +248,149 @@ class Offer:
 
     def getOfferId(self):
         return self.offer_id
+
+
+class AllAgentInfo:
+    def __init__(self):
+        pass
+
+    def getInfo(self):
+
+        sql = 'SELECT USER_ID,USER_NAME,USER_PHOTO,USER_MOBILE_NO,USER_NID,AGENT_BALANCE,AGENT_BANK_AC FROM USERS U,AGENT A WHERE U.USER_ID = A.AGENT_ID AND APPROVED_BY IS NOT NULL ORDER BY USER_ID ASC'
+
+        if execute_sql(sql, [], False, True):
+            agent = execute_sql(sql, [], False, True)
+            i = 0
+            cont_agent = agent
+            for x in agent:
+                cont_agent[i] = {'agent_name': x[1], 'agent_photo': x[2],
+                                 'agent_mobile_no': x[3], 'agent_nid': x[4], 'agent_balance': x[5], 'agent_bank_ac': x[6]}
+                agent_id = x[0]
+                transaction = execute_sql_func(
+                    'GET_TRANSACTION_COUNT_AGENT', [agent_id], False, True)
+                tran = transaction.split()
+
+                cont_agent[i]['cash_in'] = tran[0]
+                cont_agent[i]['cash_out_used'] = tran[1]
+                cont_agent[i]['merchant_payment'] = tran[2]
+                cont_agent[i]['mobile_recharge'] = tran[3]
+                cont_agent[i]['service_payment'] = tran[4]
+                cont_agent[i]['add_money_count'] = tran[5]
+
+                i = i+1
+
+            context = {'AGENT': cont_agent}
+            return context
+        else:
+            context = {'AGENT': False}
+            return context
+
+
+class AllCustomerInfo:
+    def __init__(self):
+        pass
+
+    def getInfo(self):
+        sql = 'SELECT USER_ID,USER_NAME,USER_PHOTO,USER_MOBILE_NO,USER_NID,CUSTOMER_BALANCE FROM USERS U,CUSTOMER C WHERE U.USER_ID = C.CUSTOMER_ID AND APPROVED_BY IS NOT NULL ORDER BY USER_ID ASC'
+        if execute_sql(sql, [], False, True):
+            customer = execute_sql(sql, [], False, True)
+            i = 0
+            cont_customer = customer
+            for x in customer:
+                cont_customer[i] = {'customer_name': x[1], 'customer_photo': x[2],
+                                    'customer_mobile_no': x[3], 'customer_nid': x[4], 'customer_balance': x[5]}
+                customer_id = x[0]
+                transaction = execute_sql_func('GET_TRANSACTION_COUNT_CUSTOMER', [
+                    customer_id], False, True)
+                tran = transaction.split()
+
+                cont_customer[i]['cash_in_to'] = tran[0]
+                cont_customer[i]['cash_out_from'] = tran[1]
+                cont_customer[i]['merchant_payment'] = tran[2]
+                cont_customer[i]['mobile_recharge'] = tran[3]
+                cont_customer[i]['service_payment'] = tran[4]
+                cont_customer[i]['send_money_from'] = tran[5]
+                cont_customer[i]['received_money_to'] = tran[6]
+                i = i+1
+
+            context = {'CUSTOMER': cont_customer}
+            return context
+        else:
+            context = {'CUSTOMER': False}
+            return context
+
+
+class AllMerchantInfo:
+    def __init__(self):
+        pass
+
+    def getInfo(self):
+        sql = """SELECT MERCHANT_ID,MERCHANT_NAME,MERCHANT_LOGO_IMAGE,TRADE_LICENSE_NO,HEAD_OFFICE_LOCATION,NVL(O.DISCOUNT_PERCENT,0)
+                FROM MERCHANTS M,OFFERS O
+                WHERE M.OFFER_ID = O.OFFER_ID (+)
+                ORDER BY MERCHANT_ID ASC"""
+        merchant = execute_sql(sql, [], False, True)
+        cont_merchant = merchant
+        i = 0
+        for x in merchant:
+            cont_merchant[i] = {'merchant_name': x[1], 'merchant_photo': x[2], 'trade_license': x[3],
+                                'head_office': x[4], 'offer': x[5]}
+            merchant_id = x[0]
+            merchant_info = execute_sql_func(
+                'GET_MERCHANT_INFO', [merchant_id], False, True)
+            info = merchant_info.split()
+            cont_merchant[i]['total_branch'] = info[0]
+            cont_merchant[i]['mer_balance'] = info[1]
+            cont_merchant[i]['total_transaction'] = info[2]
+
+            i = i+1
+        context = {'MERCHANT': cont_merchant}
+        return context
+
+
+class AllOperatorInfo:
+    def __init__(self):
+        pass
+
+    def getInfo(self):
+
+        sql = """SELECT M.OPERATOR_ID,M.OPERATOR_NAME,M.OPERATOR_DIGIT,M.OPERATOR_BANK_AC_NO,M.OPERATOR_BALANCE,NVL(COUNT(MR.OPERATOR_ID),0) TOTAL
+                FROM MOBILE_OPERATOR M,MOBILE_RECHARGE MR,HISTORY H
+                WHERE M.OPERATOR_ID = MR.OPERATOR_ID (+) AND MR.HISTORY_ID = H.HISTORY_ID AND M.APPROVED_BY IS NOT NULL
+                GROUP BY M.OPERATOR_ID,M.OPERATOR_NAME,M.OPERATOR_DIGIT,M.OPERATOR_BANK_AC_NO,M.OPERATOR_BALANCE
+                ORDER BY M.OPERATOR_ID ASC"""
+        operator = execute_sql(sql, [], False, True)
+        cont_operator = operator
+        i = 0
+        for x in operator:
+            cont_operator[i] = {'operator_name': x[1], 'operator_3rd_digit': x[2],
+                                'operator_bank_ac_no': x[3], 'operator_balance': x[4], 'transaction': x[5]}
+            i = i+1
+        context = {'OPERATOR': cont_operator}
+        return context
+
+
+class AllServiceProviderInfo:
+    def __init__(self):
+        pass
+
+    def getInfo(self):
+
+        sql = """SELECT S.SERVICE_NAME,S.SERVICE_PHOTO,S.SERVICE_TYPE,S.SERVICE_BANK_AC_NO,S.BALANCE,COUNT(PUB.SERVICE_ID) TOTAL
+                FROM UTILITY_SERVICE S,PAY_UTILITY_BILL PUB,HISTORY H
+                WHERE S.SERVICE_ID = PUB.SERVICE_ID (+) AND PUB.HISTORY_ID = H.HISTORY_ID AND APPROVED_BY IS NOT NULL
+                GROUP BY S.SERVICE_ID,S.SERVICE_NAME,S.SERVICE_PHOTO,S.SERVICE_TYPE,S.SERVICE_BANK_AC_NO,S.BALANCE
+                ORDER BY S.SERVICE_TYPE ASC"""
+        service_provider = execute_sql(sql, [], False, True)
+        cont_service = service_provider
+        i = 0
+        for x in service_provider:
+            cont_service[i] = {'service_name': x[0],
+                               'service_photo': x[1],
+                               'service_type': x[2],
+                               'service_bank_ac': x[3],
+                               'service_balance': x[4],
+                               'service_transaction': x[5]}
+            i = i+1
+        context = {'SERVICE': cont_service}
+        return context

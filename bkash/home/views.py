@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.views import View
-from .models import UserProfile, UpdateUser, AdminProfile, MerchantProfile, Branch, Offer
+from .models import UserProfile, UpdateUser, AdminProfile, MerchantProfile, Branch, Offer, AllCustomerInfo, AllAgentInfo, AllMerchantInfo, AllOperatorInfo, AllServiceProviderInfo
 from django.core.files.storage import FileSystemStorage
 from dashboard.models import execute_sql
 import os
@@ -19,6 +19,8 @@ class HomeView(View):
                     sql, [request.session.get('CUSTOMER')], False, True)[0][0]
                 context['BALANCE'] = balance
 
+                context['MERCHANT'] = getMerchant()
+
                 resp = render(request, 'home/user_home.html', context)
                 resp.set_cookie('NAME', context['NAME'])
                 resp.set_cookie('MOBILE', context['MOBILE'])
@@ -31,6 +33,7 @@ class HomeView(View):
 
             context = {'NAME': request.COOKIES.get('NAME'), 'PHOTO': request.COOKIES.get('PHOTO'),
                        'MOBILE': request.COOKIES.get('MOBILE'), 'TYPE': 'customer', 'BALANCE': balance}
+            context['MERCHANT'] = getMerchant()
             return render(request, 'home/user_home.html', context)
 
         elif request.session.get('AGENT'):
@@ -42,7 +45,7 @@ class HomeView(View):
                 balance = execute_sql(
                     sql, [request.session.get('AGENT')], False, True)[0][0]
                 context['BALANCE'] = balance
-
+                context['MERCHANT'] = getMerchant()
                 resp = render(request, 'home/user_home.html', context)
                 resp.set_cookie('NAME', context['NAME'])
                 resp.set_cookie('MOBILE', context['MOBILE'])
@@ -55,6 +58,7 @@ class HomeView(View):
 
             context = {'NAME': request.COOKIES.get('NAME'), 'PHOTO': request.COOKIES.get('PHOTO'),
                        'MOBILE': request.COOKIES.get('MOBILE'), 'TYPE': 'agent', 'BALANCE': balance}
+            context['MERCHANT'] = getMerchant()
             return render(request, 'home/user_home.html', context)
 
         elif request.session.get('ADMIN'):
@@ -79,80 +83,96 @@ class HomeView(View):
                 resp.set_cookie('OFFER_PERCENT', context['OFFER_PERCENT'])
                 return resp
 
-            context = {'NAME': request.COOKIES.get('NAME'), 'PHOTO': request.COOKIES.get('PHOTO'),\
-                       'TRADE_LICENSE_NO': request.COOKIES.get('TRADE_LICENSE_NO'), 'TYPE': 'merchant',\
-                            'HEAD_OFFICE_LOCATION': request.COOKIES.get('HEAD_OFFICE_LOCATION'),\
-                                 'BRANCH': request.COOKIES.get('BRANCH_NAME'), 'OFFER_PERCENT': request.COOKIES.get('OFFER_PERCENT')}
+            context = {'NAME': request.COOKIES.get('NAME'), 'PHOTO': request.COOKIES.get('PHOTO'),
+                       'TRADE_LICENSE_NO': request.COOKIES.get('TRADE_LICENSE_NO'), 'TYPE': 'merchant',
+                       'HEAD_OFFICE_LOCATION': request.COOKIES.get('HEAD_OFFICE_LOCATION'),
+                       'BRANCH': request.COOKIES.get('BRANCH_NAME'), 'OFFER_PERCENT': request.COOKIES.get('OFFER_PERCENT')}
             return render(request, 'home/merchant_home.html', context)
 
         return render(request, 'home/home.html')
 
     def post(self, request):
         if request.session.get('ADMIN'):
-            for name, key in request.POST.items():
-                if name[0:4] == 'CUST':
-                    if int(key) > 0:
-                        sql = 'UPDATE CUSTOMER SET APPROVED_BY=:admin WHERE CUSTOMER_ID=:cust'
-                        list = [request.session.get('ADMIN'), key]
-                        execute_sql(sql, list, True, False)
-                    elif int(key) < 0:
-                        sql = 'DELETE CUSTOMER WHERE CUSTOMER_ID=:cust'
-                        list = [-int(key)]
-                        execute_sql(sql, list, True, False)
-                        sql = 'DELETE USERS WHERE USER_ID=:user'
-                        execute_sql(sql, list, True, False)
-                elif name[0:4] == 'AGEN':
-                    if int(key) > 0:
-                        sql = 'UPDATE AGENT SET APPROVED_BY=:admin WHERE AGENT_ID=:agent'
-                        list = [request.session.get('ADMIN'), key]
-                        execute_sql(sql, list, True, False)
-                        sql = 'UPDATE AGENT SET AGENT_BALANCE=5000 WHERE AGENT_ID=:agent'
-                        list = [key]
-                        execute_sql(sql, list, True, False)
-                    elif int(key) < 0:
-                        sql = 'DELETE AGENT WHERE AGENT_ID=:admin'
-                        list = [-int(key)]
-                        execute_sql(sql, list, True, False)
-                        sql = 'DELETE USERS WHERE USER_ID=:user'
-                        execute_sql(sql, list, True, False)
-                elif name[0:4] == 'ADMI':
-                    if int(key) > 0:
-                        sql = 'UPDATE ADMIN SET APPROVED_BY=:admin WHERE ADMIN_ID=:admin'
-                        list = [request.session.get('ADMIN'), key]
-                        execute_sql(sql, list, True, False)
-                    elif int(key) < 0:
-                        sql = 'DELETE ADMIN WHERE ADMIN_ID=:admin'
-                        list = [-int(key)]
-                        execute_sql(sql, list, True, False)
-                elif name[0:4] == 'MERC':
-                    if int(key) > 0:
-                        sql = 'UPDATE MERCHANTS SET APPROVED_BY=:admin WHERE MERCHANT_ID=:merchant'
-                        list = [request.session.get('ADMIN'), key]
-                        execute_sql(sql, list, True, False)
-                    elif int(key) < 0:
-                        sql = 'DELETE MERCHANTS WHERE MERCHANT_ID=:merchant'
-                        list = [-int(key)]
-                        execute_sql(sql, list, True, False)
-                elif name[0:4] == 'SERV':
-                    if int(key)>0:
-                        sql = 'UPDATE UTILITY_SERVICE SET APPROVED_BY=:admin WHERE SERVICE_ID=:service'
-                        list=[request.session.get('ADMIN'),key]
-                        execute_sql(sql,list,True,False)
-                    elif int(key)<0:
-                        sql = 'DELETE UTILITY_SERVICE WHERE SERVICE_ID=:service'
-                        list=[-int(key)]
-                        execute_sql(sql,list,True,False) 
-                elif name[0:4] == 'OPER':
-                    if int(key)>0:
-                        sql = 'UPDATE MOBILE_OPERATOR SET APPROVED_BY=:admin WHERE OPERATOR_ID=:operator'
-                        list=[request.session.get('ADMIN'),key]
-                        execute_sql(sql,list,True,False)
-                    elif int(key)<0:
-                        sql = 'DELETE MOBILE_OPERATOR WHERE OPERATOR_ID=:operator'
-                        list=[-int(key)]
-                        execute_sql(sql,list,True,False)  
+            admin_id = request.session.get('ADMIN')
+            if request.POST.get('agent_mobile_no') and request.POST.get('add_money_amount'):
+                agent_number = request.POST.get('agent_mobile_no')
+                amount = request.POST.get('add_money_amount')
+                admin = AdminProfile(admin_id)
+                if admin.addMoney(agent_number, amount):
+                    add_money_successful = True
+                    context = admin.getProfile()
+                    context['add_money_successful'] = add_money_successful
+                    return render(request, 'home/admin_home.html', context)
+                else:
+                    add_money_failed = True
+                    context = admin.getProfile()
+                    context['add_money_failed'] = add_money_failed
+                    return render(request, 'home/admin_home.html', context)
+            else:
+                for name, key in request.POST.items():
+                    if name[0:4] == 'CUST':
+                        if int(key) > 0:
+                            sql = 'UPDATE CUSTOMER SET APPROVED_BY=:admin WHERE CUSTOMER_ID=:cust'
+                            list = [request.session.get('ADMIN'), key]
+                            execute_sql(sql, list, True, False)
+                        elif int(key) < 0:
+                            sql = 'DELETE CUSTOMER WHERE CUSTOMER_ID=:cust'
+                            list = [-int(key)]
+                            execute_sql(sql, list, True, False)
+                            sql = 'DELETE USERS WHERE USER_ID=:user'
+                            execute_sql(sql, list, True, False)
+                    elif name[0:4] == 'AGEN':
+                        if int(key) > 0:
+                            sql = 'UPDATE AGENT SET APPROVED_BY=:admin WHERE AGENT_ID=:agent'
+                            list = [request.session.get('ADMIN'), key]
+                            execute_sql(sql, list, True, False)
+                            sql = 'UPDATE AGENT SET AGENT_BALANCE=5000 WHERE AGENT_ID=:agent'
+                            list = [key]
+                            execute_sql(sql, list, True, False)
+                        elif int(key) < 0:
+                            sql = 'DELETE AGENT WHERE AGENT_ID=:admin'
+                            list = [-int(key)]
+                            execute_sql(sql, list, True, False)
+                            sql = 'DELETE USERS WHERE USER_ID=:user'
+                            execute_sql(sql, list, True, False)
+                    elif name[0:4] == 'ADMI':
+                        if int(key) > 0:
+                            sql = 'UPDATE ADMIN SET APPROVED_BY=:admin WHERE ADMIN_ID=:admin'
+                            list = [request.session.get('ADMIN'), key]
+                            execute_sql(sql, list, True, False)
+                        elif int(key) < 0:
+                            sql = 'DELETE ADMIN WHERE ADMIN_ID=:admin'
+                            list = [-int(key)]
+                            execute_sql(sql, list, True, False)
+                    elif name[0:4] == 'MERC':
+                        if int(key) > 0:
+                            sql = 'UPDATE MERCHANTS SET APPROVED_BY=:admin WHERE MERCHANT_ID=:merchant'
+                            list = [request.session.get('ADMIN'), key]
+                            execute_sql(sql, list, True, False)
+                        elif int(key) < 0:
+                            sql = 'DELETE MERCHANTS WHERE MERCHANT_ID=:merchant'
+                            list = [-int(key)]
+                            execute_sql(sql, list, True, False)
+                    elif name[0:4] == 'SERV':
+                        if int(key) > 0:
+                            sql = 'UPDATE UTILITY_SERVICE SET APPROVED_BY=:admin WHERE SERVICE_ID=:service'
+                            list = [request.session.get('ADMIN'), key]
+                            execute_sql(sql, list, True, False)
+                        elif int(key) < 0:
+                            sql = 'DELETE UTILITY_SERVICE WHERE SERVICE_ID=:service'
+                            list = [-int(key)]
+                            execute_sql(sql, list, True, False)
+                    elif name[0:4] == 'OPER':
+                        if int(key) > 0:
+                            sql = 'UPDATE MOBILE_OPERATOR SET APPROVED_BY=:admin WHERE OPERATOR_ID=:operator'
+                            list = [request.session.get('ADMIN'), key]
+                            execute_sql(sql, list, True, False)
+                        elif int(key) < 0:
+                            sql = 'DELETE MOBILE_OPERATOR WHERE OPERATOR_ID=:operator'
+                            list = [-int(key)]
+                            execute_sql(sql, list, True, False)
 
-            return redirect('home:home')
+                return redirect('home:home')
 
         elif request.session.get('MERCHANT'):
             offer_perc = request.POST.get('offer')
@@ -271,3 +291,54 @@ class addBranchView(View):
             context = merchant.getProfile()
             context['message'] = branch_name_exists
             return render(request, "home/merchantBrachAdd.html", context)
+
+
+class customerInfoView(View):
+    def get(self, request):
+        customer = AllCustomerInfo()
+        context = customer.getInfo()
+        return render(request, 'home/admin_customer_info.html', context)
+
+
+class agentInfoView(View):
+    def get(self, request):
+        agent = AllAgentInfo()
+        context = agent.getInfo()
+        return render(request, 'home/admin_agent_info.html', context)
+
+
+class merchantInfoView(View):
+    def get(self, request):
+        merchant = AllMerchantInfo()
+        context = merchant.getInfo()
+        return render(request, 'home/admin_merchant_info.html', context)
+
+
+class operatorInfoView(View):
+    def get(self, request):
+        operator = AllOperatorInfo()
+        context = operator.getInfo()
+        return render(request, 'home/admin_operator_info.html', context)
+
+
+class serviceProviderInfoView(View):
+    def get(self, request):
+        service = AllServiceProviderInfo()
+        context = service.getInfo()
+        return render(request, 'home/admin_service_info.html', context)
+
+
+def getMerchant():
+    sql = 'SELECT COUNT(*) FROM MERCHANTS M,OFFERS O WHERE M.OFFER_ID = O.OFFER_ID AND O.DISCOUNT_PERCENT>0'
+    if execute_sql(sql, [], False, True)[0][0] != 0:
+        sql = 'SELECT M.MERCHANT_NAME,M.MERCHANT_LOGO_IMAGE,O.DISCOUNT_PERCENT FROM MERCHANTS M,OFFERS O WHERE M.OFFER_ID = O.OFFER_ID AND O.DISCOUNT_PERCENT>0 ORDER BY O.DISCOUNT_PERCENT DESC'
+        merchant_list = execute_sql(sql, [], False, True)
+        cont_merchant = merchant_list
+        i = 0
+        for x in merchant_list:
+            cont_merchant[i] = {'merchant_name': x[0],
+                                'merchant_photo': x[1], 'discount_percent': x[2]}
+            i = i+1
+        return cont_merchant
+    else:
+        return None

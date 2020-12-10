@@ -44,27 +44,46 @@
           <li>
             <a href="{% url 'home:home' %}">Home</a>
           </li>
-          <!--<li>
+          <li>
             <a
               href="#pageSubmenu"
               data-toggle="collapse"
               aria-expanded="false"
               class="dropdown-toggle"
-              >Profile</a
+              >View Profile</a
             >
             
             <ul class="collapse list-unstyled" id="pageSubmenu">
               <li>
-                <a href="profile.html">View Profile</a>
+                <a href="{% url 'home:customerInfo' %}">Customer</a>
               </li>
               <li>
-                <a href="changeProfileInfo.html">Change Info</a>
+                <a href="{% url 'home:agentInfo' %}">Agent</a>
+              </li>
+              <li>
+                <a href="{% url 'home:merchantInfo' %}">Merchant</a>
+              </li>
+              <li>
+                <a href="{% url 'home:operatorInfo' %}">Mobile Operator</a>
+              </li>
+              <li>
+                <a href="{% url 'home:serviceInfo' %}">Service Provider</a>
               </li>
             </ul>
           </li>
-          -->
           <li>
-            <a href="#">Add Money</a>
+            <a
+              href="#addmoneysubmenu"
+              data-toggle="collapse"
+              aria-expanded="false"
+              class="dropdown-toggle"
+              >Add Money</a
+            >
+            <ul class="collapse list-unstyled" id="addmoneysubmenu">
+              <li>
+                <a href="#addMoney" data-toggle="modal" data-target="#addMoney">To Agent</a>
+              </li>
+            </ul>
           </li>
         </ul>
 
@@ -110,6 +129,51 @@
             </ul>
           </div>
         </nav>
+
+        <div class="modal fade" id="addMoney" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Money To Agent Account</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form action="" method="POST">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label for="agent_mobile_no">Enter Agent Mobile Number</label>
+                    <input type="text" id="agent_mobile_no" name="agent_mobile_no" class="form-control" required>
+                    <br>
+                    <label for="add_money_amount">Enter Amount</label>
+                    <input type="number" id="add_money_amount" name="add_money_amount" class="form-control" min="100" max="10000" required>
+                    <br>
+                    <input type="submit" class="btn btn-success pb-1" value="Add Money">
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% if add_money_failed %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>Sorry!</strong>Add Money Failed.Please Check For Right Agent Number
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% endif %}
+
+        {% if add_money_successful %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <strong>Ok! </strong> You have successfully Added Money To Agent Account
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% endif %}
 
         <div class="content-wrapper">
           <form action="" method="POST" enctype="multipart/form-data">

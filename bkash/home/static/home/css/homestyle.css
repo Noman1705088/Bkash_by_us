@@ -6,7 +6,7 @@ body {
 p {
   font-size: 1.1em;
   font-weight: 300;
-  line-height: 1.7em;
+  line-height: 1.3em;
   color: #999;
 }
 a,
@@ -173,6 +173,15 @@ hr.light-100 {
   width: 100%;
   margin-top: 0.8rem;
   margin-bottom: 1rem;
+}
+.card-block {
+  height: 200px;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  height: 30px;
+  background: transparent; /* make scrollbar transparent */
 }
 @media (maz-width: 768px) {
   #sidebar {
