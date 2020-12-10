@@ -65,7 +65,7 @@
             <br>
             <div class="pt-2">
                 <label for="mobileno">Branch Mobile No:</label>
-                <input type="text" name="mobileno" class="form-control" placeholder="Enter Your Branch Mobile No" required>
+                <input type="text" name="mobileno" class="form-control" placeholder="Enter Your Branch Mobile No (sample- 01xxxxxxxxx)" pattern="[0]{1}[1]{1}[0-9]{9}" required>
               </div>
             <br>
             {% if message %}

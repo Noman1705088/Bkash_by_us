@@ -1,278 +1,357 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
     <link rel="stylesheet" href="{% static 'home/css/homestyle.css' %}" />
-    <script src="https://kit.fontawesome.com/e367819fd5.js" crossorigin="anonymous"></script>
+    <script
+      src="https://kit.fontawesome.com/e367819fd5.js"
+      crossorigin="anonymous"
+    ></script>
 
     <title>bootstrap 4 sidebar</title>
-</head>
+  </head>
 
-<body>
-{% if MOBILE %}
+  <body>
+    {% if MOBILE %}
     <div class="wrapper">
-        <nav id="sidebar">
-            <div class="sidebar-header">
-                <!--<h3>BOOTSTRAP SIDEBAR</h3>-->
-                <div class="py-4 px-2 mb-4">
-                    <div class="media d-flex align-items-center justify-content-center">
-                        <img src="{{PHOTO}}" alt="" width="100" height="100"
-                            class="mr-3 rounded-circle img-thumbnail shadow-sm" />
-                        <div class="media-body">
-                            <h5 class="m-0">{{NAME}}</h5>
-                            {% if TYPE == 'customer' %}
-                                <p class="font-weight-normal text-white mb-0">Customer</p>
-                            {% elif TYPE == 'agent' %}
-                                <p class="font-weight-normal text-white mb-0">Agent</p>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <p class="float-left text-white mb-0">Mobile: {{MOBILE}}</p>
-                   
-                </div>
+      <nav id="sidebar">
+        <div class="sidebar-header">
+          <!--<h3>BOOTSTRAP SIDEBAR</h3>-->
+          <div class="py-4 px-2 mb-4">
+            <div class="media d-flex align-items-center justify-content-center">
+              <img
+                src="{{PHOTO}}?lastmod=12345678"
+                alt=""
+                width="100"
+                height="100"
+                class="mr-3 rounded-circle img-thumbnail shadow-sm"
+              />
+              <div class="media-body">
+                <h5 class="m-0">{{NAME}}</h5>
+                {% if TYPE == 'customer' %}
+                <p class="font-weight-normal text-white mb-0">Customer</p>
+                {% elif TYPE == 'agent' %}
+                <p class="font-weight-normal text-white mb-0">Agent</p>
+                {% endif %}
+              </div>
             </div>
+            <p class="float-left text-white mb-0">Mobile: {{MOBILE}}</p>
+          </div>
+        </div>
 
-            <ul class="list-unstyled components">
-                <li>
-                    <a
-                      href="#balanceSubmenu"
-                      data-toggle="collapse"
-                      aria-expanded="false"
-                      class="dropdown-toggle"
-                      >Click For Balance</a
-                    >
-                    <ul class="collapse list-unstyled" id="balanceSubmenu">
-                      <li class="text-center">
-                        <p
-                          class="pb-1 font-weight-bold"
-                          style="color: rgb(235, 140, 16)"
-                        >
-                          {{BALANCE}} <i class="fas fa-dollar-sign"></i>
-                        </p>
-                      </li>
-                    </ul>
-                  </li>
-                <li>
-                    <a href="{% url 'home:home' %}">Home</a>
-                </li>
-                <li>
-                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Profile</a>
-                    <ul class="collapse list-unstyled" id="pageSubmenu">
-                        <li>
-                            <a href="{% url 'home:userInfo' %}">View Profile</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'home:updateUser' %}">Change Info</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="{% url 'services:history' %}">Transaction History</a>
-                </li>
-                <li>
-                    <a href="#contact">Contact Us</a>
-                </li>
+        <ul class="list-unstyled components">
+          <li>
+            <a
+              href="#balanceSubmenu"
+              data-toggle="collapse"
+              aria-expanded="false"
+              class="dropdown-toggle"
+              >Click For Balance</a
+            >
+            <ul class="collapse list-unstyled" id="balanceSubmenu">
+              <li class="text-center">
+                <p
+                  class="pb-1 font-weight-bold"
+                  style="color: rgb(235, 140, 16)"
+                >
+                  {{BALANCE}} <i class="fas fa-dollar-sign"></i>
+                </p>
+              </li>
             </ul>
+          </li>
+          <li>
+            <a href="{% url 'home:home' %}">Home</a>
+          </li>
+          <li>
+            <a
+              href="#pageSubmenu"
+              data-toggle="collapse"
+              aria-expanded="false"
+              class="dropdown-toggle"
+              >Profile</a
+            >
+            <ul class="collapse list-unstyled" id="pageSubmenu">
+              <li>
+                <a href="{% url 'home:userInfo' %}">View Profile</a>
+              </li>
+              <li>
+                <a href="{% url 'home:updateUser' %}">Change Info</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="{% url 'services:history' %}">Transaction History</a>
+          </li>
+          <li>
+            <a href="#contact">Contact Us</a>
+          </li>
+        </ul>
 
-            <ul class="list-unstyled CTAs">
-                <li>
-                    <a href="{% url 'home:logout' %}" class="download">Logout</a>
-                </li>
+        <ul class="list-unstyled CTAs">
+          <li>
+            <a href="{% url 'home:logout' %}" class="download">Logout</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="content">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+          <button type="button" id="sidebarCollapse" class="btn btn-info">
+            <i class="fa fa-align-justify"></i>
+          </button>
+          <a href="" class="navbar-brand"
+            ><img
+              src="{% static 'home/img/icon.png' %}"
+              alt=""
+              style="max-width: 50%; max-height: 50%; object-fit: contain"
+              class="px-3"
+          /></a>
+
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <div
+                  class="media d-flex align-items-center justify-content-center"
+                >
+                  <a href="" class="nav-link">
+                    <img
+                      src="{{PHOTO}}?lastmod=12345678"
+                      alt=""
+                      width="50"
+                      height="50"
+                      style="object-fit: contain"
+                      class="mr-3 rounded-circle img-thumbnail shadow-sm"
+                    />
+                  </a>
+                </div>
+              </li>
             </ul>
+          </div>
         </nav>
 
-        <div class="content">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-                <button type="button" id="sidebarCollapse" class="btn btn-info">
-                    <i class="fa fa-align-justify"></i>
-                </button>
-                <a href="" class="navbar-brand"><img src="{% static 'home/img/icon.png' %}" alt=""
-                        style="max-width: 50%; max-height: 50%; object-fit: contain" class="px-3" /></a>
-
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <div
-                              class="media d-flex align-items-center justify-content-center"
-                            >
-                              <a href="" class="nav-link">
-                                <img
-                                  src="{{PHOTO}}?lastmod=12345678"
-                                  alt=""
-                                  width="50"
-                                  height="50"
-                                  style="object-fit: contain"
-                                  class="mr-3 rounded-circle img-thumbnail shadow-sm"
-                                />
-                              </a>
-                            </div>
-                          </li>
-                    </ul>
-                </div>
-            </nav>
-
-            <div class="content-wrapper">
-                <div class="container-fluid padding">
-                    <div class="row welcome text-center">
-                        <div class="col-12">
-                            <h1 class="display-4">Safe Money Transfer</h1>
-                        </div>
-                        <hr />
-                        <div class="col-12">
-                            <p class="lead">
-                                Welcome to our online money transaction website bKash.You can do
-                                Send Money,Cash In,Cash Out,Mobile Recharge,Shopping Payment and
-                                Paying Differents Bills through our website.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!--- Three Column Section -->
-                <div class="container-fluid padding">
-                    <div class="row text-center padding">
-                            <div class="col-xs-12 col-sm-6 col-md-4 my-2">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <i class="fas fa-shopping-bag"></i>
-                                        <h3>Payment</h3>
-                                        <p>Shopping Payment with CashBack</p>
-                                        <a href="{% url 'services:merchantpayment' %}" class="btn btn-primary">Make Payment</a>
-                                    </div>
-                                </div>
-                            </div>
-                        <div class="col-xs-12 col-sm-6 col-md-4 my-2">
-                            <div class="card">
-                                <div class="card-body">
-                                    <i class="far fa-lightbulb"></i>
-                                    <h3>Bill</h3>
-                                    <p>Pay Your gas,electricity bill</p>
-                                    <a href="{% url 'services:payBill' %}" class="btn btn-primary">Pay Bill</a>
-                                </div>
-                            </div>
-                        </div>
-                
-                
-                        <div class="col-xs-12 col-sm-6 col-md-4 my-2">
-                            <div class="card">
-                                <div class="card-body">
-                                    <i class="fas fa-mobile-alt"></i>
-                                    <h3>Mobile Recharge</h3>
-                                    <p>Recharge Your Mobile Number</p>
-                                    <a href="{% url 'services:mobileRecharge' %}" class="btn btn-primary">Recharge</a>
-                                </div>
-                            </div>
-                        </div>
-                
-                        {% if TYPE == 'customer' %}
-                        <div class="col-xs-12 col-sm-6 col-md-4 my-2">
-                            <div class="card">
-                                <div class="card-body">
-                                    <i class="fas fa-comments-dollar"></i>
-                                    <h3>Send Money</h3>
-                                    <p>Send Money To other Customer</p>
-                                    <a href="{% url 'services:sendMoney' %}" class="btn btn-primary">Send Money</a>
-                                </div>
-                            </div>
-                        </div>
-                  
-                        <div class="col-xs-12 col-sm-6 col-md-4 my-2">
-                            <div class="card">
-                                <div class="card-body">
-                                    <i class="fas fa-hand-holding-usd"></i>
-                                    <h3>Cash Out</h3>
-                                    <p>Take Out Money From Your Account</p>
-                                    <a href="{% url 'services:cashOut' %}" class="btn btn-primary">Cash Out</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% elif TYPE == 'agent'%}
-                        <div class="col-xs-12 col-sm-6 col-md-4 my-2">
-                            <div class="card">
-                                <div class="card-body">
-                                    <i class="fas fa-funnel-dollar"></i>
-                                    <h3>Cash In</h3>
-                                    <p>Add Money To Your Account</p>
-                                    <a href="{% url 'services:cashIn' %}" class="btn btn-primary">Cash In</a>
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-             
-                    <hr class="my-4" />
-                </div>
+        <div class="content-wrapper">
+          <div class="container-fluid padding">
+            <div class="row welcome text-center">
+              <div class="col-12">
+                <h1 class="display-4">Safe Money Transfer</h1>
+              </div>
+              <hr />
+              <div class="col-12">
+                <p class="lead">
+                  Welcome to our online money transaction website bKash.You can
+                  do Send Money,Cash In,Cash Out,Mobile Recharge,Shopping
+                  Payment and Paying Differents Bills through our website.
+                </p>
+              </div>
             </div>
+          </div>
 
-            <footer id="contact">
-                <div class="container-fluid padding">
-                  <div class="row text-center">
-                    <div class="col-12">
-                      <h3>Contact Us</h3>
-                    </div>
-                    <div class="col-md-4">
-                      <hr class="light" />
-                      <i class="fas fa-phone mb-2"></i>
-                      <h5>Mobile Number</h5>
-                      <hr class="light" />
-                      <p>+8801771369217</p>
-                      <p>+8801521103929</p>
-                    </div>
-                    <div class="col-md-4">
-                      <hr class="light" />
-                      <i class="fas fa-laptop-house mb-2"></i>
-                      <h5>Location</h5>
-                      <hr class="light" />
-                      <p>Room No : 219</p>
-                      <p>Ahsanullah Hall</p>
-                      <p>BUET,Dhaka</p>
-                    </div>
-                    <div class="col-md-4">
-                      <hr class="light" />
-                      <i class="far fa-envelope mb-2"></i>
-                      <h5>Email</h5>
-                      <hr class="light" />
-                      <p>asifahmedutsa@gmail.com</p>
-                      <p>abdullahalnoman@gmail.com</p>
-                    </div>
-                    <div class="col-12">
-                      <hr class="light-100" />
-                      <h5>copyright&copy;bKash.com</h5>
-                    </div>
+          <!--- Three Column Section -->
+          <div class="container-fluid padding">
+            <div class="row text-center padding">
+              <div class="col-xs-12 col-sm-6 col-md-4 my-2">
+                <div class="card">
+                  <div class="card-body">
+                    <i class="fas fa-shopping-bag"></i>
+                    <h3>Payment</h3>
+                    <p>Shopping Payment with CashBack</p>
+                    <a
+                      href="{% url 'services:merchantpayment' %}"
+                      class="btn btn-primary"
+                      >Make Payment</a
+                    >
                   </div>
                 </div>
-              </footer>
-          
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-4 my-2">
+                <div class="card">
+                  <div class="card-body">
+                    <i class="far fa-lightbulb"></i>
+                    <h3>Bill</h3>
+                    <p>Pay Your gas,electricity bill</p>
+                    <a
+                      href="{% url 'services:payBill' %}"
+                      class="btn btn-primary"
+                      >Pay Bill</a
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xs-12 col-sm-6 col-md-4 my-2">
+                <div class="card">
+                  <div class="card-body">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Mobile Recharge</h3>
+                    <p>Recharge Your Mobile Number</p>
+                    <a
+                      href="{% url 'services:mobileRecharge' %}"
+                      class="btn btn-primary"
+                      >Recharge</a
+                    >
+                  </div>
+                </div>
+              </div>
+
+              {% if TYPE == 'customer' %}
+              <div class="col-xs-12 col-sm-6 col-md-4 my-2">
+                <div class="card">
+                  <div class="card-body">
+                    <i class="fas fa-comments-dollar"></i>
+                    <h3>Send Money</h3>
+                    <p>Send Money To other Customer</p>
+                    <a
+                      href="{% url 'services:sendMoney' %}"
+                      class="btn btn-primary"
+                      >Send Money</a
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xs-12 col-sm-6 col-md-4 my-2">
+                <div class="card">
+                  <div class="card-body">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <h3>Cash Out</h3>
+                    <p>Take Out Money From Your Account</p>
+                    <a
+                      href="{% url 'services:cashOut' %}"
+                      class="btn btn-primary"
+                      >Cash Out</a
+                    >
+                  </div>
+                </div>
+              </div>
+            {% elif TYPE == 'agent'%}
+            <div class="col-xs-12 col-sm-6 col-md-4 my-2">
+              <div class="card">
+                <div class="card-body">
+                  <i class="fas fa-funnel-dollar"></i>
+                  <h3>Cash In</h3>
+                  <p>Add Money To Your Account</p>
+                  <a href="{% url 'services:cashIn' %}" class="btn btn-primary"
+                    >Cash In</a
+                  >
+                </div>
+              </div>
+            </div>
+            {% endif %}
 
         </div>
 
-        <!-- Optional JavaScript -->
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-        <script>
-            $(document).ready(function () {
-                $("#sidebarCollapse").on("click", function () {
-                    $("#sidebar").toggleClass("active");
-                });
-            });
-        </script>
+            <hr class="my-4" />
+            <h2 class="text-center d-block">Merchants With Cashback Offer</h2>
+            {% if MERCHANT %}
+            <div class="container-fluid" style="overflow-x: auto">
+              <div class="row flex-nowrap mt-4">
+                {% for merchant in MERCHANT %}
+                <div class="col-4">
+                  <div class="card card-block text-center">
+                    <div
+                      class="media d-flex align-items-center justify-content-center"
+                    >
+                      <a href="" class="nav-link">
+                        <img
+                          src="media\{{merchant.merchant_photo}}?lastmod=12345678"
+                          alt=""
+                          width="100"
+                          height="100"
+                          style="object-fit: contain"
+                          class="mr-3 rounded-circle img-thumbnail shadow-sm"
+                        />
+                      </a>
+                    </div>
+                    <p class="font-weight-bold text-dark">{{merchant.merchant_name}}</p>
+                    <p class="font-weight-bold text-dark">{{merchant.discount_percent}}% Cash Back</p>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
 
-{% endif %}
-</body>
+      <footer id="contact">
+        <div class="container-fluid padding">
+          <div class="row text-center">
+            <div class="col-12">
+              <h3>Contact Us</h3>
+            </div>
+            <div class="col-md-4">
+              <hr class="light" />
+              <i class="fas fa-phone mb-2"></i>
+              <h5>Mobile Number</h5>
+              <hr class="light" />
+              <p>+8801771369217</p>
+              <p>+8801521103929</p>
+            </div>
+            <div class="col-md-4">
+              <hr class="light" />
+              <i class="fas fa-laptop-house mb-2"></i>
+              <h5>Location</h5>
+              <hr class="light" />
+              <p>Room No : 219</p>
+              <p>Ahsanullah Hall</p>
+              <p>BUET,Dhaka</p>
+            </div>
+            <div class="col-md-4">
+              <hr class="light" />
+              <i class="far fa-envelope mb-2"></i>
+              <h5>Email</h5>
+              <hr class="light" />
+              <p>asifahmedutsa@gmail.com</p>
+              <p>abdullahalnoman@gmail.com</p>
+            </div>
+            <div class="col-12">
+              <hr class="light-100" />
+              <h5>copyright&copy;bKash.com</h5>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
 
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#sidebarCollapse").on("click", function () {
+          $("#sidebar").toggleClass("active");
+        });
+      });
+    </script>
+
+    {% endif %}
+  </body>
 </html>

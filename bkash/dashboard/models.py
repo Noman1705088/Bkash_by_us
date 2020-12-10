@@ -42,6 +42,22 @@ def execute_sql(sql, list, commit, is_select_st,connection):
     except db.Error as error:
         print(error)
 
+def execute_sql_func(function_name, list, commit, is_select_st,connection):
+    try:
+        '''with db.connect(
+                user='bkash_db',
+                password='123',
+                dsn='localhost/orcl',
+                encoding='UTF-8') as connection:'''
+        with connection.cursor() as cursor:
+            if is_select_st:
+                row = cursor.callfunc(function_name,str,list)
+                return row
+
+    except db.Error as error:
+        print(error)
+
+
 
 class USERS:
     def __init__(self, img, username, father_name, mother_name, gender, dob, nid_no, mobile_no, Password):
@@ -298,8 +314,8 @@ class MobileOperator:
             return False
 
     def is_name_available(self):
-        sql = 'SELECT COUNT(OPERATOR_ID) FROM MOBILE_OPERATOR WHERE OPERATOR_NAME =: name'
-        list = [self.operator_name]
+        sql = 'SELECT COUNT(OPERATOR_ID) FROM MOBILE_OPERATOR WHERE UPPER(OPERATOR_NAME) =: name'
+        list = [self.operator_name.upper()]
         if execute_sql(sql, list, False, True,connection)[0][0] == 0:
             return True
         else:

@@ -3,8 +3,8 @@
 {% block content %}
     {% if NAME %}
         {% for hist in HISTORY %}
-        <h3 class="py-2" style="color:red;padding-left: 100px;font-family: Garamond, serif;"><u>Branch Name:</u> {{hist.NAME_BRANCH}}</h3>
-        <br><br>
+        <h3 style="color:rgb(8, 133, 29);padding-left: 95px;font-family: Garamond, serif;font-weight: 600;" class="pt-2">Branch Name : {{hist.NAME_BRANCH}}</h3>
+        <br>
         {% for branch_his in hist.BRANCH_HIS %}
         <div class="card-body" style="border-color: rgb(66, 57, 57); border-radius: 5px; border-style: solid; width:80%; margin: auto;">
             <table class="table table-borderless text-center">
