@@ -132,7 +132,7 @@ class CashOut:
         return False
 
     def doTransiction(self):
-        execute_PROCEDURE('CASH_OUT_TRANSACTION',[self.sender_id,self.receiver_id,self.amount],connection)
+        execute_PROCEDURE('CASH_OUT_TRANSACTION',[self.sender_id,self.receiver_id,self.amount,0],connection)
 
 
 class PayBill:

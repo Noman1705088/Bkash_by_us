@@ -83,7 +83,10 @@ class AdminProfile:
                 x[0]), 'operator_val': x[0], 'operator_name': x[1], 'operator_digit': x[2], 'operator_bank_ac': x[3]}
             i = i+1
 
-        context = {'NAME': name, 'CUSTOMER': cont_cust,
+        sql = 'SELECT BKASH_BALANCE FROM ADMIN WHERE ADMIN_ID=1'
+        bal = execute_sql(sql, [], False, True,connection)[0][0]
+        
+        context = {'NAME': name,'BALANCE':bal, 'CUSTOMER': cont_cust,
                    'AGENT': cont_agent, 'ADMIN': cont_admin, 'MERCHANT': cont_merchant, 'SERVICE': cont_service, 'OPERATOR': cont_operator}
 
         return context

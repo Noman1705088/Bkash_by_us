@@ -42,6 +42,25 @@
 
         <ul class="list-unstyled components">
           <li>
+            <a
+              href="#balanceSubmenu"
+              data-toggle="collapse"
+              aria-expanded="false"
+              class="dropdown-toggle"
+              >Click For Balance</a
+            >
+            <ul class="collapse list-unstyled" id="balanceSubmenu">
+              <li class="text-center">
+                <p
+                  class="pb-1 font-weight-bold"
+                  style="color: rgb(235, 140, 16)"
+                >
+                  {{BALANCE}} <i class="fas fa-dollar-sign"></i>
+                </p>
+              </li>
+            </ul>
+          </li>
+          <li>
             <a href="{% url 'home:home' %}">Home</a>
           </li>
           <li>
