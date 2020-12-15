@@ -1,11 +1,12 @@
 from django.db import models
-from dashboard.models import execute_sql, hash_the_password,connection
+from dashboard.models import execute_sql, hash_the_password, connection
 import cx_Oracle as db
 
-def execute_PROCEDURE(procedure_name, list,connection):
+
+def execute_PROCEDURE(procedure_name, list, connection):
     try:
         with connection.cursor() as cursor:
-            cursor.callproc(procedure_name,list)
+            cursor.callproc(procedure_name, list)
     except db.Error as error:
         print(error)
 
@@ -22,9 +23,9 @@ class SendMoney:
             AND APPROVED_BY IS NOT NULL'
         list = [self.sender_id]
 
-        if not execute_sql(sql, list, False, True,connection):
+        if not execute_sql(sql, list, False, True, connection):
             return False
-        elif execute_sql(sql, list, False, True,connection)[0][0] == hash_the_password(self.password):
+        elif execute_sql(sql, list, False, True, connection)[0][0] == hash_the_password(self.password):
             return True
         else:
             return False
@@ -32,7 +33,7 @@ class SendMoney:
     def hasEnoughMoney(self):
         sql = 'SELECT CUSTOMER_BALANCE FROM CUSTOMER WHERE CUSTOMER_ID=: CUST_ID'
         list = [self.sender_id]
-        sender_balance = execute_sql(sql, list, False, True,connection)[0][0]
+        sender_balance = execute_sql(sql, list, False, True, connection)[0][0]
 
         if sender_balance >= self.amount:
             return True
@@ -42,13 +43,15 @@ class SendMoney:
         sql = 'SELECT CUSTOMER_ID FROM USERS U JOIN CUSTOMER C ON C.CUSTOMER_ID=U.USER_ID WHERE USER_MOBILE_NO =: receiver'
         list = [self.receiver_mobile]
 
-        if execute_sql(sql, list, False, True,connection):
-            self.receiver_id = execute_sql(sql, list, False, True,connection)[0][0]
+        if execute_sql(sql, list, False, True, connection):
+            self.receiver_id = execute_sql(
+                sql, list, False, True, connection)[0][0]
             return True
         return False
 
     def doTransiction(self):
-        execute_PROCEDURE('SEND_MONEY_TRANSACTION',[self.sender_id,self.receiver_id,self.amount],connection)        
+        execute_PROCEDURE('SEND_MONEY_TRANSACTION', [
+                          self.sender_id, self.receiver_id, self.amount], connection)
 
 
 class CashIn:
@@ -63,9 +66,9 @@ class CashIn:
             AND APPROVED_BY IS NOT NULL'
         list = [self.sender_id]
 
-        if not execute_sql(sql, list, False, True,connection):
+        if not execute_sql(sql, list, False, True, connection):
             return False
-        elif execute_sql(sql, list, False, True,connection)[0][0] == hash_the_password(self.password):
+        elif execute_sql(sql, list, False, True, connection)[0][0] == hash_the_password(self.password):
             return True
         else:
             return False
@@ -73,7 +76,7 @@ class CashIn:
     def hasEnoughMoney(self):
         sql = 'SELECT AGENT_BALANCE FROM AGENT WHERE AGENT_ID=: AGENT_ID'
         list = [self.sender_id]
-        sender_balance = execute_sql(sql, list, False, True,connection)[0][0]
+        sender_balance = execute_sql(sql, list, False, True, connection)[0][0]
 
         if sender_balance >= self.amount:
             return True
@@ -84,13 +87,15 @@ class CashIn:
              WHERE USER_MOBILE_NO =: receiver AND APPROVED_BY IS NOT NULL'
         list = [self.receiver_mobile]
 
-        if execute_sql(sql, list, False, True,connection):
-            self.receiver_id = execute_sql(sql, list, False, True,connection)[0][0]
+        if execute_sql(sql, list, False, True, connection):
+            self.receiver_id = execute_sql(
+                sql, list, False, True, connection)[0][0]
             return True
         return False
 
     def doTransiction(self):
-        execute_PROCEDURE('CASH_IN_TRANSACTION',[self.sender_id,self.receiver_id,self.amount],connection)
+        execute_PROCEDURE('CASH_IN_TRANSACTION', [
+                          self.sender_id, self.receiver_id, self.amount], connection)
 
 
 class CashOut:
@@ -105,9 +110,9 @@ class CashOut:
             AND APPROVED_BY IS NOT NULL'
         list = [self.sender_id]
 
-        if not execute_sql(sql, list, False, True,connection):
+        if not execute_sql(sql, list, False, True, connection):
             return False
-        elif execute_sql(sql, list, False, True,connection)[0][0] == hash_the_password(self.password):
+        elif execute_sql(sql, list, False, True, connection)[0][0] == hash_the_password(self.password):
             return True
         else:
             return False
@@ -115,7 +120,7 @@ class CashOut:
     def hasEnoughMoney(self):
         sql = 'SELECT CUSTOMER_BALANCE FROM CUSTOMER WHERE CUSTOMER_ID=: CUST_ID'
         list = [self.sender_id]
-        sender_balance = execute_sql(sql, list, False, True,connection)[0][0]
+        sender_balance = execute_sql(sql, list, False, True, connection)[0][0]
 
         if sender_balance >= self.amount:
             return True
@@ -126,13 +131,15 @@ class CashOut:
              WHERE USER_MOBILE_NO=: receiver AND APPROVED_BY IS NOT NULL'
         list = [self.receiver_mobile]
 
-        if execute_sql(sql, list, False, True,connection):
-            self.receiver_id = execute_sql(sql, list, False, True,connection)[0][0]
+        if execute_sql(sql, list, False, True, connection):
+            self.receiver_id = execute_sql(
+                sql, list, False, True, connection)[0][0]
             return True
         return False
 
     def doTransiction(self):
-        execute_PROCEDURE('CASH_OUT_TRANSACTION',[self.sender_id,self.receiver_id,self.amount,0],connection)
+        execute_PROCEDURE('CASH_OUT_TRANSACTION', [
+                          self.sender_id, self.receiver_id, self.amount, 2], connection)
 
 
 class PayBill:
@@ -141,7 +148,7 @@ class PayBill:
              WHERE UPPER(SERVICE_TYPE) = UPPER(:type) AND APPROVED_BY IS NOT NULL'
 
         list = [service_type]
-        services = execute_sql(sql,list,False,True,connection)
+        services = execute_sql(sql, list, False, True, connection)
         cont_service = services
 
         i = 0
@@ -158,17 +165,19 @@ class PayBill:
              WHERE SERVICE_ID=:service_id AND APPROVED_BY IS NOT NULL'
 
         list = [service_id]
-        x = execute_sql(sql,list,False,True,connection)
+        x = execute_sql(sql, list, False, True, connection)
 
         context = {
             'service_name': x[0][0], 'service_type': x[0][1], 'service_photo': x[0][2]}
         return context
 
-    def doTransictionCustomer(self,service_id,user_id,amount,billing_id):
-        execute_PROCEDURE('PAYBILL_TRANSACTION',[user_id,service_id,amount,'CUSTOMER',billing_id],connection)
+    def doTransictionCustomer(self, service_id, user_id, amount, billing_id):
+        execute_PROCEDURE('PAYBILL_TRANSACTION', [
+                          user_id, service_id, amount, 'CUSTOMER', billing_id], connection)
 
-    def doTransictionAgent(self,service_id,user_id,amount,billing_id):
-        execute_PROCEDURE('PAYBILL_TRANSACTION',[user_id,service_id,amount,'AGENT',billing_id],connection)
+    def doTransictionAgent(self, service_id, user_id, amount, billing_id):
+        execute_PROCEDURE('PAYBILL_TRANSACTION', [
+                          user_id, service_id, amount, 'AGENT', billing_id], connection)
 
     def isCorrectPass(self, isCustomer, user_id, password):
         if isCustomer:
@@ -178,8 +187,8 @@ class PayBill:
             sql = 'SELECT USER_PASSWORD FROM USERS U JOIN AGENT A ON U.USER_ID=A.AGENT_ID WHERE AGENT_ID=:AGENT\
                 AND APPROVED_BY IS NOT NULL'
 
-        list= [user_id]
-        passwordIs = execute_sql(sql, list, False, True,connection)
+        list = [user_id]
+        passwordIs = execute_sql(sql, list, False, True, connection)
 
         if not passwordIs:
             return False
@@ -195,7 +204,7 @@ class PayBill:
             sql = 'SELECT AGENT_BALANCE FROM AGENT WHERE AGENT_ID=: AGENT_ID'
 
         list = [user_id]
-        sender_balance = execute_sql(sql,list,False,True,connection)[0][0]
+        sender_balance = execute_sql(sql, list, False, True, connection)[0][0]
 
         if int(sender_balance) >= int(amount):
             return True
@@ -220,7 +229,7 @@ class HistoryOf:
                             WHERE SENDER =: SENDER OR RECEIVER =: RECEIVER\
                                 ORDER BY TRANSACTION_TIME DESC'
 
-        ans = execute_sql(sql, [self.user, self.user], False, True,connection)
+        ans = execute_sql(sql, [self.user, self.user], False, True, connection)
         cont_history = ans
 
         i = 0
@@ -230,37 +239,43 @@ class HistoryOf:
 
             if sender[:5] == 'USER_':
                 sql1 = 'SELECT USER_MOBILE_NO FROM USERS WHERE USER_ID=: id'
-                sender = execute_sql(sql1, [sender[5:]], False, True,connection)[0][0]
+                sender = execute_sql(
+                    sql1, [sender[5:]], False, True, connection)[0][0]
             elif sender[:5] == 'CBAK_':
                 sender = 'Bkash'
             elif sender[:5] == 'ADDM_':
                 sender = 'Bkash'
             if receiver[:5] == 'USER_':
                 sql2 = 'SELECT USER_MOBILE_NO FROM USERS WHERE USER_ID=: id'
-                receiver = execute_sql(sql2,[receiver[5:]],False,True,connection)[0][0]
-            elif receiver[:5] == 'SERV_' :
+                receiver = execute_sql(
+                    sql2, [receiver[5:]], False, True, connection)[0][0]
+            elif receiver[:5] == 'SERV_':
                 sql2 = 'SELECT SERVICE_NAME,SERVICE_TYPE FROM UTILITY_SERVICE WHERE SERVICE_ID=: id'
-                receiver = execute_sql(sql2,[receiver[5:]],False,True,connection)[0][0] +\
-                    '('+execute_sql(sql2,[receiver[5:]],False,True,connection)[0][1]+')'
-            elif receiver[:5] == 'MERC_' :
+                receiver = execute_sql(sql2, [receiver[5:]], False, True, connection)[0][0] +\
+                    '('+execute_sql(sql2, [receiver[5:]],
+                                    False, True, connection)[0][1]+')'
+            elif receiver[:5] == 'MERC_':
                 sql2 = 'SELECT (SELECT MERCHANT_NAME FROM MERCHANTS WHERE MERCHANT_ID=BRANCH_MERCHANT_ID),\
                     BRANCH_NAME FROM BRANCH WHERE BRANCH_ID=: id'
-                receiver = execute_sql(sql2,[receiver[5:]],False,True,connection)[0][0]\
-                     +'('+execute_sql(sql2,[receiver[5:]],False,True,connection)[0][1]+')'
+                receiver = execute_sql(sql2, [receiver[5:]], False, True, connection)[0][0]\
+                    + '('+execute_sql(sql2, [receiver[5:]],
+                                      False, True, connection)[0][1]+')'
             elif receiver[:5] == 'OPER_':
                 sql2 = 'SELECT TO_MOBILE_NUMBER_RECHARGE,OPERATOR_NAME\
                     FROM MOBILE_OPERATOR O,MOBILE_RECHARGE M\
                         WHERE O.OPERATOR_ID = M.OPERATOR_ID AND HISTORY_ID = :hist_id'
-                receiver_first = execute_sql(sql2,[x[6]],False,True,connection)[0]
-                receiver = receiver_first[0] +'(' + receiver_first[1] +')'
-            
+                receiver_first = execute_sql(
+                    sql2, [x[6]], False, True, connection)[0]
+                receiver = receiver_first[0] + '(' + receiver_first[1] + ')'
+
             billing_id = None
             if x[5] == 'Pay Utility Bill':
-                sql3= 'SELECT BILLING_ID FROM PAY_UTILITY_BILL WHERE HISTORY_ID=:id'
-                billing_id = execute_sql(sql3,[x[6]],False,True,connection)[0][0]
+                sql3 = 'SELECT BILLING_ID FROM PAY_UTILITY_BILL WHERE HISTORY_ID=:id'
+                billing_id = execute_sql(
+                    sql3, [x[6]], False, True, connection)[0][0]
 
-            cont_history[i] = {'SENDER':sender,'RECEIVER':receiver,'AMOUNT':x[2],'TXID':x[3],\
-                'TIME':x[4],'HIS_TYPE':x[5],'Billing_Id':billing_id}
+            cont_history[i] = {'SENDER': sender, 'RECEIVER': receiver, 'AMOUNT': x[2], 'TXID': x[3],
+                               'TIME': x[4], 'HIS_TYPE': x[5], 'Billing_Id': billing_id}
             i = i+1
 
         return cont_history
@@ -283,9 +298,9 @@ class MerchantPayment:
                 AND APPROVED_BY IS NOT NULL'
         list = [self.sender_id]
 
-        if not execute_sql(sql, list, False, True,connection):
+        if not execute_sql(sql, list, False, True, connection):
             return False
-        elif execute_sql(sql, list, False, True,connection)[0][0] == hash_the_password(self.password):
+        elif execute_sql(sql, list, False, True, connection)[0][0] == hash_the_password(self.password):
             return True
         else:
             return False
@@ -294,8 +309,8 @@ class MerchantPayment:
         sql = 'SELECT BRANCH_ID,BRANCH_MERCHANT_ID FROM BRANCH B,MERCHANTS M WHERE B.BRANCH_MERCHANT_ID = M.MERCHANT_ID AND B.BRANCH_MOBILE_NO =: BR_MOB'
         list = [self.merchant_mobile_no]
 
-        if execute_sql(sql, list, False, True,connection):
-            ans = execute_sql(sql, list, False, True,connection)[0]
+        if execute_sql(sql, list, False, True, connection):
+            ans = execute_sql(sql, list, False, True, connection)[0]
             self.merchant_branch_id = ans[0]
             self.merchant_id = ans[1]
             return True
@@ -308,7 +323,7 @@ class MerchantPayment:
         elif self.sender_type == "agent":
             sql = 'SELECT AGENT_BALANCE FROM AGENT WHERE AGENT_ID=: AGNT_ID'
         list = [self.sender_id]
-        sender_balance = execute_sql(sql, list, False, True,connection)[0][0]
+        sender_balance = execute_sql(sql, list, False, True, connection)[0][0]
 
         if sender_balance >= self.amount:
             return True
@@ -318,12 +333,14 @@ class MerchantPayment:
         sql = 'SELECT DISCOUNT_PERCENT FROM OFFERS O,MERCHANTS M WHERE M.OFFER_ID = O.OFFER_ID  AND MERCHANT_ID =: MERC_ID'
         list = [self.merchant_id]
 
-        if not execute_sql(sql, list, False, True,connection):
+        if not execute_sql(sql, list, False, True, connection):
             disc_percent = 0
         else:
-            disc_percent = int(execute_sql(sql, list, False, True,connection)[0][0])
+            disc_percent = int(execute_sql(
+                sql, list, False, True, connection)[0][0])
 
-        execute_PROCEDURE('PAYMENT_TRANSACTION',[self.sender_id,self.merchant_branch_id,self.amount,self.sender_type,disc_percent],connection)
+        execute_PROCEDURE('PAYMENT_TRANSACTION', [
+                          self.sender_id, self.merchant_branch_id, self.amount, self.sender_type, disc_percent], connection)
 
 
 class MobileRecharge:
@@ -343,9 +360,9 @@ class MobileRecharge:
                 AND APPROVED_BY IS NOT NULL'
         list = [self.sender_id]
 
-        if not execute_sql(sql, list, False, True,connection):
+        if not execute_sql(sql, list, False, True, connection):
             return False
-        elif execute_sql(sql, list, False, True,connection)[0][0] == hash_the_password(self.password):
+        elif execute_sql(sql, list, False, True, connection)[0][0] == hash_the_password(self.password):
             return True
         else:
             return False
@@ -356,7 +373,7 @@ class MobileRecharge:
         elif self.sender_type == "agent":
             sql = 'SELECT AGENT_BALANCE FROM AGENT WHERE AGENT_ID=: AGNT_ID'
         list = [self.sender_id]
-        sender_balance = execute_sql(sql, list, False, True,connection)[0][0]
+        sender_balance = execute_sql(sql, list, False, True, connection)[0][0]
 
         if sender_balance >= self.recharge_amount:
             return True
@@ -368,7 +385,7 @@ class MobileRecharge:
         sql = 'SELECT COUNT(OPERATOR_ID) FROM MOBILE_OPERATOR WHERE OPERATOR_DIGIT =: digit AND APPROVED_BY IS NOT NULL'
         list = [digit]
 
-        if execute_sql(sql,list,False,True,connection)[0][0] == 0:
+        if execute_sql(sql, list, False, True, connection)[0][0] == 0:
             return False
         else:
             return True
@@ -378,7 +395,8 @@ class MobileRecharge:
 
         sql = 'SELECT OPERATOR_ID FROM MOBILE_OPERATOR WHERE OPERATOR_DIGIT =: digit'
         list = [digit]
-        operator_id = execute_sql(sql,list,False,True,connection)[0][0]
+        operator_id = execute_sql(sql, list, False, True, connection)[0][0]
 
-        list = [self.sender_id,operator_id,self.recharge_amount,self.sender_type,self.receiver_mobile_no]
-        execute_PROCEDURE('MOBILE_RECHARGE_TRANSACTION',list,connection)
+        list = [self.sender_id, operator_id, self.recharge_amount,
+                self.sender_type, self.receiver_mobile_no]
+        execute_PROCEDURE('MOBILE_RECHARGE_TRANSACTION', list, connection)

@@ -163,7 +163,7 @@
                   {% csrf_token %}
                   <div class="form-group">
                     <label for="agent_mobile_no">Enter Agent Mobile Number</label>
-                    <input type="text" id="agent_mobile_no" name="agent_mobile_no" class="form-control" required>
+                    <input type="text" id="agent_mobile_no" name="agent_mobile_no" class="form-control" placeholder="Enter Agent Mobile No (sample- 01xxxxxxxxx)" pattern="[0]{1}[1]{1}[0-9]{9}" required>
                     <br>
                     <label for="add_money_amount">Enter Amount</label>
                     <input type="number" id="add_money_amount" name="add_money_amount" class="form-control" min="100" max="10000" required>
